@@ -1,0 +1,10 @@
+.notFound__handler {
+    height: 100vh;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column  ;
+}
+.notFound__handler img {
+    max-width: 500px;
+}

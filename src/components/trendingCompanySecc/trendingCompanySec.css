@@ -1,0 +1,23 @@
+.showAllBtn .nav-link {
+    background-color: var(--primary-white);
+    color: var(--main-blue-color);
+    border: 1px solid var(--main-blue-color);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    padding: 10px 40px;
+}
+.showAllBtn i {
+    margin-inline-start: 10px;
+}
+.showAllBtn .nav-link:hover {
+    background-color: var(--main-blue-color);
+    color: var(--primary-white);
+}

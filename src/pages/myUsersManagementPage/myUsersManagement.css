@@ -1,0 +1,17 @@
+.content__view__handler.content__box__shadow{
+    border-radius: 14px;
+    padding: 12px;
+    background-color: #fff;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 11;
+    margin: 0 30px;
+    margin-top: -60px;
+}
+
+@media screen and (max-width: 600px){
+    .content__view__handler.content__box__shadow{
+        margin: 0;
+    }
+}

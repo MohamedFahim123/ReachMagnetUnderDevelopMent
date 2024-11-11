@@ -1,0 +1,165 @@
+.selected__product__item {
+    margin-top: 30px;
+    padding: 20px 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.selected__product__info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.selected__product__info .prod__img img {
+    width: 158px;
+    height: 151px;
+    border-radius: 8px;
+}
+.selected__product__info .prod__text {
+    width: 300px;
+}
+.selected__product__info .prod__text h3 {
+    font-weight: 600;
+    font-size: 18px;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+.selected__product__info .prod__text strong {
+    font-size: 14px;
+    font-weight: 500;
+}
+.selected__product__info .prod__text p {
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+}
+.selected__product__action {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: right;
+}
+.selected__product__action .delete__btn i {
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all ease-in-out .3s;
+}
+.selected__product__action .delete__btn i:hover {
+    color: rgb(148, 21, 21);
+}
+.selected__product__action .quantity__btns {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.selected__product__action .quantity__btns .increaseBtn ,
+.selected__product__action .quantity__btns .decreaseBtn {
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    width: 30px;
+    text-align: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all ease-in-out .3s;
+}
+.selected__product__action .quantity__btns .increaseBtn:hover {
+    background-color: rgba(13, 148, 136, 1);
+    border: 2px solid rgba(13, 148, 136, 1);
+    color: #fff;
+}
+.selected__product__action .quantity__btns .decreaseBtn:hover {
+    background-color: rgb(148, 21, 21);
+    border: 2px solid rgb(148, 21, 21);
+    color: #fff;
+}
+.selected__product__action .quantity__btns span {
+    min-width: 20px;
+    text-align: center;
+}
+.showNotesInput {
+    max-height: 30px;
+    display: block;
+    max-width: 200px;
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
+    margin-bottom: 15px;
+}
+.showNotesInput:focus ,
+.showNotesInput:focus-visible ,
+.showNotesInput:hover {
+    box-shadow: none;
+    outline: none;
+}
+.showNotesInput::placeholder {
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.5);
+}
+.showNotes span {
+    display: block;
+}
+.showNotes {
+    padding: 3px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    font-size: 15px;
+    width: 80%;
+}
+.showNotes i {
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 2px;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.showNotes i:hover {
+    color: #ff2020;
+}
+.prod__text .pageMainBtnStyle {
+    border-color: var(--main-blue-color);
+    color: var(--main-blue-color);
+    cursor: pointer;
+    font-size: 15px;
+}
+.prod__text .pageMainBtnStyle:hover{
+    background-color: var(--main-blue-color);
+    color: var(--primary-white);
+}
+@media screen and (max-width: 600px) {
+    .selected__product__info .prod__text h3 {
+        font-size: 12px;
+    }
+    .selected__product__info .prod__text strong {
+        font-size: 10px;
+        font-weight: 500;
+    }
+    .selected__product__info .prod__text p {
+        font-size: 8px;
+    }
+    .selected__product__info {
+        gap: 8px;
+    }
+    .selected__product__info .prod__img img {
+        width: 75px;
+        height: 90px;
+    }
+    .selected__product__action {
+        gap: 30px;
+    }
+    .selected__product__action .quantity__btns {
+        gap: 7px;
+        color: rgba(148, 21, 21, 1);
+    }
+}

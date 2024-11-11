@@ -1,0 +1,126 @@
+.newCatalogItem__form__handler {
+    background: var(--primary-white);
+    box-shadow: 0px 10px 60px 0px rgba(226, 236, 249, 0.5);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.catalog__form__items {
+    margin-top: 30px;
+}
+
+.catalog__new__input label {
+    margin-bottom: 8px;
+    text-transform: capitalize;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.catalog__new__input input,
+.catalog__new__input select {
+    border-radius: 8px;
+    box-shadow: none;
+    outline: none;
+    height: 50px;
+    border: 0.5px solid rgba(128, 157, 173, 0.5);
+    margin-bottom: 20px;
+}
+
+.catalog__new__input textarea {
+    border-radius: 8px;
+    box-shadow: none;
+    outline: none;
+    border: 0.5px solid rgba(128, 157, 173, 0.5);
+    margin-bottom: 20px;
+}
+
+.catalog__new__input input:focus,
+.catalog__new__input textarea:focus,
+.catalog__new__input select:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.catalog__new__input input::placeholder,
+.catalog__new__input select {
+    text-transform: capitalize;
+    color: rgba(128, 157, 173, 1);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.custom-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.custom-input {
+    flex: 0 0 50%;
+    margin-right: 0.5rem;
+    /* Adjust the margin as needed */
+}
+
+.custom-select {
+    flex: 0 0 25%;
+    background: url("../../assets/sidebar-icons/chevron-down\ 1.svg") no-repeat right 0.75rem center;
+    appearance: none;
+    /* border: none; */
+}
+
+.currency__label {
+    margin-right: 5px;
+}
+
+.upload__image__btn {
+    margin: 30px 0;
+}
+
+.upload__image__btn button {
+    padding: 10px 16px 10px 16px;
+    gap: 10px;
+    border-radius: 6px;
+    background: rgba(0, 163, 255, 1);
+    border: 2px solid rgba(0, 163, 255, 1);
+    color: var(--primary-white);
+    transition: ease-in-out .3s;
+}
+
+.upload__image__btn button:hover {
+    background-color: var(--primary-white);
+    color: rgba(0, 163, 255, 1);
+}
+
+.catalog__check__points .check__item {
+    margin-bottom: 10px;
+}
+
+.catalog__check__points .check__item input {
+    width: 18px;
+    height: 18px;
+    gap: 0px;
+    border-radius: 4px;
+    border: 0.5px solid rgba(94, 98, 120, 1);
+    box-shadow: none;
+    outline: none;
+    margin-right: 20px; 
+    cursor: pointer;
+}
+
+.catalog__check__points .check__item label {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.75px;
+    text-align: left;
+    color: rgba(51, 51, 51, 1);
+
+}
+
+@media screen and (max-width: 600px){
+    .custom-input-container{
+        display: block;
+    }
+    .catalog__check__points .check__item input{
+        margin-right: 5px;
+    }
+}

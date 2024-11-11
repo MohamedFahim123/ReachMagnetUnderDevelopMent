@@ -1,0 +1,45 @@
+.sidebarOffcanvas{
+    width: 250px;
+    height: 100%;
+    background-color: #fff !important;
+    padding: 40px;
+    margin: 20px 0;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+.sidebar__menu {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar__menu__info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+
+}
+
+.sidebar__menu_active {
+    background-color: #dfdfdf;
+    border-radius: 8px;
+}
+
+.sidebar__menu__info img {
+    width: 30px;
+    height: 30px;
+}
+
+.sidebar__menu__info h5 {
+    margin-bottom: 0;
+    font-size: 12px;
+}
+@media (max-width: 768px){
+    .sidebarOffcanvas{
+        margin: 0 !important;
+    }
+}
+

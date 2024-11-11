@@ -1,0 +1,13 @@
+.otherCategory__handler{
+    margin-top: 30px;
+}
+.otherCategory__handler .headerSec__handler h1{
+    text-align: center;
+}
+.otherCategory__searchBar{
+    margin-top: 50px;
+}
+.otherCategory__display__handler .sidebar-toggle{
+    background-color: #fff;
+    color: var(--primary-black);
+}

@@ -1,0 +1,28 @@
+.downloadAppSec__handler{
+    margin-top: 100px;
+}
+.downloadAppSec__handler .downloadAppSec__btnss img{
+    width: 257px;
+    height: 83px;
+}
+.downloadAppSec__handler .downloadAppSec__btnss .btnForDownload{
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+.downloadAppSec__handler .header_ofSec{
+    text-align: left !important;
+}
+.downloadAppSec__handler .header_ofSec p{
+    margin: 0;
+}
+@media screen and (max-width: 600px) {
+    .downloadAppSec__handler .header_ofSec{
+        text-align: center !important;
+    }
+    .downloadAppSec__handler .header_ofSec p{
+        margin: auto;
+    }
+    .downloadAppSec__btnss{
+        text-align: center;
+    }
+}

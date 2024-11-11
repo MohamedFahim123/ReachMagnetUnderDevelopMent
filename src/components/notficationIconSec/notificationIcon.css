@@ -1,0 +1,174 @@
+.notificationIcon__handler{
+    position: relative;
+}
+.notificationCount__num{
+    position: absolute;
+    top: -16px;
+    right: -10px;
+    font-size: 12px;
+    /* background: var(--main-turquoise); */
+    background: var(--sale-color);
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+}
+.iconItemBox{
+    background: rgba(221, 221, 221, 0.719);
+    padding: 20px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.notificationIcon__handler i{
+    margin: 0 !important;
+    cursor: pointer;
+    color: #edca56 !important;
+}
+.notificationIcon__handler i:hover{
+    color: #e7bd32 !important;
+  
+}
+.notficationBody__handler{
+    position: absolute;
+    right: 0;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(6, 126, 173, 0.909);
+    color: #fff;
+    transition: all 0.4s ease-out, opacity 0.4s ease-out;
+    transform: translateY(-40px); 
+    visibility: hidden;
+    opacity: 0;
+    width:300px;
+    /* box-shadow: 4px 10px 5px 5px rgba(37, 36, 36, 0.4); */
+    box-shadow: 0 0 10px #0003;
+}
+.notficationBody__handler.show{
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(10px);
+    z-index: 200;
+}
+.notficationBody__handler.hide {
+    transform: translateY(0);
+    opacity: 0;
+}
+.notHeaderBox h3{
+    font-size: 18px;
+}
+.notItem{
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+
+}
+.notItem:not(:last-child){
+    margin-block: 10px;
+}
+.notItem img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.itemInfo h5{
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.itemInfo p{
+    font-size: 12px;
+}
+.notItem:hover{
+    background: rgba(1, 187, 233, 0.906);
+}
+/* .viewMoreNotfiBtn{
+    padding: 15px;
+    text-transform: capitalize;
+    font-size: 14px;
+    margin: 20px 0 0;
+    border-radius: 8px;
+    border: 1px solid var(--main-blue-color);
+    background: var(--main-turquoise);
+    width: 100%;
+    color: #fff;
+} */
+
+
+.viewMoreNotfiBtn {
+    width: 100%;
+    --color: var(--main-blue-color);
+    padding: 0.8em 1.7em;
+    background-color: transparent;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0 0;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: 400;
+    font-size: 17px;
+    border: 1px solid;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: #fff;
+    z-index: 1;
+   }
+   
+   .viewMoreNotfiBtn::before, .viewMoreNotfiBtn::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    background-color: var(--color);
+    transition: 1s ease;
+   }
+   
+   .viewMoreNotfiBtn::before {
+    top: -1em;
+    left: -1em;
+   }
+   
+   .viewMoreNotfiBtn::after {
+    left: calc(100% + 1em);
+    top: calc(100% + 1em);
+   }
+   
+   .viewMoreNotfiBtn:hover::before, .viewMoreNotfiBtn:hover::after {
+    height: 410px;
+    width: 410px;
+   }
+   
+   .viewMoreNotfiBtn:hover {
+    color: #fff;
+   }
+   
+   .viewMoreNotfiBtn:active {
+    filter: brightness(.8);
+   }
+   .addResponsive{
+    display: none !important;
+   }
+   @media screen and (max-width: 991px) {
+    .addResponsive{
+        display: block !important;
+       }
+       .notficationBody__handler{
+        right: -20px;
+       }
+       .notificationIcon__handler i{
+        font-size: 18px;
+    }
+   }
+
+
+

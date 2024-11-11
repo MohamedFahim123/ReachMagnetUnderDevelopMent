@@ -1,0 +1,92 @@
+.franchiseSec__handler{
+    margin: 50px 0;
+}
+.franchiseSec__content{
+    background: linear-gradient(-72deg, #08AAE8 0%,  #067FAD 50%,  #06264D 100%);
+    border-radius: 24px;
+    padding: 60px 0;
+    color: var(--primary-white);
+}
+.franchiseSec__content-two {
+    background-image: url('../../assets/franchiseSec/d53597d3d4d9f203263363ce7db66d8d.jpeg');
+    background-size: cover;
+    background-position: center;
+    padding: 75px 0;
+    position: relative;
+}
+
+.franchiseSec__content h3 {
+    position: relative;
+    z-index: 15;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 25px;
+    margin-bottom: 25px;
+    text-transform: capitalize;
+}
+.franchiseSec__content-two h3 {
+    font-size: 40px;
+    font-weight: 500;
+}
+.franchiseSec__content p {
+    position: relative;
+    z-index: 15;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 170%;
+    margin-bottom: 30px;
+}
+.franchiseSec__content-two p {
+    font-size: 24px;
+    margin-bottom: 0;
+    font-weight: 400;
+}
+.franchise__actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.franchise__actions button{
+    position: relative;
+    background: transparent;
+    border: 2px solid var(--primary-white);
+    color: var(--primary-white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: ease-in-out .3s;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    -webkit-transition: ease-in-out .3s;
+    -moz-transition: ease-in-out .3s;
+    -ms-transition: ease-in-out .3s;
+    -o-transition: ease-in-out .3s;
+}
+.franchise__actions button:hover{
+    background: var(--primary-white);
+    color: #067FAD;
+}
+
+@media screen and (max-width: 600px) {
+    .franchiseSec__content{
+        padding: 30px 0;
+    }
+    .franchiseSec__content h3{
+        font-size: 16px;
+    }
+    .franchiseSec__content p{
+        line-height: normal;
+        font-size: 12px;
+        padding: 0 10px;
+        font-weight: 300;
+    }
+    .franchise__actions{
+        gap: 10px;
+    }
+    .franchise__actions button{
+        /* padding: 10px 15px; */
+        font-size: 12px;
+    }
+}

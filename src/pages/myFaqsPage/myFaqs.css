@@ -1,0 +1,24 @@
+.allFaqsDash__handler .singleCompany__rectangleSec-slide{
+    /* background: var(--main-blue-color); */
+}
+.allFaqsDash__handler .singleCompany__rectangleSec-slide h4{
+    color: var(--main-black-color);
+    border-bottom: 1px dotted #000;
+}
+.allFaqsDash__handler .singleCompany__rectangleSec-slide .deleteFaq__btn{
+    display: flex;
+    justify-content: end;
+}
+.allFaqsDash__handler .singleCompany__rectangleSec-slide .deleteFaq__btn i{
+    color: rgba(160, 157, 157, 1);
+    cursor: pointer;
+    transition: all ease-in-out .2s;
+}
+.allFaqsDash__handler .singleCompany__rectangleSec-slide .deleteFaq__btn i:hover{
+    color: rgba(238, 155, 144, 1);
+}
+.allFaqsDash__handler .singleCompany__rectangleSec-slide{
+height: auto;
+}
+
+/* --main-turquoise */

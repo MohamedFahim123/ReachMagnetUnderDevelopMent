@@ -1,0 +1,8 @@
+.unAuthorizedSection {
+    height: 50vh;
+}
+.unAuthorizedSection h2 {
+    max-width: 80%;
+    margin: auto;
+    line-height: 1.86;
+}

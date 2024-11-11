@@ -1,0 +1,8 @@
+.heroOnlyCover__handler{
+    background-image: url('../../assets/companyImages/cover.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    height: 70vh;
+}

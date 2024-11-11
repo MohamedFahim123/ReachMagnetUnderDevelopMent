@@ -1,0 +1,20 @@
+.profileFilterbar__handler{
+    width: 100%;
+    
+}
+.profileFilterbar__handler .productDetailsFilterationBar-list{
+    background-color: #fff;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profileFilterbar__handler .productDetailsFilterationBar-list .catalog__new__input{
+    width: 80%;
+}
+
+@media screen and (max-width: 600px) {
+    .profileFilterbar__handler .productDetailsFilterationBar-list .catalog__new__input{
+        width: 100%;
+    }
+}

@@ -1,0 +1,59 @@
+.companyWorkHourTable__handler .WorkHourTables__box{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 10px;
+    justify-content: center;
+    border: 1px dotted rgba(128, 157, 173, 1);
+}
+/* .companyWorkHourForm__handler{
+    text-align: center;
+} */
+.editModeBtn{
+    background: transparent;
+    border: 1px solid var( --main-turquoise);
+    color: var( --main-turquoise);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: end;
+    margin-bottom: 10px;
+    transition: all ease-in-out .2s ;
+
+}
+.editModeBtn:hover{
+    background: var( --main-turquoise);
+    color: #fff;
+}
+.profileFormInputItem .deleteBtn{
+    border: 1px solid rgba(213, 0, 18, 1);
+    background: rgba(213, 0, 18, 1);
+    padding: 10px 25px;
+    color: #fff;
+    border-radius: 12px;
+    margin-top: 10px;
+    font-size: 14px;
+    text-transform: capitalize;
+    transition: all ease-in-out .2s ;
+}
+.companyWorkHourTable__handler .formActions{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profileFormInputItem .deleteBtn:hover{
+    background: #fff;
+    color: rgba(213, 0, 18, 1);
+}
+
+@media screen and (max-width: 768px) {
+    .companyWorkHourTable__handler .WorkHourTables__box{
+        flex-direction: column;
+        justify-content: center;
+    }
+}

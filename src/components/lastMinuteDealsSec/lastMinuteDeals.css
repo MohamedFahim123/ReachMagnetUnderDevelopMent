@@ -1,0 +1,36 @@
+.lastMinuteDeals__handler {
+    background: var(--primary-white);
+    padding-bottom: 30px;
+}
+
+.lastMinuteDeal__logo__img {
+    width: 248px;
+    height: 97.55px;
+    margin-bottom: 4px;
+}
+.lastMinuteDeals__handler .lastMinuteDeals__cards .product__image img{
+    width: 330px;
+    height: 190px;
+    border-radius: 12px;
+}
+.lastMinuteDeals__handler .lastMinuteDeals__cards .product__info .sub__info p{
+    text-align: right;
+}
+.lastMinuteDeals__handler .lastMinuteDeals__cards .deal__time .deal__time__day{
+    text-align: left;
+}
+
+@media screen and (max-width: 600px) {
+    .lastMinuteDeal__logo__img {
+        width: 68px;
+        height: 26.75px;
+        margin-bottom: -27px;
+        position: relative;
+        z-index: 10;
+    }
+
+.lastMinuteDeals__handler .lastMinuteDeals__cards .product__image img{
+    width: 100%;
+    height: 120px;
+}
+}

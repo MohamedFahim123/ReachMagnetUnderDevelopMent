@@ -1,0 +1,24 @@
+.profileForm__handler {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.profileFormInputItem input {
+    background: transparent;
+}
+.cityContainerProfileForm {
+    width: 45%;
+}
+.profileForm__handler .startUpdateBtn{
+    border-radius: 7px !important;
+    padding: 10px 30px;
+    -webkit-border-radius: 7px !important;
+    -moz-border-radius: 7px !important;
+    -ms-border-radius: 7px !important;
+    -o-border-radius: 7px !important;
+}
+@media screen and (max-width: 600px) {
+    .cityContainerProfileForm {
+        width: 100%;
+    } 
+}

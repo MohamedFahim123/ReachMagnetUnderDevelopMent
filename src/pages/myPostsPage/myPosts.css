@@ -1,0 +1,13 @@
+.postsInDash__handler .postItemBg{
+    background: var(--body-color);
+    padding: 20px;
+    border-radius: 10px;
+}
+.headOfNews__card-rightPart i{
+   color: rgba(160, 157, 157, 1);
+    cursor: pointer;
+    transition: all ease-in-out .2s;
+}
+.headOfNews__card-rightPart i:hover{
+    color: rgba(238, 155, 144, 1);
+}

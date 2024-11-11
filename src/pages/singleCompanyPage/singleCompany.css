@@ -1,0 +1,21 @@
+.singleCompany__handler .productDetailsFilterationBar-list{
+    background: var(--primary-white) !important;
+}
+.singleCompany__handler .readyToBuy__navigationBar{
+    display: none;
+}
+/* .showCompany__Service .lastMinuteCard_handler .product_image {
+    height: 200px !important;
+} */
+.showCompany__Service .lastMinuteCard__handler{
+    height: 100%;
+}
+.showCompany__Service .product__image img{
+    height: 200px !important;
+    border-radius: 8px !important;
+    object-fit: cover !important;
+    margin-bottom: 10px;
+}
+.showCompany__Service .sub__info{
+    display: none !important;
+}

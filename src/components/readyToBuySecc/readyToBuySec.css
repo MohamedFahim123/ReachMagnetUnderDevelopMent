@@ -1,0 +1,45 @@
+.readyToBuySec__handler .listedNavigate {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.readyToBuy__products {
+    margin: 40px 0;
+}
+
+.readyToBuy__selectBar select {
+    width: 167px;
+    background: transparent;
+    padding: 8px;
+    border: 1px solid var(--main-turquoise);
+    border-radius: 6px;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+    color: var(--main-turquoise);
+    font-size: 12px;
+    text-align: center;
+    appearance: none;
+    /* Remove default arrow in modern browsers */
+    -webkit-appearance: none;
+    /* Remove default arrow in Safari */
+    -moz-appearance: none;
+    /* Remove default arrow in Firefox */
+    background-image: url('../../assets/logos/arrow-down-select.png');
+    /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 9px 5px;
+}
+
+@media screen and (max-width: 600px) {
+    .readyToBuySec__handler .listedNavigate {
+        gap: 0;
+    }
+
+    .readyToBuy__products {
+        margin: 20px 0;
+    }
+}

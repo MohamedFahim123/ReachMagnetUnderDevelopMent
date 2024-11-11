@@ -1,0 +1,18 @@
+.bookAppointMentForm textarea {
+    min-height: 80px;
+}
+.modal-dialog {
+    display: flex !important;
+    justify-content: center !important;
+}
+.modal-content {
+    min-width: 600px;
+}
+@media (max-width: 768px) {
+    .modal-content{
+        min-width: 100%;
+    }
+}
+.modal-backdrop.show {
+    opacity: 0.8 !important;
+}

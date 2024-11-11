@@ -1,0 +1,10 @@
+.productOwnerName {
+    font-size: 30px;
+    font-weight: 500;
+    color: #000000;
+}
+@media (max-width: 374px) {
+    .productOwnerName {
+        font-size: 25px;
+    }
+}

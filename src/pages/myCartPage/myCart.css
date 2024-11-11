@@ -1,0 +1,253 @@
+.cartItems__content{
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+    padding-bottom: 30px; */
+}
+.cartItems__content h2{
+    text-transform: capitalize;
+    font-size: 25px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 20px;
+}
+.productCartItem__card{
+    background: #fff;
+    padding: 20px 15px;
+    display: flex;
+    gap: 10px;
+    border-radius: 24px;
+    width: 100%;
+}
+.productCartItem__card .cartItem__img{
+    width: 40%;
+}
+.productCartItem__card .cartItem__img img{
+    width: 256px;
+    height: 225px;
+    border-radius: 12px;
+}
+.productCartItem__card .cartItem__info{
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+}
+.productCartItem__card .cartItem__info__left h5,
+.orderSummary__content h5
+{
+    text-transform: capitalize;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 20px;
+}
+.item__attributes{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+ .item__attributes .attribute__tit{
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: rgba(33, 33, 33, 1);
+}
+.item__attributes span{
+    border: .5px solid rgba(145, 151, 179, 1);
+    padding: 1px 8px;
+    border-radius: 4px;
+    color: rgba(145, 151, 179, 1);
+    font-size: 12px;
+    font-weight: 400;
+}
+.productCartItem__card .cartItem__info__left .item__qty{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 40px;
+}
+.productCartItem__card .cartItem__info__left .item__qty span{
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: rgba(145, 151, 179, 1);
+}
+.productCartItem__card .cartItem__info__left .item__qty select{
+    border: .5px solid rgba(145, 151, 179, 1) !important;
+    width: 46px;
+}
+ .remove__btn{
+    border-radius: 4px;
+    text-align: center;
+    border: .5px solid rgba(145, 151, 179, 1);
+    padding: 6px 0;
+    transition: all ease-in-out .3s;
+    color: rgba(145, 151, 179, 1);
+    cursor: pointer;
+    width: 100px;
+    /* height: 27px; */
+}
+ .remove__btn:hover{
+    background: rgba(213, 0, 18, 1);
+    border: .5px solid rgba(213, 0, 18, 1);
+    color: #fff;
+}
+.remove__btn.displayNoneOnSm{
+    display: block;
+}
+.remove__btn.dislayNoneOnLg{
+    display: none;
+}
+.productCartItem__card .cartItem__info__left .remove__btn i{
+    margin-right: 5px;
+}
+.productCartItem__card .cartItem__info__right .cartItem__price h3{
+    font-weight: bold;
+    font-size: 24px;
+    color: var(--main-blue-color);
+}
+.orderSummary__content{
+    border: 1px solid rgba(48, 135, 218, 1);
+    border-radius: 24px;
+    padding: 15px;
+    /* margin-top: 60px; */
+}
+.orderSummary__content .couponCodeInput{
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 30px;
+}
+.orderSummary__content .couponCodeInput button{
+    border: none;
+    background: rgba(48, 135, 218, 1);
+    color: #fff;
+    text-transform: capitalize;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    transition: all ease-in-out .2s;
+    cursor: pointer;
+}
+.orderSummary__content .couponCodeInput button:hover{
+    background: rgb(38, 109, 176);
+}
+.orderSummary__content .couponCodeInput input{
+    border: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.orderSummary__content  .summaryInfo__item{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+.orderSummary__content  .summaryInfo__item span{
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: capitalize;
+    color: rgba(145, 151, 179, 1);
+}
+.orderSummary__content  .summaryInfo__item h5{
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #000;
+}
+.orderSummary__content .orderSummary__info{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+} 
+.orderSummary__content .orderTotalPrice{
+    margin-bottom: 20px;
+}
+.orderSummary__content .orderTotalPrice .totPrice{
+    font-size: 20px;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #000;
+}
+.orderSummary__content .orderTotalPrice .summaryInfo__item h5{
+    font-size: 20px;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #000;
+}
+ .orderCheckout__btn button{
+    width: 100%;
+    background: rgba(48, 135, 218, 1);
+    color: #fff;
+    border: 1px solid rgba(48, 135, 218, 1);
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 15px 0;
+    transition: all .2s ease-in-out;
+}
+ .orderCheckout__btn button:hover{
+color: rgba(48, 135, 218, 1);
+background: #fff;
+}
+
+@media screen and (max-width: 600px) {
+    .productCartItem__card{
+        align-items: center;
+    }
+    .productCartItem__card .cartItem__img img{
+        width: 90px;
+        height: 120px;
+    }
+    .productCartItem__card .cartItem__info__left .item__attributes{
+        flex-wrap: wrap;
+    }
+
+    .productCartItem__card .cartItem__info__left .item__attributes span {
+        font-size: 8px;
+    }
+    .productCartItem__card .cartItem__img{
+        width: 31%;
+    }
+    .productCartItem__card .cartItem__info{
+        width: 69%;
+    }
+    .remove__btn.displayNoneOnSm{
+        display: none;
+    }
+    .remove__btn.dislayNoneOnLg{
+        display: block;
+    }
+    .cartItem__info__right{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: end;
+    }
+    .cartItems__content h2{
+        font-size: 16px;
+    }
+    .productCartItem__card .cartItem__info__left h5, .orderSummary__content h5{
+        font-size: 15px;
+    }
+    .productCartItem__card .cartItem__info__left .item__attributes .attribute__tit {
+        font-size: 13px;
+    }
+    .productCartItem__card .cartItem__info__left .item__qty span {
+        font-size: 13px;
+    }
+    .productCartItem__card .cartItem__info__right .cartItem__price h3 {
+        font-size: 20px;
+    }
+}
+
+.emptyState {
+    min-height: 65vh;
+    max-width: 80%;
+    padding: 50px;
+    font-size: 40px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}

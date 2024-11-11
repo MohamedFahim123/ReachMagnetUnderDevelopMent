@@ -1,0 +1,77 @@
+.mainContentHeader__handler .content__header{
+    padding: 30px 0;
+}
+.content__header h1{
+font-size: 24px;
+font-weight: 500;
+line-height: 36px;
+text-align: left;
+
+}
+.myFooter__search form{
+    position: relative;
+    display: inline-block;
+}
+.myFooter__search form input{
+    box-shadow: none;
+    opacity: 1;
+    background: #fff;
+    border: none;
+    width: 216px;
+    padding-left: 16px;
+    padding-right: 50px;
+    border-color: transparent !important;
+    color: var(--primary-black);
+    height: 38px;
+    line-height: 31px;
+    font-size: 16px;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+.myFooter__search form input::placeholder{
+    font-size: 16px;
+    color: #888;
+    text-transform: capitalize;
+}
+.myFooter__search form input:focus , 
+.myFooter__search form input:focus-visible , 
+.myFooter__search form input:hover {
+    outline: none;
+    border: none;
+}
+.myFooter__search form input:focus::placeholder {
+    color: #fff;
+    caret-color: var(--primary-hover-blue);
+}
+.myFooter__search form button{
+    position: absolute;
+    top: 0px;
+    right: 0;
+    width: 36px;
+    text-align: center;
+    padding: 0;
+    height: 100%;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    color: #888;
+}
+.myFooter__search form button i{
+    width: 24px;
+    height: 24px;
+}
+
+@media screen and (max-width: 600px){
+    .myFooter__search form input{
+        width: 125px;
+    }
+    .content__header h1{
+        font-size: 16px;
+    }
+    .mainContentHeader__handler.expanded{
+        overflow: hidden;
+    }
+}

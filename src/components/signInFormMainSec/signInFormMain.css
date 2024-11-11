@@ -1,0 +1,102 @@
+.gotoLoginLink{
+    text-decoration: underline;
+    color: rgba(7, 82, 154, 1);
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 40px;
+    cursor: pointer;
+}
+ul.loginToggler {
+    padding-inline-start: 12px;
+}
+ul.loginToggler li {
+    font-weight: 500;
+    text-align: center;
+    font-size: 24px;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    -webkit-border-radius: 10px 10px 0 0;
+    -moz-border-radius: 10px 10px 0 0;
+    -ms-border-radius: 10px 10px 0 0;
+    -o-border-radius: 10px 10px 0 0;
+    border-bottom: none;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+
+    background-color: #808080;
+    color: var(--primary-white);
+    border: 1px solid #808080;
+
+
+}
+ul.loginToggler li.active {
+    background-color: var(--primary-white);
+    color: var(--main-blue-color);
+    border-color: var(--primary-white);
+}
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+.toggle-switch-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ddd;
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 2px #ccc;
+    transition: background-color 0.3s ease-in-out;
+}
+.toggle-switch-handle {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+.toggle-switch::before {
+    content: "";
+    position: absolute;
+    top: -25px;
+    right: -35px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #aaa;
+    text-shadow: 1px 1px #fff;
+    transition: color 0.3s ease-in-out;
+}
+.toggle-switch input[type="checkbox"]:checked + .toggle-switch-handle {
+    transform: translateX(45px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 3px #011F5B;
+}
+.toggle-switch input[type="checkbox"]:checked + .toggle-switch-background {
+    background-color: #011F5B;
+    box-shadow: inset 0 0 0 2px #011F5B;
+}
+.toggle-switch input[type="checkbox"]:checked + .toggle-switch:before {
+    content: "On";
+    color: #011F5B;
+    right: -15px;
+}
+.toggle-switch input[type="checkbox"]:checked + .toggle-switch-background .toggle-switch-handle {
+    transform: translateX(40px);
+}
+.signUpForm__mainSec {
+    transform: translateY(180px);
+    -webkit-transform: translateY(180px);
+    -moz-transform: translateY(180px);
+    -ms-transform: translateY(180px);
+    -o-transform: translateY(180px);
+    padding-bottom: 250px !important;
+}

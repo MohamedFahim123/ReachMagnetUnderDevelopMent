@@ -1,0 +1,27 @@
+.header_ofSec h3 {
+    font-size: 40px;
+    font-weight: 500;
+}
+.header_ofSec p {
+    margin: auto;
+    font-size: 20px ;
+    font-weight: 400;
+    max-width: 650px;
+}
+@media (max-width: 767px) {
+    .header_ofSec h3 {
+        font-size: 30px;
+    }
+    .header_ofSec p {
+        font-size: 16px;
+    }
+}
+@media (max-width: 500px) {
+    .header_ofSec h3 {
+        font-size: 16px;
+    }
+    .header_ofSec p {
+        font-size: 12px;
+        max-width: 90%;
+    }
+}

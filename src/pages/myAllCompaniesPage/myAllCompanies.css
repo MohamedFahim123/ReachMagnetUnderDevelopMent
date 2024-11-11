@@ -1,0 +1,191 @@
+.MyAllCompanies__handler{
+    margin-bottom: 60px;
+    margin-top: 30px;
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compImage img {
+    width: 146px;
+    height: 146px;
+    border-radius: 12px;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .subInfoItem img {
+    width: 14px;
+    height: 14px;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyMainCountry img {
+    width: 28px;
+    height: 19px;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .companyActions button {
+    background: var(--main-blue-color);
+    color: #fff;
+    border: 1px solid var(--main-blue-color);
+    padding: 10px 30px;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .companyActions button:hover {
+    background: #fff;
+    color: var(--main-blue-color);
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem {
+    background: #fff;
+    border: 1px solid rgba(94, 98, 120, 0.2);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    /* justify-content: center; */
+    align-items: center;
+    width: 100%;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .compImage {
+    width: 20%;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo {
+    width: 55%;
+}
+
+.mainContentAllCompanies__handler .CompanyContentItem .companyActions {
+    width: 20%;
+    text-align: right;
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo h5{
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: capitalize;
+    color: rgba(51, 51, 51, 1);
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companySubInfo{
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companySubInfo .subInfoItem{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    align-items: center;
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companySubInfo .subInfoItem span{
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: capitalize;
+    color: rgba(181, 181, 195, 1);
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyDescrip p{
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(51, 51, 51, 1);
+    text-transform: capitalize;
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyMainCountry{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    align-items: center;
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyMainCountry i{
+    color: rgba(181, 181, 195, 1);
+
+}
+.mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyMainCountry span{
+    font-size: 17px;
+    font-weight: 400;
+    text-transform: capitalize;
+    color: var(--main-blue-color);
+}
+@media screen and (max-width: 600px){
+    .mainContentAllCompanies__handler{
+        margin-top: 50px;
+    }
+    .allContentPosts__handler{
+        margin-top: 50px;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companySubInfo{
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .mainContentAllCompanies__handler .CompanyContentItem{
+        flex-direction: column;
+        justify-content: start;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage,
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo,
+    .mainContentAllCompanies__handler .CompanyContentItem .companyActions
+    {
+        width: 100%;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage{
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage img{
+        border-radius: 12px;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .companyActions{
+        text-align: right;
+        margin-top: 20px;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyMainCountry {
+        margin-top: 20px;
+    }
+}
+
+
+
+@media screen and (min-width: 992px) and (max-width: 1025px){
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage {
+        width: 20%;
+    }
+    
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo {
+        width: 55%;
+    }
+    
+    .mainContentAllCompanies__handler .CompanyContentItem .companyActions {
+        width: 20%;
+        text-align: right;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage img{
+        width: 126px;
+        height: 126px;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyDescrip {
+        width: 90%;
+    }
+}
+@media screen and (min-width: 1025px) and (max-width: 1200px) {
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage {
+        width: 20%;
+    }
+    
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo {
+        width: 55%;
+    }
+    
+    .mainContentAllCompanies__handler .CompanyContentItem .companyActions {
+        width: 20%;
+        text-align: right;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compImage img{
+        width: 116px;
+        height: 116px;
+    }
+    .mainContentAllCompanies__handler .CompanyContentItem .compMainInfo .companyDescrip {
+        width: 90%;
+    }
+}
+
+.MyAllCompanies__handler h1{
+    font-size: 50px;
+}

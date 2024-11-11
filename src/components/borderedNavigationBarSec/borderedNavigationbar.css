@@ -1,0 +1,24 @@
+.borderdNavigateItem{
+    font-weight: 400;
+    font-size: 16px;
+    border: 1px solid transparent;
+    padding: 5px 20px;
+    cursor: pointer;
+    color: rgba(51, 51, 51, 1);
+}
+.borderdNavigateItem.active{
+    border: 1px solid var(--main-turquoise);
+    padding: 5px 20px;
+    border-radius: 6px;
+    color: var(--main-turquoise);
+}
+.borderdNavigateItem:hover{
+    border: 1px solid var(--main-turquoise);
+    border-radius: 6px;
+    color: var(--main-turquoise);
+}
+@media screen and (max-width: 600px) {
+    .borderdNavigateItem{
+        padding: 5px 10px;
+    }
+}

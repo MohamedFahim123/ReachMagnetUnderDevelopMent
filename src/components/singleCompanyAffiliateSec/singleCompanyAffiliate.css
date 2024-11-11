@@ -1,0 +1,168 @@
+.singleCompany__affiliate .affiliate-innerContent {
+    background: linear-gradient(-72deg,#08aae8,#067fad 50%,#06264d);
+    color: var(--primary-white);
+    padding-block: 70px;
+}
+.star {
+    position: relative;
+    display: inline-block;
+    width: 40px; 
+    height: 40px;
+    z-index: 20;
+    margin-bottom: 20px;
+}
+.star:before, .star:after {
+    content: '';
+    position: absolute;
+    z-index: 20;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    background: #00A3FF;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+.star:before {
+    transform: translate(-50%, -50%) rotate(45deg);
+    -webkit-transform: translate(-50%, -50%) rotate(45deg);
+    -moz-transform: translate(-50%, -50%) rotate(45deg);
+    -ms-transform: translate(-50%, -50%) rotate(45deg);
+    -o-transform: translate(-50%, -50%) rotate(45deg);
+}
+.star:after {
+    transform: translate(-50%, -50%) rotate(0deg);
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    -moz-transform: translate(-50%, -50%) rotate(0deg);
+    -ms-transform: translate(-50%, -50%) rotate(0deg);
+    -o-transform: translate(-50%, -50%) rotate(0deg);
+}
+.leftAffiliate h4 {
+    color: #3F4254;
+    font-size: 25px;
+    position: relative;
+    z-index: 20;
+}
+.leftAffiliate {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.leftAffiliate::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: var(--primary-white);
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%,70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    width: 165px;
+    height: 170px;
+    border-radius: 60px;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    -ms-border-radius: 60px;
+    -o-border-radius: 60px;
+    transform: translate(-50%,-50%) rotatez(160deg);
+    -webkit-transform: translate(-50%,-50%) rotatez(160deg);
+    -moz-transform: translate(-50%,-50%) rotatez(160deg);
+    -ms-transform: translate(-50%,-50%) rotatez(160deg);
+    -o-transform: translate(-50%,-50%) rotatez(160deg);
+}
+.affiliate-innerContent .header_ofSec h3 {
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    font-size: 25px;
+}
+.affiliate-innerContent .header_ofSec p {
+    max-width: 100% !important;
+    font-family: var(--secondary-font);
+    font-size: 15px;
+    font-weight: 400;
+}
+.affiliate-card {
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    -ms-border-radius: 9px;
+    -o-border-radius: 9px;
+    border: 0.5px solid #ffffff;
+    padding: 20px 25px;
+}
+.affiliate-card-top h5 {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.affiliate-card-top {
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #ffffff;
+}
+.affiliate-card-bottom p {
+    font-weight: 300;
+    font-size: 11px;
+    margin-block: 15px 10px;
+    line-height: 1.68;
+}
+.affiliateBtn {
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    background:none;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    display: block;
+    margin: auto;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+}
+.affiliateBtn:hover {
+    background: linear-gradient(-72deg,#08aae8,#067fad 50%,#06264d);
+    color: #ffffff;
+}
+@media (max-width: 991px) {
+    .leftAffiliate {
+        margin-block: 40px 70px;
+    }
+    .affiliate-card-top h5 {
+        font-size: 12px;
+    }
+    .affiliate-card-top p {
+        font-size: 10px;
+    }
+    .affiliate-innerContent .header_ofSec p {
+        font-size: 14px;
+    }
+    .singleCompany__affiliate .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .singleCompany__affiliate .row {
+        margin: 0 !important;
+    }
+    .singleCompany__affiliate .col-12 {
+        padding: 0 !important;
+    }
+}
+@media (max-width: 767px) {
+    .affiliate-card {
+        max-width: 90% !important;
+    }
+    .affiliate-card:not(:last-child){
+        margin-bottom: 30px;
+    }
+}

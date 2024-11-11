@@ -1,0 +1,91 @@
+.followerInfo__Item{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.follower__filter__search .input__search__part{
+    margin-top: 30px;
+}
+.follower__filter__search input{
+    border-radius: 8px;
+    border: 1px solid #CFD0D5;
+    padding-left: 30px ;
+}
+.followerInfo__handler{
+    margin-top: 30px;
+}
+.followerInfo__Item{
+    padding: 12px 16px;
+}
+.followerInfo__Item .followerImage img{
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.followerContactInfo h1{
+    font-size: 16px;
+    font-weight: 500;
+    color: #434343;
+    text-transform: capitalize;
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+.followerContactInfo p{
+    font-size: 14px;
+    font-weight: 500;
+    color: #959595;
+    cursor: pointer;
+}
+.followerContactInfo .follower__status{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.followerContactInfo .isUsersfollowed{
+    background-color: rgba(1, 31, 91, 1);
+    /* color: var(--primary-white); */
+    color: rgba(145, 151, 179, 1);
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 2px 4px;
+    font-size: 10px;
+    border-radius: 3px;
+}
+.followerInfo__handler .my__roles__actions{
+    margin-left: 0;
+}
+@media screen and (max-width: 600px) {
+    .followerInfo__Item .followerImage img{
+        width: 52px;
+        height: 52px;
+    }
+    .followerContactInfo h1{
+        font-size: 14px;
+    }
+    .followerContactInfo p{
+        font-size: 10px;
+    }
+    .followerContactInfo .isUsersfollowed{
+        font-size: 9px;
+    }
+    .followerContactInfo .follower__status{
+        gap: 10px;
+    }
+    .follower__filter__search .input__search__part i{
+        display: inline-block !important;
+    }
+    .follower__filter__search input{
+        padding-left: 30px ;
+    }
+}
+@media screen and (max-width: 768px){
+    .follower__filter__search .input__search__part i{
+        display: inline-block !important;
+    }
+    .follower__filter__search input{
+        padding-left: 30px ;
+    }
+}

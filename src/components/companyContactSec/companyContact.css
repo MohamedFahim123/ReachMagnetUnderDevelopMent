@@ -1,0 +1,160 @@
+.contact__mainSec {
+    margin-top: 50px;
+    padding: 60px 0;
+}
+.contactCompany-type li {
+    font-size: 14px;
+    padding: 15px 35px;
+    border: 1px solid #011F5B;
+    color: var(--primary-black);
+    background-color: var(--primary-white);
+    border-radius: 8px 8px 0 0 ;
+    -webkit-border-radius: 8px 8px 0 0 ;
+    -moz-border-radius: 8px 8px 0 0 ;
+    -ms-border-radius: 8px 8px 0 0 ;
+    -o-border-radius: 8px 8px 0 0 ;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.contactCompany-type li:hover {
+    color: var(--primary-white);
+    background-color: #011F5B;
+}
+.contactCompany-type .contactCompany-type-active {
+    color: var(--primary-white);
+    background-color: #011F5B;
+}
+.contactCompany__form {
+    border: 1px solid var(--text-gray-color);
+    border-radius: 0 8px 8px 8px;
+    -webkit-border-radius: 0 8px 8px 8px;
+    -moz-border-radius: 0 8px 8px 8px;
+    -ms-border-radius: 0 8px 8px 8px;
+    -o-border-radius: 0 8px 8px 8px;
+    padding-bottom: 30px !important;
+}
+.contactCompany__form h4 {
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-white);
+    background-color: #011F5B;
+    border: 1px solid #011F5B;
+    border-radius: 0 8px 0 0;
+    -webkit-border-radius: 0 8px 0 0;
+    -moz-border-radius: 0 8px 0 0;
+    -ms-border-radius: 0 8px 0 0;
+    -o-border-radius: 0 8px 0 0;
+}
+.contactCompany__form label {
+    color: var(--primary-black);
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+.contactCompany__form input ,
+.contactCompany__form textarea,
+.contactCompany__form select {
+    padding: 10px 15px;
+    border: 1px solid #263F5B1A;
+    background-color: #263F5B1A;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+.contactCompany__form input:focus ,
+.contactCompany__form input:focus-visible ,
+.contactCompany__form textarea:focus,
+.contactCompany__form textarea:focus-visible {
+    outline: none;
+    border-color: #011F5B;
+}
+.contactCompany__form input::placeholder ,
+.contactCompany__form textarea::placeholder {
+    color: #00000033;
+}
+.contactCompany__form textarea {
+    height: 200px;
+}
+.contactCompany__form-submitBtn {
+    border: 1px solid #011F5B !important;
+    outline: none;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    background-color: #011F5B !important;
+    color: var(--primary-white) !important;
+    font-size: 22px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.contactCompany__form-submitBtn:hover {
+    color: #011F5B !important;
+    background-color: var(--primary-white) !important;
+}
+@media (max-width: 767px) {
+    .contactCompany-type li {
+        padding: 15px 15px;
+        font-size: 12px ;
+}
+    .contactCompany__form-submitBtn {
+        font-size: 16px;
+    }
+    .contactCompany__form h4 {
+        font-size: 13px;
+    }
+    .contact__mainSec .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .contact__mainSec .row {
+        margin: 0 !important;
+    }
+    .contact__mainSec .col-lg-12 {
+        padding: 0 !important;
+    }
+    .contactCompany__form label {
+        font-size: 14px;
+    }
+    .contactCompany__form textarea {
+        height: 100px;
+    }
+    .contactCompany__form input::placeholder ,
+    .contactCompany__form textarea::placeholder {
+        font-size: 14px;
+    }
+}
+@media (max-width: 440px) {
+    .contactCompany-type li {
+        padding: 10px 12px;
+        font-size: 10px;
+    }
+    .contactCompany__form h4 {
+        font-size: 12px;
+    }.contactCompany__form-submitBtn {
+        font-size: 14px;
+    }
+}

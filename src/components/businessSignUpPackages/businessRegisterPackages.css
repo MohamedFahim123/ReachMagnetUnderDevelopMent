@@ -1,0 +1,268 @@
+.business-signUp__packages h4,
+.business-signUp__packages .suggested__package {
+    font-size: 25px;
+    color: #000000;
+    font-weight: 600;
+}
+.business-signUp__packages .suggested__package {
+    font-size: 22px;
+    margin-bottom: 50px;
+}
+.business-signUp__packages .preferedTimeForPackage li {
+    font-size: 30px;
+    color: #00000078;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    position: relative;
+    padding: 20px 0;
+    overflow: hidden;
+    margin-block: 50px;
+}
+.business-signUp__packages .preferedTimeForPackage li:hover {
+    color: #000000;
+}
+.business-signUp__packages .preferedTimeForPackage li::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    bottom: 0px;
+    width: 100%;
+    height: 3px;
+    background-color: #08AAE8;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.business-signUp__packages .preferedTimeForPackage li:hover::after {
+    left: 0;
+}
+.business-signUp__packages .preferedTimeForPackage .active {
+    color: #000000;
+}
+.business-signUp__packages .preferedTimeForPackage .active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #08AAE8;
+}
+.business-signUp__packages .packageCard {
+    transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    position: relative;
+    z-index: 5;
+    padding: 30px 20px;
+}
+.business-signUp__packages .packageCard.notSelectedPackage {
+    margin-top: 70px;
+    color: var(--primary-white);
+    background-color: transparent;
+}
+
+.business-signUp__packages .packageCard.notSelectedPackage::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    left: -5px;
+    top: -5px;
+    background-image: linear-gradient(-90deg,#08AAE8 0%, #067FAD 50%, #06264D 100%);
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+}
+.business-signUp__packages .packageCard.notSelectedPackage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: -1;
+    border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27px;
+    -ms-border-radius: 27px;
+    -o-border-radius: 27px;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.business-signUp__packages .packageCard.selectedPackage::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    left: -5px;
+    top: -5px;
+    background-image: linear-gradient(-90deg,#08AAE8 0%, #067FAD 50%, #06264D 100%);
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    box-shadow: 8px 7px 15px 0 #00000080;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.business-signUp__packages .packageCard.selectedPackage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-white);
+    z-index: -1;
+    border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27px;
+    -ms-border-radius: 27px;
+    -o-border-radius: 27px;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.packageCard h5 {
+    font-family: var(--secondary-font);
+    font-size: 25px;
+    font-weight: 400;
+}
+.packageCard .price {
+    font-family: var(--secondary-font);
+    font-size: 50px;
+    font-weight: 700;
+    margin-block: 30px;
+}
+.packageCard ul li {
+    font-family: var(--secondary-font);
+    font-weight: 400;
+    padding: 15px 0;
+}
+.packageCard ul li span {
+    background-color: var(--primary-white);
+    margin-inline-end: 10px;
+    padding: 1px 2px;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.packageCard.notSelectedPackage ul li span i {
+    color: #000000;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.packageCard.selectedPackage ul li span {
+    background-color: #000000;
+}
+.packageCard.selectedPackage ul li span i {
+    color: var(--primary-white);
+}
+.packageCard .packageBtn {
+    cursor: pointer;
+    font-family: var(--secondary-font);
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    margin: 40px auto 0;
+    display: inline-block;
+    padding: 15px 0;
+    min-width: 200px;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -ms-border-radius: 14px;
+    -o-border-radius: 14px;
+    font-weight: 500;
+    font-size: 20px;
+    position: relative;
+    background-color: none;
+    background-image: none;
+}
+.packageCard .packageBtn.selectedPackageBtn {
+    color: var(--primary-white);
+    background-image: linear-gradient(-90deg,#08AAE8 0%, #067FAD 50%, #06264D 100%);
+    background-color: none;
+}
+.packageCard .packageBtn.notSelectedPackageBtn {
+    background-image: none;
+    background-color: var(--primary-white);
+    color: #1F1F1F;
+}
+@media (max-width: 991px) {
+    .business-signUp__packages .packageCard.notSelectedPackage {
+        margin-top: 0;
+    }
+}
+@media (max-width: 768px) {
+    .business-signUp__packages .preferedTimeForPackage li {
+        font-size: 25px;
+    }
+    .packageCard .price {
+        font-size: 40px;
+        margin: 20px 0;
+    }
+    .packageCard ul li {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+    .packageCard .packageBtn {
+        font-size: 16px;
+        min-width: 150px;
+    }
+}
+@media (max-width: 575px) {
+    .business-signUp__packages h4 {
+        font-size: 22px;
+    }
+    .business-signUp__packages .preferedTimeForPackage li {
+        font-size: 20px;
+    }
+    .packageCard .price {
+        font-size: 35px;
+        margin: 20px 0;
+    }
+    .packageCard ul li {
+        font-size: 13px;
+    }
+    .packageCard .packageBtn {
+        font-size: 15px;
+        min-width: 140px;
+    }
+}

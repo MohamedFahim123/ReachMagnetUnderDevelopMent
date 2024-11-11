@@ -1,0 +1,105 @@
+
+.secBordered{
+    border: 1px solid gray;
+    border-radius: 12px;
+}
+.main_header_for_order{
+    border-bottom: 1px solid #000;
+    padding-bottom: 20px;
+}
+.showOrder__handler .icon_handler{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--main-blue-color);
+    color: #fff;
+    /* padding: 4px; */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    justify-content: center;
+}
+.sub_header_for_order{
+    /* text-align: center; */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.sub_header_for_order p.specialP{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(172, 172, 172, 1);
+}
+.sub_header_for_order p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+}
+.sub_header_for_order h5{
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+}
+.changeOrderStatu__handler{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.changeOrderStatu__handler p{
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+}
+.changeOrderStatu__handler .changeSatusBtn{
+    border-radius: 8px;
+    background: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border: 1px solid #000;
+    transition:  all ease-in-out .3s;
+}
+.changeOrderStatu__handler .changeSatusBtn:hover{
+    background: #fff;
+    color: #000;
+}
+
+ .order__statue.Pending {
+    color: var(--main-blue-color);
+}
+ .order__statue.Accepted {
+    color: rgba(144, 238, 159, 1);
+}
+ .order__statue.Inprocess  {
+    color: yellowgreen;
+}
+.order__statue.Processing  {
+    color: yellowgreen;
+}
+ .order__statue.Inshipping   {
+    color: orangered;
+}
+.order__statue.Delivering   {
+    color: orangered;
+}
+ .order__statue.Completed {
+    color: green;
+}
+ .order__statue.Rejected {
+    color: #ff2020;
+}
+.order__statue.Cancelled {
+    color: #ff0101;
+}
+ @media screen and (max-width: 600px) {
+    .showOrder__handler .sub_header_for_order{
+        margin-bottom: 20px;
+    }
+    .changeOrderStatu__handler{
+        justify-content: start;
+        margin-top: 20px;
+    }
+ }

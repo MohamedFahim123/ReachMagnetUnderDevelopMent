@@ -1,0 +1,80 @@
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--body-color);
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    width: 100%;
+}
+
+li {
+    list-style: none;
+}
+
+.form-control:hover ,
+.form-control:focus ,
+.form-control:focus-visible ,
+.form-select:hover ,
+.form-select:focus ,
+.form-select:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+:root {
+    --primary-white: rgba(255, 255, 255, 1); 
+    --primary-black: rgba(0, 0, 0, 1);
+    --primary-hover-blue: rgba(1, 186, 233, 1);
+    --text-gray-color: rgba(145, 151, 179, 1);
+    --body-color: rgba(241, 244, 248, 1);
+    --main-blue-color: rgba(1, 31, 91, 1);
+    --main-turquoise: rgba(6, 127, 173, 1);
+    --sale-color: rgba(225, 8, 19, 1);
+    --secondary-font: "Inter", sans-serif;
+}
+.errorMessage {
+    color: #ff2020 !important;
+    font-size: 11px;
+}
+.inputError {
+    border-color: #ff2020 !important;
+}
+.replace__margin__with__padding .signUp__headSec{
+    margin: 0;
+    padding: 50px 0;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+
+  

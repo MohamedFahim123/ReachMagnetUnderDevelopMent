@@ -1,0 +1,76 @@
+.lastMinuteCard__handler{
+    background: var(--primary-white);
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid rgba(148, 21, 21, 1);
+}
+
+.lastMinuteCard__handler .product__info{
+    align-items: normal;
+}
+.lastMinuteCard__handler .deal__time{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.lastMinuteCard__handler .deal__time img{
+    width: 27px;
+    height: 29px;
+}
+.lastMinuteCard__handler .deal__time .deal__time__day{
+    /* margin-right: 10px; */
+    text-align: center;
+}
+.lastMinuteCard__handler .deal__time .deal__time__hour{
+    text-align: center;
+}
+.addButtonStyle{
+    background: transparent;
+    border: 1px solid var(--main-blue-color);
+    color: var(--main-blue-color);
+    border-radius: 8px;
+    padding: 5px 10px;
+    text-transform: capitalize;
+    transition: ease-in-out .3s;
+}
+.addButtonStyle:hover{
+    background: var(--main-blue-color);
+    color: var(--primary-white);
+}
+.addedButtonStyle{
+    background: var(--main-blue-color);
+    border: 1px solid var(--main-blue-color);
+    color: var(--primary-white);
+    border-radius: 8px;
+    padding: 5px 10px;
+    text-transform: capitalize;
+    transition: ease-in-out .3s;
+}
+.addedButtonStyle:hover{
+    background: rgba(1, 31, 91, 0.813);
+}
+.pageMainBtnStyle {
+    cursor: pointer !important;
+}
+@media screen and (max-width: 600px) {
+    .product__info{
+        padding: 5px 0;
+    }
+    .lastMinuteCard__handler{
+        width: 300px;
+        height: 226.6px;
+    }
+    .product__info .sub__info p{
+        font-size: 12px;
+    }
+    .lastMinuteCard__handler .deal__time img{
+        width: 19.24px;
+        height: 20.67px;
+    }
+    .deal__time__day p{
+        font-size: 12px;
+    }
+    .deal__time__hour p{
+        font-size: 12px;
+    }
+}

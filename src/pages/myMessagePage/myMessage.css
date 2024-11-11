@@ -1,0 +1,5 @@
+.myMessage__handler{
+    background: var(--primary-white);
+    padding: 20px 0;
+    overflow: hidden;
+}

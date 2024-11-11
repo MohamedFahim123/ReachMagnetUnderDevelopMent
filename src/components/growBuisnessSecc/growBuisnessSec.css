@@ -1,0 +1,88 @@
+.growBuisness__handler {
+    background-image: url('../../assets/homeGrowBuisness/Group\ 1000002993\ \(1\).png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    padding: 20px 0;
+    height: 585px;
+    margin: 60px 0;
+    position: relative;
+}
+
+.growBuisness__content {
+    display: flex;
+    flex-direction: column;
+}
+
+.growBuisness__header {
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+.growBuisness__header h1{
+    font-size: 32px;
+    font-weight: 600;
+    color: rgba(67, 67, 67, 1);
+    text-transform: capitalize;
+}
+.growBuisness__header p{
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(94, 98, 120, 1);
+    margin-top: 10px;
+}
+.growBuisness__header h1 span{
+    background: linear-gradient(to right, #376EF3 0%, #01DCFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gowBuisness__action {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.linear__btn{
+     background: linear-gradient(-72deg, #08AAE8 0%,  #067FAD 50%,  #06264D 100%);
+    border: 1px solid var(--main-turquoise);
+    /* border-image: linear-gradient(to right, #376EF3, #01DCFF); */
+    border-radius: 12px;
+    /* -moz-border-image: linear-gradient(to right, #376EF3, #01DCFF); */
+    color: var(--primary-white);
+    padding: 10px 60px;
+    transition: ease-in-out .3s;
+}
+.linear__btn:hover{
+    background-color: var(--primary-white);
+    background: linear-gradient(to right, #376EF3 0%, #01DCFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media screen and (max-width: 600px) {
+    .growBuisness__handler{
+    margin: 0;
+    background-size: 357px;
+    height: 143px;
+    padding: 0;
+    }
+    .growBuisness__header{
+        top: 3px;
+    }
+    .gowBuisness__action{
+        bottom: 3px;
+    }
+    .growBuisness__header p{
+        font-size: 10px;
+    }
+    .growBuisness__header h1{
+        font-size: 12px;
+    }
+    .linear__btn{
+        padding: 10px 20px;
+        font-size: 10px;
+    }
+}

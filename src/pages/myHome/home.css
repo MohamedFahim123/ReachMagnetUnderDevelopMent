@@ -1,0 +1,19 @@
+.oneClickQuotation__handler .franchiseSec__content p{
+margin-bottom: 30px;
+font-size: 18px;
+}
+.oneClickQuotation__handler .franchiseSec__content-two{
+    padding: 75px 30px;
+}
+.oneClickQuotation__handler .franchiseSec__content-two h3{
+    font-size: 32px;
+}
+.oneClickQuotation__handler .franchise__actions button{
+    background: var(--primary-white);
+    color: var(--primary-black);
+    padding: 10px 40px;
+}
+.oneClickQuotation__handler .franchise__actions button:hover{
+    background: transparent;
+    color: var(--primary-white);
+}

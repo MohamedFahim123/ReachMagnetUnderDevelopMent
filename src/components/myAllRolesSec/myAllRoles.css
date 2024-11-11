@@ -1,0 +1,98 @@
+/* .my__roles__actions{
+    display: flex;
+    margin-left: 30px;
+    flex-wrap: wrap;
+}
+.my__roles__actions button{
+    border: 1px solid var(--main-blue-color);
+    padding: 12px 20px;
+    border-radius: 7px;
+    font-weight: 400;
+    font-size: 12px;
+}
+.my__roles__actions button.def__btn,
+.my__roles__actions button.rolesActiveBtn
+{
+    background-color: var(--main-blue-color);
+    color: #fff;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.my__roles__actions button.cust__btn{
+    background-color: #fff;
+    color: var(--main-blue-color);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+} */
+
+.my__roles__actions {
+    display: flex;
+    margin-left: 20px;
+    flex-wrap: wrap;
+}
+.my__roles__actions button {
+    border: 1px solid var(--main-blue-color);
+    padding: 12px 20px;
+    border-radius: 7px;
+    font-weight: 400;
+    font-size: 12px;
+    cursor: pointer;
+}
+.my__roles__actions button.def__btn {
+    background-color: #fff;
+    color: var(--main-blue-color);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.my__roles__actions button.cust__btn {
+    background-color: #fff;
+    color: var(--main-blue-color);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.my__roles__actions button.rolesActiveBtn {
+    background-color: var(--main-blue-color);
+    color: #fff;
+}
+@media screen and (max-width: 600px) {
+    .my__roles__actions{
+        margin-left: 0 !important;
+    }
+}
+.allPermission__items {
+    min-height: 450px;
+}
+.paginationBtn {
+    outline: none;
+    border: 1px solid var(--main-blue-color);
+    background-color: var(--main-blue-color);
+    color: var(--primary-white);
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    font-size: 20px;
+    padding: 5px 10px;
+}
+.paginationBtn:hover {
+    background-color: var(--primary-white);
+    color: var(--main-blue-color);
+}
+.paginationBtn:disabled {
+    opacity: 0.5;
+}
+.paginationBtn:disabled:hover {
+    background-color: var(--main-blue-color);
+    color: var(--primary-white);
+}
+.currentPagePagination {
+    padding: 5px 10px;
+    min-width: 30px;
+    text-align: center ;
+}

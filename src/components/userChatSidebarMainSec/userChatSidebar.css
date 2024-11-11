@@ -1,0 +1,132 @@
+.userChatSidebar__content{
+    border: 1px solid #CFD0D5;
+    border-radius: 24px;
+    padding: 0 0 30px 0;
+    height: 600px;
+    overflow-y: auto;
+    background: #f5f8fa;
+}
+.yourInfoPart{
+    margin-bottom: 30px;
+    border-bottom: 1px solid #CFD0D5;
+}
+.userChatSidebar__content .yourMainInfo{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: linear-gradient(var(--main-blue-color),var(--main-turquoise));
+    padding: 10px;
+}
+.yourAvatarImage{
+    position: relative;
+}
+.yourAvatarImage span{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--primary-white);
+    border-radius: 50%;
+}
+.yourAvatarImage span.online{
+    background: #4AD15F;
+}
+.yourAvatarImage img{
+    width: 55px;
+    height: 55px;
+    border-radius: 8px;
+}
+.yourContactInfo h1{
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    text-transform: capitalize;
+}
+.yourContactInfo p{
+    font-size: 10px;
+    font-weight: 500;
+    color: #fff;
+}
+.yourStatusInfo{
+    /* margin-left: 5px; */
+    margin-bottom: 10px;
+}
+.yourStatusInfo select{
+    border: 1px solid #CFD0D5;
+    border-radius: 8px;
+    /* padding: 4px 0; */
+    text-transform: capitalize;
+
+}
+.yourStatusInfo select option{
+    font-size: 12px;
+    font-weight: 500;
+}
+.yourSearchUsers{
+    margin-bottom: 20px;
+}
+.yourSearchUsers input{
+    border-radius: 8px;
+    border: 1px solid #CFD0D5;
+}
+.userChatSidebar__content .messageChatItem{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all ease-in-out .2s;
+    /* align-items: center; */
+}
+.userChatSidebar__content .messageChatItem.activeHover{
+    background: #b4d6edad;
+    border-radius: 12px;
+}
+.userChatSidebar__content .messageChatItem:hover{
+    background: #b4d6edad;
+    border-radius: 12px;
+}
+.messageChatMainInfo{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.messageChatItem .messageChatImg{
+    position: relative;
+}
+.messageChatItem .messageChatImg .chatStatuNow{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--primary-white);
+    border-radius: 50%;
+}
+.messageChatItem .messageChatImg .chatStatuNow.online{
+    background: #4AD15F;
+}
+.messageChatItem .messageChatImg .chatStatuNow.offline{
+    background: #D9D9D9;
+}
+.messageChatItem .messageChatImg img{
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+.messageChatName h3{
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+.messageChatContent p{
+    font-size: 9px;
+    font-weight: 500;
+    color: #959595;
+}
+.timeOfMessage span{
+    font-size: 8px;
+    font-weight: 500;
+    color: #959595;
+}

@@ -1,0 +1,83 @@
+.signUp__headSec {
+    margin: 50px 0;
+}
+.signUp__headSec h1 {
+    font-size: 64px;
+    font-weight: 400;
+    transform: translateY(120px);
+    -webkit-transform: translateY(120px);
+    -moz-transform: translateY(120px);
+    -ms-transform: translateY(120px);
+    -o-transform: translateY(120px);
+}
+.signUp__headSec .signUp__heading-image img {
+    max-height: 450px;
+    width: 100%;
+}
+.signUp__headSec p {
+    font-size: 50px;
+    font-weight: 400;
+    transform: translate( 70px ,-80px);
+    -webkit-transform: translate( 70px ,-80px);
+    -moz-transform: translate( 70px ,-80px);
+    -ms-transform: translate( 70px ,-80px);
+    -o-transform: translate( 70px ,-80px);
+}
+@media (max-width: 991px) {
+    .signUp__headSec p {
+        transform: translate(20px,-40px);
+        -webkit-transform: translate(20px,-40px);
+        -moz-transform: translate(20px,-40px);
+        -ms-transform: translate(20px,-40px);
+        -o-transform: translate(20px,-40px);
+        font-size: 35px;
+    }
+    .signUp__headSec h1 {
+        font-size: 50px;
+    }
+    .signUp__headSec .signUp__heading-image img {
+        margin-top: 40px;
+    }
+}
+@media (max-width: 768px) {
+    .signUp__headSec p {
+        transform: translate(0px,35px);
+        -webkit-transform: translate(0px,35px);
+        -moz-transform: translate(0px,35px);
+        -ms-transform: translate(0px,35px);
+        -o-transform: translate(0px,35px);
+        font-size: 30px;
+    }
+    .signUp__headSec h1 {
+        transform: translateY(140px);
+        -webkit-transform: translateY(140px);
+        -moz-transform: translateY(140px);
+        -ms-transform: translateY(140px);
+        -o-transform: translateY(140px);
+    }
+    .signUp__headSec .signUp__heading-image img {
+        margin-top: 0;
+        transform: translateY(80px);
+        -webkit-transform: translateY(80px);
+        -moz-transform: translateY(80px);
+        -ms-transform: translateY(80px);
+        -o-transform: translateY(80px);
+    }
+}
+@media (max-width: 450px) {
+    .signUp__headSec p {
+        font-size: 25px;
+        transform: translate(0,80px);
+        -webkit-transform: translate(0,80px);
+        -moz-transform: translate(0,80px);
+        -ms-transform: translate(0,80px);
+        -o-transform: translate(0,80px);
+}
+    .signUp__headSec .signUp__heading-image img {
+        transform: translateY(105px);
+        -webkit-transform: translateY(105px);
+        -moz-transform: translateY(105px);
+        -ms-transform: translateY(105px);
+        -o-transform: translateY(105px);
+}
+}

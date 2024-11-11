@@ -1,0 +1,105 @@
+.productDetails__contentHead ,
+.product__description h5 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-black);
+}
+.productDetails__contentDescription ,
+.product__description p {
+    color: #949497;
+    font-weight: 400;
+    font-size: 14px;
+}
+.product__description {
+    margin: 40px 0;
+    text-align: start;
+    padding: 0 ;
+}
+.product__description .col-lg-4 {
+    padding: 0 !important;
+}
+.product__description p {
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.product__description div:hover p {
+    color: var(--main-turquoise);
+}
+.frequentlyTogether {
+    background-color: var(--primary-white);
+    border-radius: 22px;
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    -ms-border-radius: 22px;
+    -o-border-radius: 22px;
+    padding: 20px 30px;
+}
+.frequentlyTogether h4 {
+    font-size: 16px;
+    color: var(--primary-black);
+}
+.frequentlyTogether-offer .frequentlyTogether-image img {
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    width: 90px;
+    height: 90px;
+}
+.frequentlyTogether-image {
+    padding: 10px;
+}
+.frequentlyTogether-offer .frequentlyTogether-image i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #3866DF;
+    font-size: 15px;
+}
+.frequentlyTogether-offer .frequentlyTogether-image h5 {
+    text-align: center;
+    font-size: 10px;
+    margin-top: 10px;
+}
+.frequentlyTogether-offer .bi-plus {
+    font-size: 40px;
+}
+.buyTogether-btn {
+    font-size: 14px;
+    font-weight: 400;
+    outline: none;
+    border: 1px solid #011F5BEB;
+    background-color: var(--primary-white);
+    padding: 15px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+.frequentlyTogether {
+    max-width: 650px;
+}
+.prodDetailsChangeColorSpan p span{
+    /* color: rgba(132, 132, 132, 1); */
+    color: #949497;
+    /* color: rgba(128, 157, 173, 1); */
+}
+.limitedP{
+    color: rgba(213, 0, 18, 1) !important;
+}
+@media (max-width: 767px) {
+    .frequentlyTogether-offer {
+        justify-content: center !important;
+    }
+}
+@media (max-width: 374px) {
+    .frequentlyTogether-offer {
+        flex-direction: column !important;
+
+    }
+}

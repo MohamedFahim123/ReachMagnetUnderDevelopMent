@@ -1,0 +1,118 @@
+.aboutCompany__handler {
+    background: var(--primary-white);
+    padding: 60px 40px;
+    border-radius: 24px;
+}
+
+.aboutCompany__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aboutCompany__title img {
+    width: 57px;
+    height: 57px;
+}
+
+.aboutCompany__title h1 {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.aboutCompany__content__info {
+    padding: 0 65px;
+    margin-top: 50px;
+}
+
+.aboutCompany__content__info .breif__desc {
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.aboutCompany__content__info ul {
+    padding-left: 40px;
+    margin-top: 20px;
+}
+
+.aboutCompany__content__info ul li {
+    list-style: disc;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 300;
+    text-transform: capitalize;
+}
+
+.faqForCompany__box {
+    margin-bottom: 20px;
+}
+
+.faqForCompany__box h3 {
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+
+.faqForCompany__box p {
+    font-size: 16px;
+    font-weight: 300;
+    text-transform: capitalize;
+}
+
+.working__hour__table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 40px 0;
+}
+
+.working__hour__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 65px;
+}
+
+.working__hour__day {
+    flex: 1;
+    text-transform: capitalize;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.colored__bg {
+    background-color: rgba(232, 237, 245, 1);
+    padding: 10px;
+    border-radius: 6px;
+    flex: 1;
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+@media screen and (max-width: 600px) {
+    .aboutCompany__handler{
+        padding: 60px 0;
+    }
+    .aboutCompany__content__info{
+        padding: 0;
+        margin-top: 30px;
+    }
+    .working__hour__row{
+        padding: 0;
+    }
+    .colored__bg{
+        font-size: 12px;
+        padding: 4px;
+    }
+    .working__hour__day{
+        font-size: 16px;
+    }
+}
+
+
+

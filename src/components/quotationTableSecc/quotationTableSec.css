@@ -1,0 +1,145 @@
+.quotationTable__handler {
+    margin-top: 40px;
+}
+
+.quotationTable__content {
+    margin-top: 30px;
+}
+
+.quotationTable__content table thead th {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    text-align: left;
+    color: rgba(181, 183, 192, 1);
+
+}
+
+.quotationTable__content table tbody td {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    text-align: left;
+    color: rgba(41, 45, 50, 1);
+    padding: 20px 15px;
+}
+.quotationTable__content table tbody td.adjust__flex{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    flex-direction: row;
+}
+.quotationTable__content table tbody td .table__statu__btn {
+    /* width: Fixed (145px)px;
+    height: Hug (29px)px; */
+    padding: 4px 12px;
+    border-radius: 4px ;
+    background: var(--primary-white);
+    border: 2px solid rgba(35, 11, 52, 1);
+    color: var(--primary-white);
+    text-transform: capitalize;
+    transition: ease-in-out .3s;
+    font-weight: 500;
+    /* margin-right: 10px; */
+}
+.quotationTable__content table tbody td .table__statu__btn.ignore__btn{
+    background: rgba(255, 197, 197, 1);
+    border: 2px solid rgba(223, 4, 4, 1);
+    color: rgba(223, 4, 4, 1);
+}
+.quotationTable__content table tbody td .table__statu__btn.ignore__btn:hover{
+    background: rgba(223, 4, 4, 1);
+    color: var(--primary-white);
+}
+.quotationTable__content table tbody td .table__statu__btn.Rejected{
+    background: rgba(255, 197, 197, 1);
+    border: 2px solid rgba(223, 4, 4, 1);
+    color: rgba(223, 4, 4, 1);
+}
+.quotationTable__content table tbody td .table__statu__btn.Rejected:hover{
+    background: rgba(223, 4, 4, 1);
+    color: var(--primary-white);
+}
+.quotationTable__content table tbody td .table__statu__btn.Accepted{
+    color: var(--primary-white);
+    background: rgba(1, 186, 233, 1);
+    border: 2px solid rgba(1, 186, 233, 1)
+}
+.quotationTable__content table tbody td .table__statu__btn.Accepted:hover{
+    color: rgba(1, 186, 233, 1);
+    background: var(--primary-white);
+}
+.quotationTable__content table tbody td .table__statu__btn.Pending{
+    color: var(--primary-white);
+    background: var(--primary-black);
+    border: 2px solid var(--primary-black);
+}
+
+.quotationTable__content table tbody td .table__statu__btn.Pending:hover{
+    color: var(--primary-black);
+    background: var(--primary-white);
+}
+
+.quotationTable__content table tbody td .table__statu__btn.Awarded{
+    color: var(--primary-white);
+    background: rgb(8, 219, 8);
+    border: 2px solid rgb(8, 219, 8);
+}
+.quotationTable__content table tbody td .table__statu__btn.Awarded:hover{
+    color: rgb(8, 219, 8);
+    background: var(--primary-white);
+}
+.quotationTable__content table tbody td .table__statu__btn.Disqualified{
+    color: var(--primary-white);
+    background: #ff5420;
+    border: 2px solid #ff5420;
+}
+.quotationTable__content table tbody td .table__statu__btn.Disqualified:hover{
+    color: #ff5420;
+    background: var(--primary-white);
+}
+
+.quotationTable__content table tbody td .table__statu__btn.show__btn{
+    color: var(--main-blue-color);
+    background: var(--primary-white);
+    border: 2px solid var(--main-blue-color);
+    display: flex;
+    gap: 7px;
+}
+.quotationTable__content table tbody td .table__statu__btn.show__btn:hover{
+    color: var(--primary-white);
+    background: var(--main-blue-color);
+}
+.quotationTable__content table tbody td .table__statu__btn.submitted{
+    background: var(--primary-white);
+    border: 2px solid rgba(35, 11, 52, 1);
+    color: var(--primary-black);
+}
+.quotationTable__content table tbody td .table__statu__btn.submitted:hover{
+    color: var(--primary-white);
+    background: var(--primary-black);
+
+}
+
+@media screen and (max-width: 600px){
+    .quotationTable__content table thead th{
+        padding: 15px;
+    }
+    .quotationTable__content table tbody td{
+        padding: 15px;
+    }
+    .quotationTable__content table tbody td .table__statu__btn{
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+}
+.quotationTable__handler .my__roles__actions .meddle_btn {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -ms-border-radius: 0 !important;
+    -o-border-radius: 0 !important;
+}
+.quotationTable__content .nav-link {
+    color: var(--main-blue-color);
+}

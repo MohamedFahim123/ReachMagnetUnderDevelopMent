@@ -1,0 +1,70 @@
+.octagon__shape {
+    width: 123px;
+    height: 126.63px;
+    background: var(--primary-white);
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%,
+            70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    border-radius: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1em;
+    text-align: center;
+    cursor: pointer;
+}
+
+.octagon__shape img {
+    width: 45px;
+    height: 45px;
+}
+.octagonItem__handler{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.CategoryOctagonShape__handler {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.CategoryOctagonShape__handler span {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(37, 86, 117, 1);
+    text-transform: capitalize;
+    transform: all .3s;
+}
+
+.CategoryOctagonShape__handler span:hover {
+    color: var(--primary-black);
+}
+
+.octagonItem__handler {
+    margin-bottom: 20px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .octagon__shape{
+    width: 54px;
+    height: 55.19px;
+    }
+    .octagon__shape img{
+        width: 21px;
+    height: 21px;
+    }
+    .CategoryOctagonShape__handler span{
+        font-size: 10px;
+        font-weight: 400;
+    }
+}

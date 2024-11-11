@@ -1,0 +1,28 @@
+.signUp__page {
+    margin: -155px 0 -50px;
+    background-image: url(../../assets/signUpImages/6f1a9a9259c3c1f78b4f222fb8ff0c92.jpeg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat-y;
+}
+.compleetRegisteration__btn {
+    padding: 20px 40px;
+    background-color: var(--main-turquoise);
+    color: var(--primary-white);
+    font-weight: 500;
+    border: 1px solid var(--main-turquoise);
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    -ms-border-radius: 40px;
+    -o-border-radius: 40px;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+.compleetRegisteration__btn:hover {
+    color: var(--main-turquoise);
+    background-color: var(--primary-white);
+}

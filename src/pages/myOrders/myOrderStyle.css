@@ -1,0 +1,99 @@
+.order_item_handler{
+    border: 1px solid #809DAD80;
+    background-color: #F1F4F8;
+    box-shadow: 0 4px 4px 0 #0000001A !important;
+    margin-bottom: 40px;
+    padding: 15px 30px;
+    border-radius: 12px;
+}
+.order_item_handler p.card_title{
+    margin-bottom: 22px;
+    text-transform: capitalize;
+    font-size: 18px;
+    font-weight: 500;
+}
+.order_item_header{
+    display: flex;
+    justify-content: space-between;
+}
+.order_item_handler p.card_title span{
+    color: var(--main-blue-color);
+}
+.order_item_details{
+    /* display: flex;
+    gap: 18px; */
+}
+.order_item_details img{
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+}
+.order_details_info p{
+    text-transform: capitalize;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+.order_details_info p span{
+    color: var(--main-blue-color);
+    /* font-size: 18px; */
+    font-weight: 500;
+}
+.order_item_details .orderId_handler{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+.order_item_details .orderId_handler p{
+    text-transform: capitalize;
+    color: rgba(128, 157, 173, 0.938);
+    font-weight: 400;
+    font-size: 16px;
+    transition: all ease-in-out .3s;
+}
+
+.order_item_details .orderId_handler p i{
+    color: rgba(128, 157, 173, 0.938);
+    transition: all ease-in-out .3s;
+}
+.order_item_details .orderId_handler p:hover,
+.order_item_details .orderId_handler p:hover i
+{
+    color: var(--main-blue-color);
+}
+
+
+@media screen and (max-width: 992px) {
+    .order_item_details img{
+        width: 60px;
+        height: 60px;
+    }
+    .order_details_info p {
+        font-size: 14px;
+    }
+    .order_item_details .orderId_handler p{
+        font-size: 10px;
+    }
+}
+@media screen and (max-width: 600px){
+    .order_item_handler{
+        padding: 15px;
+    }
+    .order_item_handler p.card_title{
+        font-size: 11px;
+    }
+    .order_item_details .image_handler{
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .order_details_info{
+        margin-bottom: 15px;
+    }
+    .order_details_info p {
+        font-size: 9px;
+    }
+    .order_item_details .orderId_handler p {
+        font-size: 8px;
+    }
+
+} 

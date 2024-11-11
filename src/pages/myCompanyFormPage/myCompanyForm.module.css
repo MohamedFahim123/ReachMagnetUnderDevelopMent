@@ -1,0 +1,43 @@
+.formBodyData{
+    margin-bottom: 30px;
+}
+.formBodyData h5{
+    font-size: 16px;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #000;
+}
+.formBodyData p{
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 500;
+    color: var(--text-gray-color);
+}
+.viewLink{
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 500;
+    color: var(--main-turquoise);
+    transition: all .3s ease-out;
+}
+.viewLink:hover{
+    color: rgb(13, 74, 99);
+}
+.eyeIcon:hover{
+    color: rgb(111, 215, 118) !important;
+}
+.tybeBg{
+    box-shadow: 0 2px 8px rgb(192, 192, 192);
+    color: #000;
+    text-align: center;
+    text-transform: capitalize;
+    background-color: rgb(239, 239, 239);
+    padding: 7px;
+    border-radius: 4px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    outline: none;
+    cursor: default !important;
+}

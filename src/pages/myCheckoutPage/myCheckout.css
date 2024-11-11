@@ -1,0 +1,154 @@
+.myCheckout__handler h2{
+    font-size: 32px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #000;
+    margin-bottom: 30px;
+}
+.checkout_card{
+    border: 1px solid rgba(145, 151, 179, 1);
+    border-radius: 17px;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+.checkout_subTit{
+    font-size: 24px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #000;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(145, 151, 179, 0.2);
+    padding-bottom: 20px;
+}
+
+.checkoutForm_info .checkoutForm_items .singleQuoteInput{
+    width: 60%;
+}
+.checkoutForm_info .checkoutForm_items .singleQuoteInput input,
+.checkoutForm_info .checkoutForm_items .singleQuoteInput textarea
+{
+    width: 90%;
+}
+.checkout_products .checkout_product_item{
+    width: 70%;
+    display: flex;
+    gap: 15px;
+}
+.checkout_products .checkout_product_item .product_item_img img{
+    width: 126px;
+    height: 126px;
+    border-radius: 12px;
+}
+.checkout_products .checkout_product_item h5{
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #000;
+    margin-bottom: 10px;
+}
+.checkout_products .checkout_product_item .item__attributes{
+    margin-bottom: 10px;
+}
+.checkout_products .checkout_product_item p{
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #000;
+    margin-bottom: 10px;
+    /* rgba(145, 151, 179, 1) */
+}
+.checkout_products .checkout_product_item h5.pricePerItem{
+    font-size: 16px;
+}
+.checkout_products .checkout_product_item h5.item_price
+{
+    font-size: 16px;
+    margin-bottom: 0;
+}
+.checkout_paymentMethod .checkout_subTit {
+    text-align: center;
+    color: rgba(48, 135, 218, 1);
+    font-weight: 600;
+}
+.checkout_paymentMethod .paymentHint{
+    width: 63px;
+    height: 34px;
+    margin: 0 auto;
+    border: 2px solid rgba(56, 174, 4, 1);
+    color: rgba(56, 174, 4, 1);
+    text-transform: uppercase;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.checkout_paymentMethod .checkout_subTit .paymentNote,
+.checkout_paymentMethod .checkout_payment_details p
+{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(145, 151, 179, 1);
+    margin-top: 10px;
+}
+.checkout_paymentMethod .checkout_payment_details {
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.checkout_paymentMethod .checkout_payment_details h5{
+    font-size: 32px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #000;
+}
+.checkout_paymentMethod .checkout_payment_details .paymentHint{
+    margin: 0;
+    background: rgba(56, 174, 4, 1);
+    color: #fff;
+}
+.myCheckout__handler .orderCheckout__btn{
+    width: 100%;
+    background: rgba(48, 135, 218, 1);
+    color: #fff;
+    border: 1px solid rgba(48, 135, 218, 1);
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 15px 0;
+    transition: all .2s ease-in-out;
+}
+.myCheckout__handler .orderCheckout__btn:hover{
+    background: #fff;
+    color: rgba(48, 135, 218, 1);
+}
+@media screen and (max-width: 992px) {
+    .myCheckout__handler h2{
+        font-size: 22px;
+    }
+    .checkout_subTit{
+        font-size: 18px;
+    }
+    .myCheckout__handler .orderSummary__content h5{
+        font-size: 18px;
+    }
+    .myCheckout__handler .orderSummary__content .orderTotalPrice .totPrice{
+        font-size: 16px;
+    }
+    .checkout_paymentMethod .checkout_payment_details h5{
+        font-size: 22px;
+    }
+}
+@media screen and (max-width: 600px){
+    .checkoutForm_info .checkoutForm_items .singleQuoteInput{
+        width: 90%;
+    }
+    .checkout_products .checkout_product_item h5{
+        font-size: 16px;
+    }
+}
+
