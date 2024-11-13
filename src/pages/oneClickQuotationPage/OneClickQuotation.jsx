@@ -77,7 +77,7 @@ export default function OneClickQuotation({ token }) {
                 setloadingCart(false);
             })();
         };
-    }, []);
+    }, [loginType, token]);
 
     const handleResetCurrentQuotation = () => {
         (async () => {
@@ -116,7 +116,6 @@ export default function OneClickQuotation({ token }) {
         })();
     };
 
-    // getSubCategories Using MainCategoryId Chosen
     const handleGettingCurrentSubCategories = (event) => {
         const currentCategoryChosed = mainCategories?.find(cat => +cat?.mainCategoryId === +event?.target?.value);
         if (currentCategoryChosed) {

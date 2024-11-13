@@ -44,7 +44,8 @@ export default function NewCatalogItemForm({ token }) {
         }
     ];
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
-    const [allUnitsOfMeasure, setAllUnitsOfMeasure] = useState([])
+    const [allUnitsOfMeasure, setAllUnitsOfMeasure] = useState([]);
+
     useEffect(() => {
         const cookiesData = Cookies.get('currentLoginedData');
         if (!currentUserLogin) {
@@ -69,6 +70,7 @@ export default function NewCatalogItemForm({ token }) {
         type: [],
         image: [],
     });
+
     const fetchUnitsOfMeasure = async () => {
         try {
             const response = await axios.get(`${baseURL}/${loginType}/units-of-measure?t=${new Date().getTime()}`, {

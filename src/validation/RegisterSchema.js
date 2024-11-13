@@ -14,6 +14,7 @@ export const RegisterSchema = z.object({
     address_two: z.string(),
     image: z.any().refine((files) => files?.length === 1, 'Please upload an Image.'),
     official_id_or_passport: z.any().refine((files) => files?.length === 1, 'Please upload an Image.'),
+    accept_terms: z.any(),
 }).superRefine((data, ctx) => {
     if (data.password !== data.password_confirmation) {
     ctx.addIssue({

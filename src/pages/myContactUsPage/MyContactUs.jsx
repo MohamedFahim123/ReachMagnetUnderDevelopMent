@@ -1,6 +1,7 @@
-import React from 'react'
-import './myContactUs.css'
-import MyMainHeroSec from '../../components/myMainHeroSecc/MyMainHeroSec'
+import React from 'react';
+import './myContactUs.css';
+import MyMainHeroSec from '../../components/myMainHeroSecc/MyMainHeroSec';
+
 export default function MyContactUs() {
     return (
         <div className='myContactUs__handler singleCompanyQuote__handler'>

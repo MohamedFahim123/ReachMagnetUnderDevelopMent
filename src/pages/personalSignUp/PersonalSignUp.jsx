@@ -9,6 +9,7 @@ export default function PersonalSignUp() {
   const [loading, setLoading] = useState(true);
   const countries = GetAllCountriesStore((state) => state.countries);
   const industries = GetAllIndustriesStore((state) => state.industries);
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

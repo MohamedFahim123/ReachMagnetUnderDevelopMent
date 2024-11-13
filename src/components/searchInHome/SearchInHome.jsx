@@ -4,16 +4,15 @@ import locationIcon from "../../assets/icons/Duotone.png";
 import userIcon from "../../assets/icons/Duotone3.png";
 import emailIcon from "../../assets/icons/Duotone 2.png";
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { baseURL } from '../../functions/baseUrl';
-import toast from 'react-hot-toast';
+
 import MyLoader from '../myLoaderSec/MyLoader';
 import { GetAllCountriesStore } from '../../store/AllCountries';
+import { SearchStore } from '../../store/MainSearch';
 
 export default function SearchInHome() {
     const [loading, setLoading] = useState(true);
     const { search } = useLocation();
-    const [currentData, setCurrentData] = useState([]);
+    // const [currentData, setCurrentData] = useState([]);
     const [filteration, setFilteration] = useState({
         type: '',
         country_id: '',
@@ -28,36 +27,37 @@ export default function SearchInHome() {
     const getAllAllowedCountries = GetAllCountriesStore((state) => state.getAllAllowedCountries);
     useEffect(() => { getAllAllowedCountries() }, [getAllAllowedCountries]);
     const allowedCountries = GetAllCountriesStore((state) => state.allowedCountries);
+    const { currentData, getCurrentSearchedData } = SearchStore();
 
-    const getCurrentSearchedData = async () => {
-        const toastId = toast.loading('Loading...');
-        await axios.get(`${baseURL}/general-search${search}`, {
-            params: {
-                t: new Date().getTime(),
-            },
-            headers: {
-                "Content-Type": 'application/json',
-                Accept: 'application/json',
+    // const getCurrentSearchedData = async () => {
+    //     const toastId = toast.loading('Loading...');
+    //     await axios.get(`${baseURL}/general-search${search}`, {
+    //         params: {
+    //             t: new Date().getTime(),
+    //         },
+    //         headers: {
+    //             "Content-Type": 'application/json',
+    //             Accept: 'application/json',
 
-            }
-        })
-            .then((res) => {
-                setCurrentData(res?.data?.data?.companies);
-                toast.success(res?.data?.message || 'Data Loaded Successfully!', {
-                    id: toastId,
-                    duration: 1000
-                });
-            })
-            .catch(err => {
-                toast.error(err?.res?.data?.message || 'Something Went Wrong!', {
-                    id: toastId,
-                    duration: 1000
-                });
-            });
-    };
+    //         }
+    //     })
+    //         .then((res) => {
+    //             setCurrentData(res?.data?.data?.companies);
+    //             toast.success(res?.data?.message || 'Data Loaded Successfully!', {
+    //                 id: toastId,
+    //                 duration: 1000
+    //             });
+    //         })
+    //         .catch(err => {
+    //             toast.error(err?.res?.data?.message || 'Something Went Wrong!', {
+    //                 id: toastId,
+    //                 duration: 1000
+    //             });
+    //         });
+    // };
 
     useEffect(() => {
-        getCurrentSearchedData();
+        getCurrentSearchedData(search);
     }, [search]);
 
     function objectToParams(obj) {

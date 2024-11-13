@@ -121,10 +121,6 @@ export default function SingleCompanyQuote({ token }) {
         };
     };
 
-    useEffect(() => {
-
-    }, []);
-
     const handleResetCurrentQuotation = () => {
         (async () => {
             setloadingCart(true);
@@ -325,10 +321,6 @@ export default function SingleCompanyQuote({ token }) {
             setLoading(false);
         }, 500);
     }, [loading]);
-
-
-    console.log(currentProd?.length === 0 ? 'notCurrentProd' : currentProd)
-    console.log(cart);
 
     return (
         <>

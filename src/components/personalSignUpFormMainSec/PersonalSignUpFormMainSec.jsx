@@ -22,7 +22,6 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const navigate = useNavigate();
   const loginType = localStorage.getItem('loginType');
-
   const {
     register,
     handleSubmit,
@@ -57,7 +56,6 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
     },
     resolver: zodResolver(isSignUp ? RegisterSchema : AddEmployeeSchema),
   });
-
   const [currentCitiesInsideCountry, setCurrentCitiesInsideCountry] = useState([]);
 
   useEffect(() => {
@@ -119,6 +117,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
 
   const onSubmit = async (data) => {
     data.industry_id = selectedIndustries?.map(indust => indust?.id);
+    console.log(data);
     const toastId = toast.loading('Please Wait...');
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
