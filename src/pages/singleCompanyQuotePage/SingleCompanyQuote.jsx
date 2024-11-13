@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './singleCompanyQuote.css';
 import MyMainHeroSec from '../../components/myMainHeroSecc/MyMainHeroSec';
 import { useParams } from 'react-router-dom';
@@ -14,8 +14,9 @@ import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
+import { GetAllCountriesStore } from '../../store/AllCountries';
 
-export default function SingleCompanyQuote({ token, countries }) {
+export default function SingleCompanyQuote({ token }) {
     const [loading, setLoading] = useState(true);
     const { companyName } = useParams();
     const [companyId, setCompanyId] = useState(0)
@@ -28,6 +29,7 @@ export default function SingleCompanyQuote({ token, countries }) {
     const [cart, setCart] = useState([]);
     const [loadingCart, setloadingCart] = useState(true);
     const [loadingSubmit, setloadingSubmit] = useState(false);
+    const fileInputRef = useRef(null);
     const typesOfQuotations = [
         { id: 1, name: 'catalog' }, { id: 2, name: 'service' }
     ];
@@ -53,6 +55,7 @@ export default function SingleCompanyQuote({ token, countries }) {
         user_notes: '',
         request_by_notes: ''
     });
+    const countries = GetAllCountriesStore((state) => state.countries);
 
     useEffect(() => {
         if (token && loginType && companyIdWantedToHaveQuoteWith && requestIntries?.type) {
@@ -241,11 +244,27 @@ export default function SingleCompanyQuote({ token, countries }) {
     };
 
     const handleCustomProductChangeImage = (e) => {
-        const files = e.target.files;
-        setCustomProduct((prevState) => ({
-            ...prevState,
-            file: [...files],
-        }));
+        const maxFileSize = 5 * 1024 * 1024;
+        const maxFileCount = 3;
+        const files = Array.from(e.target.files);
+
+        setCustomProduct((prevState) => {
+            if (files?.length >= maxFileCount) {
+                toast.error('Maximum file count reached. Please remove some files before adding more.',
+                    { duration: 4000 });
+                return prevState;
+            }
+            files.forEach((file) => {
+                if (file.size >= maxFileSize) {
+                    toast.error('Files must not exceed 5MB', { duration: 4000 })
+
+                }
+            });
+            return {
+                ...prevState,
+                file: files,
+            };
+        });
     };
 
     const handleAddCustomProduct = () => {
@@ -280,16 +299,22 @@ export default function SingleCompanyQuote({ token, countries }) {
                         description: '',
                         file: []
                     });
-
+                    if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                    }
                     toast.success(`${response?.data?.message || 'Added Successfully!'}`, {
                         id: toastId,
                         duration: 1000
                     });
                 })
-                .catch(error => {
-                    toast.error(`${error?.response?.data?.message || error?.message || 'Error!'}`, {
-                        id: toastId,
-                        duration: 1000
+                .catch((err) => {
+                    Object.keys(err?.response?.data?.errors).forEach((field) => {
+                        err?.response?.data?.errors[field]?.forEach((message) => {
+                            toast.error(message, {
+                                duration: 2000,
+                                id: toastId,
+                            });
+                        });
                     });
                 });
         })();
@@ -303,6 +328,7 @@ export default function SingleCompanyQuote({ token, countries }) {
 
 
     console.log(currentProd?.length === 0 ? 'notCurrentProd' : currentProd)
+    console.log(cart);
 
     return (
         <>
@@ -507,13 +533,17 @@ export default function SingleCompanyQuote({ token, countries }) {
                                                                 <p>No products selected</p>
                                                             ) : (
                                                                 cart?.map((el) => {
+                                                                    const hasImage = el?.item?.image || el?.item?.medias?.some((media) => media.type === 'image');
+                                                                    const hasFile = el?.item?.medias?.some((media) => media.type === 'file');
                                                                     return <CartProduct
                                                                         key={el?.quotation_cart_id}
                                                                         title={el?.item?.title}
                                                                         description={el?.item?.description}
                                                                         notes={el?.note}
-                                                                        imageSrc={el?.item?.image ? el?.item?.image : el?.item?.medias?.find((media) => media.type === 'image')?.media}
-                                                                        showImage={el?.item?.image ? !!el?.item?.image : !!el?.item?.medias[0]?.media}
+                                                                        imageSrc={el?.item?.image || el?.item?.medias?.find((media) => media.type === 'image')?.media}
+                                                                        showImage={hasImage}
+                                                                        showFiles={hasFile}
+                                                                        fileList={el?.item?.medias?.filter((media) => media.type === 'file') || []}
                                                                         quantity={el?.quantity}
                                                                         cartId={el?.quotation_cart_id}
                                                                         companyIdWantedToHaveQuoteWith={companyIdWantedToHaveQuoteWith}
@@ -547,10 +577,9 @@ export default function SingleCompanyQuote({ token, countries }) {
                                                                     <select
                                                                         className='form-select w-100'
                                                                         id="qoutationSelectTheType"
-                                                                        value={requestIntries?.type}
-                                                                        onChange={(event) => {
-                                                                            setRequestIntries({ ...requestIntries, type: event?.target?.value })
-                                                                        }}
+                                                                        name='type'
+                                                                        value={customProduct?.type}
+                                                                        onChange={handleCustomProductChange}
                                                                     >
                                                                         <option value={''} disabled>Select Type</option>
                                                                         {
@@ -623,7 +652,9 @@ export default function SingleCompanyQuote({ token, countries }) {
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="customizationQuote__actions singleQuoteInput">
-                                                                    <label className=' position-relative'>UpLoad A Reference
+                                                                    <label className=' position-relative'>UpLoad A Reference <span className='optional'>
+                                                                        (max 3 files)
+                                                                    </span>
                                                                         <i title='upload images or files descripe what you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
                                                                     </label>
                                                                     <p className='fw-light mb-2'>It’s recommended to upload a photo or file as a reference for better clarity on your request</p>
@@ -631,12 +662,13 @@ export default function SingleCompanyQuote({ token, countries }) {
                                                                         type='file'
                                                                         id='customProductImageBtn'
                                                                         multiple
+                                                                        ref={fileInputRef}
                                                                         onChange={handleCustomProductChangeImage}
                                                                         className={`form-control`}
                                                                     />
                                                                     {
                                                                         customProduct.file.length > 0 &&
-                                                                        <small className="hintForAddedFiles">Attachments has been added</small>
+                                                                        <small className="hintForAddedFiles d-block">Attachments has been added</small>
                                                                     }
                                                                     <span className='pageMainBtnStyle addItemToQuoteBtn mt-4' onClick={handleAddCustomProduct}>
                                                                         Add Item to Quotation

@@ -1458,7 +1458,7 @@ export default function BusinessSignUpFormMainSec({ countries, citizenships, ind
                                 <input
                                   type={`${showPassword ? 'text' : 'password'}`}
                                   id='signUpemployee_password'
-                                  placeholder='Enter 8-digit password'
+                                  placeholder='Min 8: upper, lower, number, symbol.'
                                   {...register('employee_password')}
                                   className={`form-control signUpInput ${errors.employee_password ? 'inputError' : ''}`}
                                 />
@@ -1507,7 +1507,7 @@ export default function BusinessSignUpFormMainSec({ countries, citizenships, ind
                             </div>
                             <div className='col-lg-6'>
                               <label htmlFor="signUpofficial_id_or_passport">
-                                Owner's <span className="optional">(Official-Id / Passport)</span><span className="requiredStar"> *</span>
+                                Owner's <span className="optional">(Official-ID / Passport)</span><span className="requiredStar"> *</span>
                                 <i title="" className="bi bi-info-circle ms-1 cursorPointer"></i>
                               </label>
                               <input

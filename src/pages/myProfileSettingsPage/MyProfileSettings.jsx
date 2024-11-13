@@ -9,10 +9,11 @@ import MyProfileForm from '../../components/myProfileFormSec/MyProfileForm'
 import UpdatePassword from '../../components/updatePasswordSec/UpdatePassword'
 import Cookies from 'js-cookie';
 import MyLoader from '../../components/myLoaderSec/MyLoader'
+import { GetAllCountriesStore } from '../../store/AllCountries'
 
 localStorage.setItem('updatingProfile', 'notUpdating');
 
-export default function MyProfileSettings({ token, countries }) {
+export default function MyProfileSettings({ token }) {
     const [loading, setLoading] = useState(true);
     const [profileUpdateStatus, setProfileUpdateStatus] = useState(localStorage.getItem('updatingProfile'));
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
@@ -21,7 +22,7 @@ export default function MyProfileSettings({ token, countries }) {
     const [currnetImageUpdateError, setCurrentImageUpdateError] = useState('');
     const [imgChanged, setImageChanged] = useState(false);
     const loginType = localStorage.getItem('loginType');
-
+    const countries = GetAllCountriesStore((state) => state.countries);
     useEffect(() => {
         const cookiesData = Cookies.get('currentLoginedData');
         if (!currentUserLogin) {

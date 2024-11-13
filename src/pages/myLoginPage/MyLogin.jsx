@@ -3,7 +3,7 @@ import './myLogin.css';
 import SignInFormMainSec from '../../components/signInFormMainSec/SignInFormMainSec';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 
-export default function MyLogin({type,setType, fcmToken}) {
+export default function MyLogin({type,setType}) {
     const [loading, setLoading] = useState(true);
     const [loginType , setLoginType] = useState(localStorage.getItem('loginType'));
 
@@ -24,7 +24,7 @@ export default function MyLogin({type,setType, fcmToken}) {
                     <MyLoader />
                     :
                     <div className='signUp__page'>
-                        <SignInFormMainSec fcmToken={fcmToken} loginType={loginType} setLoginType={setLoginType} />
+                        <SignInFormMainSec loginType={loginType} setLoginType={setLoginType} />
                     </div>
             }
         </>

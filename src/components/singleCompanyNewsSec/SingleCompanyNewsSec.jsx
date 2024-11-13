@@ -40,7 +40,7 @@ export default function SingleCompanyNewsSec({ token }) {
         newData.length > 0 && (
           <>
             <HeaderOfSec
-              secHead='Company'
+              secHead='Companies Insights'
               secText='Stay informed with the latest updates, announcements, and specials from our company'
             />
             <Container className='my-5'>

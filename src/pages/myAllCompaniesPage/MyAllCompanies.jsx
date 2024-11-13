@@ -4,10 +4,10 @@ import axios from "axios";
 import { baseURL } from "../../functions/baseUrl";
 import locationIcon from "../../assets/icons/Duotone.png";
 import userIcon from "../../assets/icons/Duotone3.png";
-import emailIcon from "../../assets/icons/Duotone 2.png";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { scrollToTop } from "../../functions/scrollToTop";
 import MyLoader from "../../components/myLoaderSec/MyLoader";
+
 export default function MyAllCompanies({ token }) {
     const [loading, setLoading] = useState(true);
     const [companies, setCompanies] = useState([]);
@@ -68,7 +68,6 @@ export default function MyAllCompanies({ token }) {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(endpoint);
 
             const companiesData = response?.data?.data?.companies || [];
             const totalPagesData = response?.data?.data?.total_pages || 1;

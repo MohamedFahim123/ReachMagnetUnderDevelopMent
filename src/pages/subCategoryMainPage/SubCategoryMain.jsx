@@ -8,12 +8,11 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { baseURL } from '../../functions/baseUrl'
 import toast from 'react-hot-toast'
-export default function SubCategoryMain({}) {
+export default function SubCategoryMain() {
     const [loading, setLoading] = useState(true);
     const {subIndustryID} = useParams()    
     const [contentData, setContentData] = useState([]);
     const [industries, setIndustries] = useState([]);
-    
     const fetchAllIndustries = async () => {
         try {
             const response = await axios.get(`${baseURL}/industries?t=${new Date().getTime()}`);

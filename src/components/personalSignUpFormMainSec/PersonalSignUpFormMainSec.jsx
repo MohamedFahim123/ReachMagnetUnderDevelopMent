@@ -532,7 +532,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                             <input
                               type={`${showPassword ? 'text' : 'password'}`}
                               id='signUpPassword'
-                              placeholder='Enter 8-digit password'
+                              placeholder='Min 8: upper, lower, number, symbol.'
                               {...register('password')}
                               className={`form-control signUpInput ${errors.password ? 'inputError' : ''}`}
                             />
@@ -561,7 +561,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                               <input
                                 type={`${showConfirmPassword ? 'text' : 'password'}`}
                                 id='signUpConfirmPassword'
-                                placeholder='Enter 8-digit password'
+                                placeholder='Confirm password'
                                 {...register('password_confirmation')}
                                 className={`form-control signUpInput ${errors.password_confirmation ? 'inputError' : ''}`}
                               />
@@ -585,7 +585,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                           !isSignUp &&
                           <div className='col-lg-12 mb-4'>
                             <label htmlFor="addEmployeeofficial_id_or_passport" >
-                              Official Id Or Passport<span className="requiredStar"> *</span>
+                              Official ID Or Passport<span className="requiredStar"> *</span>
                             </label>
                             <input
                               type='file'

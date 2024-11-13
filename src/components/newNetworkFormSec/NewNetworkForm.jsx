@@ -158,7 +158,7 @@ console.log(currNetwork);
                                         >
                                             <option value="" disabled>Select partner label</option>
                                             <option value="client">Client</option>
-                                            <option value="partener">Partener</option>
+                                            <option value="partener">Partner</option>
                                             <option value="agent">Agent</option>
                                         </select>
                                     </div>

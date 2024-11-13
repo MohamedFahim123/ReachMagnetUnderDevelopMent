@@ -20,7 +20,6 @@ export default function TrendingCompanySec({ companies, token }) {
             };
         };
     }, [companies]);
-    console.log(companies)
 
     return (
         <div className='trendingCompany__handler'>

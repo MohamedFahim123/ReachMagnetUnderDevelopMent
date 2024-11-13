@@ -11,8 +11,9 @@ import { scrollToTop } from '../../functions/scrollToTop';
 import MyLoader from '../myLoaderSec/MyLoader';
 import Cookies from 'js-cookie'
 import UnAuthSec from '../unAuthSection/UnAuthSec';
+import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 
-export default function NewCatalogItemForm({ mainCategories, token }) {
+export default function NewCatalogItemForm({ token }) {
     const [unAuth, setUnAuth] = useState(false);
     const [loading, setLoading] = useState(true);
     const loginType = localStorage.getItem('loginType')
@@ -51,6 +52,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
             setCurrentUserLogin(newShape);
         }
     }, [Cookies.get('currentLoginedData'), currentUserLogin]);
+    const mainCategories = GetAllMainCategoriesStore((state) => state.mainCategories);
 
     const [formData, setFormData] = useState({
         title_ar: '',
@@ -156,20 +158,20 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
             })
         };
     }, [currCatalog]);
-    
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'tax' && value < 0 ) {
+        if (name === 'tax' && value < 0) {
             setFormData((prevState) => ({
                 ...prevState,
                 [name]: 0,
             }));
-        }else if(name === 'tax' && value >= 100 ){
+        } else if (name === 'tax' && value >= 100) {
             setFormData((prevState) => ({
                 ...prevState,
                 [name]: 100,
             }));
-        }else{
+        } else {
             setFormData((prevState) => ({
                 ...prevState,
                 [name]: value,
@@ -200,7 +202,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
-        
+
         const submissionData = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key !== 'image' && !Array.isArray(formData[key])) {
@@ -266,7 +268,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="title_en">Product Name in English <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <input
                                                             type="text"
@@ -281,7 +283,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="title_ar">Product Name in Arabic <span className='optional'>(optional)</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <input
                                                             type="text"
@@ -298,7 +300,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="category_id">Category <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <select
                                                             name="category_id"
@@ -318,7 +320,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="sub_category_id">Sub Category <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <select
                                                             name="sub_category_id"
@@ -342,7 +344,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                         <label htmlFor="unit_of_measure_id">
                                                             unit of measure <span className="requiredStar"> *</span>
                                                             <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                            </label>
+                                                        </label>
                                                         <select
                                                             name="unit_of_measure_id"
                                                             className="form-control custom-select"
@@ -359,9 +361,9 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6">
-                                                <div className="catalog__new__input">
+                                                    <div className="catalog__new__input">
                                                         <label htmlFor="code">product code <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <input
                                                             type="text"
@@ -378,7 +380,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="description_en">Description in English <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <textarea
                                                             name="description_en"
@@ -392,7 +394,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="description_ar">Description in Arabic <span className='optional'>(optional)</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <textarea
                                                             name="description_ar"
@@ -408,7 +410,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="price">Price <span className='optional'>(optional)</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <div className="custom-input-container">
                                                             <input
@@ -426,7 +428,7 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="tax">Tax % <span className='optional'>(optional)</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <div className="custom-input-container">
                                                             <input
@@ -440,15 +442,15 @@ export default function NewCatalogItemForm({ mainCategories, token }) {
                                                                 value={formData?.tax}
                                                                 onChange={handleInputChange}
                                                             />
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="upload__image__btn">
                                                 <label htmlFor="tax">
-                                                    Add Multible Images 
-                                                <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                    Add Multiple Images
+                                                    <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                 </label>
                                                 <input
                                                     type="file"

@@ -11,6 +11,7 @@
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    align-items: center;
 }
 .selected__product__info .prod__img img {
     width: 158px;
@@ -149,7 +150,11 @@
         font-size: 8px;
     }
     .selected__product__info {
-        gap: 8px;
+        /* gap: ; */
+        justify-content: space-between;
+    }
+    .selected__product__info .prod__text {
+        width: 100px;
     }
     .selected__product__info .prod__img img {
         width: 75px;
@@ -161,5 +166,19 @@
     .selected__product__action .quantity__btns {
         gap: 7px;
         color: rgba(148, 21, 21, 1);
+    }
+    .file__attachments{
+        width: 75px !important;
+        height: 90px !important;
+        overflow-y: auto;
+    }
+    .file__attachments h5{
+        font-size: 12px;
+    }
+    .file__attachments ul li{
+        font-size: 10px;
+    }
+    .file__attachments p{
+        font-size: 8px;
     }
 }

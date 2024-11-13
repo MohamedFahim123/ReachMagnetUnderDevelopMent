@@ -71,7 +71,6 @@ import MyNetwork from './pages/myNetwork/MyNetwork';
 import NewNetworkForm from './components/newNetworkFormSec/NewNetworkForm';
 import MyCatalogDetails from './pages/myCatalogDetailsPage/MyCatalogDetails';
 import MyServiceDetails from './pages/myServiceDetailsPage/MyServiceDetails';
-export let AllReadMessages = true;
 
 
 function App() {
@@ -79,146 +78,9 @@ function App() {
   const [loginType, setLoginType] = useState(localStorage.getItem('loginType'));
   const [totalCartItemsInCart, setTotalCartItemsInCart] = useState(0);
   const [totalWishlistItems, setTotalWishlistItems] = useState(0);
-
   const location = useLocation();
   const navigate = useNavigate();
   const [scrollToggle, setScrollToggle] = useState(false);
-  const [allRead, setAllRead] = useState(true);
-  const [loadingAllChats, setLoadingAllChats] = useState(false);
-  const [chats, setChats] = useState([]);
-  const [error, setError] = useState(null);
-  const [userNowInfo, setUserNowInfo] = useState([]);
-
-  const getAllChats = async () => {
-    try {
-      setLoadingAllChats(true);
-      const slug = loginType === 'user' ? 'my-chats' : 'company-chats';
-      const res = await axios.get(`${baseURL}/${loginType}/${slug}?t=${new Date().getTime()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setAllRead(res?.data?.data?.all_read);
-      AllReadMessages = res?.data?.data?.all_read
-      setChats(res?.data?.data?.chats);
-      setUserNowInfo(res?.data?.data?.user);
-      setFireMessage(false);
-    } catch (error) {
-      setError(error?.response?.data?.message || 'Failed to load chats');
-    };
-    setLoadingAllChats(false);
-  };
-
-  // useEffect(() => {
-  //   const updateLoginType = () => {
-  //     if (localStorage.getItem('loginType') !== 'employee') {
-  //       localStorage.setItem('loginType', 'user');
-  //       setLoginType('user');
-  //     }
-  //   };
-  //   updateLoginType();
-  // }, []);
-
-  // const handleScroll = debounce(() => {
-  //   setScrollToggle(window.scrollY > 200);
-  // }, 300);
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
-
-  const countriesQuery = useQuery(
-    'countries',
-    () => getDataFromAPI('countries', { headers: { Authorization: `Bearer ${token}` } }),
-    {
-      cacheTime: 1000 * 60 * 15 ,
-      retry: false,
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  const [allowedCountrySearch, setAllowedcountrySearch] = useState([])
-  const fetchAllowedCountries = async () => {
-    try {
-      const response = await axios.get(`${baseURL}/company-countries`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setAllowedcountrySearch(response?.data?.data?.countries);
-    } catch (error) {
-      toast.error(error?.response?.data.message || 'Something Went Wrong!');
-    };
-  };
-
-  useEffect(() => {
-    fetchAllowedCountries();
-  }, []);
-  const industriesQuery = useQuery({
-    queryKey: ['industries'],
-    queryFn: () => getDataFromAPI('industries'),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-
-  const selectedIndustriesQuery = useQuery({
-    queryKey: ['selected-industries'],
-    queryFn: () => getDataFromAPI('selected-industries'),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-
-  const mainCategoriesQuery = useQuery({
-    queryKey: ['main-categories'],
-    queryFn: () => getDataFromAPI('main-categories'),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-
-  const mainActivitiesQuery = useQuery({
-    queryKey: ['main-activities'],
-    queryFn: () => getDataFromAPI('main-activities'),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-
-  const companiesQuery = useQuery({
-    queryKey: ['companies'],
-    queryFn: () => getDataFromAPI(`companies`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    }),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-
-  const regionsQuery = useQuery({
-    queryKey: ['regions'],
-    queryFn: () => getDataFromAPI('regions'),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-
-  const citizenshipsQuery = useQuery({
-    queryKey: ['citizenships'],
-    queryFn: () => getDataFromAPI('citizenships'),
-    retry: false,
-    cacheTime: 1000 * 60 * 15 ,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
 
   // const fetchCartItems = async () => {
   //   if (token) {
@@ -283,16 +145,12 @@ function App() {
   const [fireMessage, setFireMessage] = useState(false);
 
   useMessaging(token, loginType, loginnedUserId, setFireMessage);
-  useEffect(() => {
-    if (token && loginType) {
-      getAllChats();
-    }
-  }, [fireMessage])
+
   return (
     <>
 
       {
-        (location.pathname.includes('profile')) ? <></> : <MyNavBar allRead={allRead} fireNotification={fireNotification} setFireNotification={setFireNotification} loginType={loginType} token={token} scrollToggle={scrollToggle} />
+        (location.pathname.includes('profile')) ? <></> : <MyNavBar fireMessage={fireMessage} fireNotification={fireNotification} setFireNotification={setFireNotification} loginType={loginType} token={token} scrollToggle={scrollToggle} />
       }
 
       <Toaster position="top-right" reverseOrder={false} />
@@ -300,11 +158,13 @@ function App() {
       <Routes>
 
         {/* HomePage Route */}
-        <Route path='/*' element={<NotFound />}/>
-        <Route path='/' element={<Home selectedIndustries={selectedIndustriesQuery?.data?.industries} companies={companiesQuery?.data?.companies} countries={allowedCountrySearch} token={token} />} />
+        <Route path='/*' element={<NotFound />} />
+        <Route path='/' element={<Home
+          token={token}
+        />} />
 
         {/* Search Page */}
-        <Route path='/reach-magnet' element={<SearchInHome countries={allowedCountrySearch} />} />
+        <Route path='/reach-magnet' element={<SearchInHome />} />
 
         {/* Shop Routes */}
         {/* <Route path='/discover' element={<Discover />} /> */}
@@ -326,9 +186,13 @@ function App() {
         <Route path='/show-company/:companyId' element={<SingleCompany token={token} />} />
         <Route path='/show-company/:companyId/catalog-details/:catalogId' element={<MyCatalogDetails token={token} />} />
         <Route path='/show-company/:companyId/service-details/:servId' element={<MyServiceDetails token={token} />} />
-        <Route path='/:companyName/request-quote' element={<SingleCompanyQuote countries={countriesQuery?.data?.countries} token={token} />} />
+        <Route path='/:companyName/request-quote' element={<SingleCompanyQuote
+          token={token}
+        />} />
 
-        <Route path='/one-click-quotation' element={<OneClickQuotation regions={regionsQuery?.data?.regions} mainCategories={mainCategoriesQuery?.data?.mainCategories} countries={countriesQuery?.data?.countries} token={token} />} />
+        <Route path='/one-click-quotation' element={<OneClickQuotation
+          token={token}
+        />} />
 
         <Route path='/all-insights' element={<MyCompaniesInsights token={token} />} />
 
@@ -339,12 +203,17 @@ function App() {
 
         {/* all category routes */}
         <Route path='/all-Industries' element={<OtherCategories />} />
-        <Route path='/all-Industries/:subIndustryID' element={<SubCategoryMain industries={industriesQuery?.data?.industries} />} />
+        <Route path='/all-Industries/:subIndustryID' element={<SubCategoryMain
+        />} />
 
         {/* Login & Regester Routes */}
-        <Route path='/personalsignUp' element={<PersonalSignUp countries={countriesQuery?.data?.countries} industries={industriesQuery?.data?.industries} />} />
-        <Route path='/business-signUp' element={<BusinessSignUp citizenships={citizenshipsQuery?.data?.citizenships} countries={countriesQuery?.data?.countries} industries={industriesQuery?.data?.industries} mainCategories={mainCategoriesQuery?.data?.mainCategories} mainActivities={mainActivitiesQuery?.data?.mainActivities} />} />
-        <Route path='/login' element={<MyLogin type={loginType} companiesQuery setType={setLoginType} />} />
+        <Route path='/personalsignUp' element={<PersonalSignUp />} />
+        <Route path='/business-signUp' element={<BusinessSignUp
+        />} />
+        <Route path='/login' element={<MyLogin
+          type={loginType}
+          setType={setLoginType}
+        />} />
         <Route path='/forget-password' element={<EnterUrEmail />} />
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/user-verification' element={<UserVirificationSec token={token} />} />
@@ -353,18 +222,32 @@ function App() {
         <Route path='/profile/followers' element={<CompanyFollowers loginType={loginType} token={token} />} />
 
         <Route path='/profile/catalog' element={<MyCatalog token={token} />} />
-        <Route path='/profile/catalog/addNewItem' element={<NewCatalogItemForm mainCategories={mainCategoriesQuery?.data?.mainCategories} token={token} />} />
-        <Route path='/profile/catalog/edit-item/:id' element={<NewCatalogItemForm mainCategories={mainCategoriesQuery?.data?.mainCategories} token={token} />} />
-        <Route path='/profile/catalogs/show-one/:itemId' element={<ShowOneProductInfoInDash token={token} show_slug={'show-catalog'} />} />
+        <Route path='/profile/catalog/addNewItem' element={<NewCatalogItemForm
+          token={token}
+        />} />
+        <Route path='/profile/catalog/edit-item/:id' element={<NewCatalogItemForm
+          token={token}
+        />} />
+        <Route path='/profile/catalogs/show-one/:itemId' element={<ShowOneProductInfoInDash
+          token={token}
+          show_slug={'show-catalog'}
+        />} />
 
         <Route path='/profile/network' element={<MyNetwork token={token} />} />
         <Route path='/profile/network/addNewItem' element={<NewNetworkForm token={token} />} />
         <Route path='/profile/network/edit-item/:id' element={<NewNetworkForm token={token} />} />
 
         <Route path='/profile/service' element={<MyService token={token} />} />
-        <Route path='/profile/service/addNewItem' element={<NewServiceForm mainCategories={mainCategoriesQuery?.data?.mainCategories} token={token} />} />
-        <Route path='/profile/service/edit-item/:id' element={<NewServiceForm mainCategories={mainCategoriesQuery?.data?.mainCategories} token={token} />} />
-        <Route path='/profile/service/show-one/:itemId' element={<ShowOneProductInfoInDash token={token} show_slug={'show-service'} />} />
+        <Route path='/profile/service/addNewItem' element={<NewServiceForm
+          token={token}
+        />} />
+        <Route path='/profile/service/edit-item/:id' element={<NewServiceForm
+          token={token}
+        />} />
+        <Route path='/profile/service/show-one/:itemId' element={<ShowOneProductInfoInDash
+          token={token}
+          show_slug={'show-service'}
+        />} />
 
         <Route path='/profile/media' element={<MyMedia token={token} />} />
         <Route path='/profile/media/addNewItem' element={<NewMediaForm token={token} />} />
@@ -377,7 +260,9 @@ function App() {
 
         <Route path='/profile/contact-form' element={<MyComanyForm token={token} />} />
         <Route path='/profile/products' element={<MyProducts token={token} />} />
-        <Route path='/profile/products/addNewItem' element={<NewProductForm mainCategories={mainCategoriesQuery?.data?.mainCategories} countries={countriesQuery?.data?.countries} token={token} />} />
+        <Route path='/profile/products/addNewItem' element={<NewProductForm
+          token={token}
+        />} />
         {/* <Route path='/profile/products/edit-item/:id' element={<NewProductForm mainCategories={mainCategoriesQuery?.data?.mainCategories} token={token} />} /> */}
         <Route path='/profile/products/show-one/:itemId' element={<ShowOneECommProductInDash token={token} />} />
 
@@ -406,14 +291,32 @@ function App() {
 
         {/* <Route path='/company-messages' element={<CompanyMessage token={token} />} /> */}
 
-        <Route path='/your-messages' element={<MyMessage getAllChats={getAllChats} setError={setError} chats={chats} userNowInfo={userNowInfo} token={token} setFireMessage={setFireMessage} fireMessage={fireMessage} />} />
-        <Route path='/your-messages/:activeChatId' element={<MyMessage getAllChats={getAllChats} setError={setError} chats={chats} userNowInfo={userNowInfo} setFireMessage={setFireMessage} fireMessage={fireMessage} token={token} />} />
+        <Route path='/your-messages' element={<MyMessage
+          token={token}
+          setFireMessage={setFireMessage}
+          fireMessage={fireMessage}
+        />} />
+        <Route path='/your-messages/:activeChatId' element={<MyMessage
+          setFireMessage={setFireMessage}
+          fireMessage={fireMessage}
+          token={token}
+        />} />
 
-        <Route path='/profile/notifications' element={<MyNotfications fireNotification={fireNotification} setFireNotification={setFireNotification} token={token} />} />
+        <Route path='/profile/notifications' element={<MyNotfications
+          fireNotification={fireNotification}
+          setFireNotification={setFireNotification}
+          token={token}
+        />} />
 
-        <Route path='/profile/profile-settings' element={<MyProfileSettings countries={countriesQuery?.data?.countries} loginType={loginType} token={token} />} />
-        <Route path='/profile/business-settings' element={<MyBussinessSettings mainCategories={mainCategoriesQuery?.data?.mainCategories} token={token} />} />
-        <Route path='/profile/users-management' element={<MyUsersManagement countries={countriesQuery?.data?.countries} loginType={loginType} token={token} />} />
+        <Route path='/profile/profile-settings' element={<MyProfileSettings
+          token={token}
+        />} />
+        <Route path='/profile/business-settings' element={<MyBussinessSettings
+          token={token}
+        />} />
+        <Route path='/profile/users-management' element={<MyUsersManagement
+          token={token}
+        />} />
 
       </Routes>
 

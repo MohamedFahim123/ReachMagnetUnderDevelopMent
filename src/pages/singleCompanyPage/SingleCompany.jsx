@@ -78,7 +78,6 @@ export default function SingleCompany({ token, fetchCartItems, wishlistItems }) 
         { name: 'Overview', active: activeItem === 'Overview' },
         { name: 'Services', active: activeItem === 'Services' },
         { name: 'Product Catalog', active: activeItem === 'Product Catalog' },
-        // { name: 'Products', active: activeItem === 'Products' },
         { name: 'Media', active: activeItem === 'Media' },
         { name: 'Networks', active: activeItem === 'Networks' },
     ];
@@ -92,10 +91,6 @@ export default function SingleCompany({ token, fetchCartItems, wishlistItems }) 
             setLoading(false);
         }, 500);
     }, [loading]);
-
-    console.log(showCompaniesQuery?.data?.company);
-console.log(companyNetworks?.data);
-
 
     return (
         <>

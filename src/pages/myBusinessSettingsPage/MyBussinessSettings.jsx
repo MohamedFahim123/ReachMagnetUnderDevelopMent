@@ -14,11 +14,12 @@ import Cookies from 'js-cookie';
 import CompanyWorkHourForm from '../../components/companyWorkHourFormItem/CompanyWorkHourForm';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
+import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 
 localStorage.setItem('updatingCompany', 'notUpdating');
 localStorage.setItem('updatingCompanyActivities', 'notUpdating');
 
-export default function MyBussinessSettings({ token, mainCategories }) {
+export default function MyBussinessSettings({ token }) {
     const [loading, setLoading] = useState(true);
     const loginType = localStorage.getItem('loginType');
     const [company, setCompany] = useState({});
@@ -34,6 +35,7 @@ export default function MyBussinessSettings({ token, mainCategories }) {
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
     const companyUpdated = Cookies.get('currentUpdatedCompanyData') ? false : true;
     const [unAuth, setUnAuth] = useState(false);
+    const mainCategories = GetAllMainCategoriesStore((state) => state.mainCategories);
 
     useEffect(() => {
         const cookiesData = Cookies.get('currentLoginedData');

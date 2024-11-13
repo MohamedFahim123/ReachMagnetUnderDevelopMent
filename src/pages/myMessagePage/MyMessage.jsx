@@ -7,8 +7,9 @@ import { baseURL } from '../../functions/baseUrl';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { GetAllChatsStore } from '../../store/AllChats';
 
-export default function MyMessage({getAllChats, setError,chats,userNowInfo, token, fireMessage, setFireMessage }) {
+export default function MyMessage({token, fireMessage, setFireMessage }) {
     const loginType = localStorage.getItem('loginType');
     const [loading, setLoading] = useState(true);
     const { activeChatId } = useParams();
@@ -20,8 +21,12 @@ export default function MyMessage({getAllChats, setError,chats,userNowInfo, toke
     const [loadingActiveChat, setLoadingActiveChat] = useState(false);
     const navigate = useNavigate();
     const [firstRender, setFirstRender] = useState(true);
+    const [error, setError] = useState(null);
 
-
+    // store code ...
+    const getAllChats = GetAllChatsStore((state)=> state.getAllChats);
+    const chats = GetAllChatsStore((state) => state.chats);
+    const userNowInfo = GetAllChatsStore((state) => state.userNowInfo);
 
     const showActiveChat = async (page = 1) => {
         setLoadingActiveChat(true);
@@ -85,7 +90,7 @@ export default function MyMessage({getAllChats, setError,chats,userNowInfo, toke
             getAllChats();
         }, 10000);
         return () => clearInterval(interval);
-    }, []);
+    }, [getAllChats]);
 
     return (
         <>

@@ -9,11 +9,12 @@ import Cookies from 'js-cookie';
 import MyLoader from '../../components/myLoaderSec/MyLoader'
 import PersonalSignUpFormMainSec from '../../components/personalSignUpFormMainSec/PersonalSignUpFormMainSec'
 import AllEmployeesSection from '../../components/allEmployeesSection/AllEmployeesSection'
+import { GetAllCountriesStore } from '../../store/AllCountries'
 
-export default function MyUsersManagement({ token ,countries }) {
+export default function MyUsersManagement({ token }) {
     const [loading, setLoading] = useState(true);
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
-
+    const countries = GetAllCountriesStore((state) => state.countries);
     useEffect(() => {
         const cookiesData = Cookies.get('currentLoginedData');
         if (!currentUserLogin) {

@@ -9,9 +9,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { scrollToTop } from '../../functions/scrollToTop';
 import MyLoader from '../myLoaderSec/MyLoader';
 import Cookies from 'js-cookie';
+import { GetAllCountriesStore } from '../../store/AllCountries';
+import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 
-export default function NewProductForm({ mainCategories, token, countries}) {
-
+export default function NewProductForm({ token}) {
+  const countries = GetAllCountriesStore((state) => state.countries);
   const loginType = localStorage.getItem('loginType');
   const navigate = useNavigate();
   const [currentUserLogin, setCurrentUserLogin] = useState(null);
@@ -68,12 +70,11 @@ export default function NewProductForm({ mainCategories, token, countries}) {
         ]
       }
     ]
-
-
   });
   const [dangerouses, setDangerouses] = useState([])
   const [productBrand, setProductBrand] = useState([])
   const [allUnits, setAllUnits] = useState([])
+  const mainCategories = GetAllMainCategoriesStore((state) => state.mainCategories);
 
   const fetchAllDangerouse = async () => {
 

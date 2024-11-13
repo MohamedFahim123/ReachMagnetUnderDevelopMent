@@ -10,8 +10,9 @@ import { scrollToTop } from '../../functions/scrollToTop'
 import MyLoader from '../myLoaderSec/MyLoader'
 import Cookies from 'js-cookie';
 import UnAuthSec from '../unAuthSection/UnAuthSec'
+import { GetAllMainCategoriesStore } from '../../store/AllMainCategories'
 
-export default function NewServiceForm({ mainCategories, token }) {
+export default function NewServiceForm({ token }) {
     const [loading, setLoading] = useState(true);
     const loginType = localStorage.getItem('loginType');
     const navigate = useNavigate();
@@ -26,7 +27,9 @@ export default function NewServiceForm({ mainCategories, token }) {
             const newShape = JSON.parse(cookiesData);
             setCurrentUserLogin(newShape);
         }
-    }, [Cookies.get('currentLoginedData'), currentUserLogin]);;
+    }, [Cookies.get('currentLoginedData'), currentUserLogin]);
+
+    const mainCategories = GetAllMainCategoriesStore((state) => state.mainCategories);
 
     const [formData, setFormData] = useState({
         title_ar: '',
@@ -36,7 +39,7 @@ export default function NewServiceForm({ mainCategories, token }) {
         category_id: '',
         sub_category_id: '',
         status: 'active',
-        code:'',
+        code: '',
         image: '',
     });
 
@@ -179,13 +182,13 @@ export default function NewServiceForm({ mainCategories, token }) {
                                     <UnAuthSec />
                                     :
                                     <div className='newCatalogItem__form__handler'>
-                                        <ContentViewHeader title={id ? 'Update Service Item' :'Add Item to Service'} />
+                                        <ContentViewHeader title={id ? 'Update Service Item' : 'Add Item to Service'} />
                                         <form className="catalog__form__items" onSubmit={handleFormSubmit}>
                                             <div className="row">
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="title_en">Product Name in English <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <input
                                                             type="text"
@@ -200,7 +203,7 @@ export default function NewServiceForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="title_ar">Product Name in Arabic <span className='optional'>(optional)</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <input
                                                             type="text"
@@ -217,7 +220,7 @@ export default function NewServiceForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="category_id">Category <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <select
                                                             name="category_id"
@@ -237,7 +240,7 @@ export default function NewServiceForm({ mainCategories, token }) {
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="sub_category_id">Sub Category <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <select
                                                             name="sub_category_id"
@@ -258,23 +261,23 @@ export default function NewServiceForm({ mainCategories, token }) {
                                             <div className="row">
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
-                                                            <label htmlFor="code">service code <span className="requiredStar"> *</span>
+                                                        <label htmlFor="code">service code <span className="requiredStar"> *</span>
                                                             <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="code"
-                                                                className="form-control"
-                                                                placeholder="Enter your text"
-                                                                value={formData?.code}
-                                                                onChange={handleInputChange}
-                                                            />
-                                                        </div>
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            name="code"
+                                                            className="form-control"
+                                                            placeholder="Enter your text"
+                                                            value={formData?.code}
+                                                            onChange={handleInputChange}
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="description_en">Description in English <span className="requiredStar"> *</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <textarea
                                                             name="description_en"
@@ -288,7 +291,7 @@ export default function NewServiceForm({ mainCategories, token }) {
                                                 <div className="col-lg-8">
                                                     <div className="catalog__new__input">
                                                         <label htmlFor="description_ar">Description in Arabic <span className='optional'>(optional)</span>
-                                                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <textarea
                                                             name="description_ar"

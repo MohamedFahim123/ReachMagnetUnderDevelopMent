@@ -188,9 +188,12 @@
     margin-top: 5px;
 }
 .customizationQuote__actions .hintForAddedFiles {
-    background-color:  rgb(15, 130, 238);
+    background-color:  rgba(6, 127, 173, .7);
     color: #fff;
-    font-size: 13px !important;
     border-radius: 4px;
     padding: 3px 5px;
+}
+.customizationQuote__actions p.hintForAddedFiles{
+    font-size: 13px !important;
+
 }

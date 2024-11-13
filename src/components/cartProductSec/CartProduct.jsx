@@ -3,6 +3,7 @@ import './cartProduct.css';
 import toast from 'react-hot-toast';
 import { baseURL } from '../../functions/baseUrl';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 export default function CartProduct({
     title,
@@ -10,6 +11,8 @@ export default function CartProduct({
     notes , 
     imageSrc,
     showImage = true,
+    showFiles = false,
+    fileList = [],
     cartId,
     quantity,
     companyIdWantedToHaveQuoteWith,
@@ -270,9 +273,55 @@ export default function CartProduct({
     return (
         <div className="selected__product__item" >
             <div className="selected__product__info">
-                {showImage && imageSrc && (
-                    <div className="prod__img">
-                        <img src={imageSrc} alt={title} />
+                { (showImage || showFiles) &&
+                ( <div>
+                    {showImage && imageSrc && (
+                            <div className="prod__img">
+                                <img src={imageSrc} alt={title} />
+                            </div>
+                    )}
+
+                    {showFiles && fileList.length > 0 && (
+                        <div style={{
+                            background: 'rgba(6, 127, 173, .7)',
+                            padding: '8px',
+                            borderRadius: '8px',
+                            color: '#fff',
+                            width: '158px',
+                            height: '151px',
+                            textTransform: 'capitalize',
+                            marginTop: '10px',
+                        }} className="file__attachments">
+                            <h5>Attached Files:</h5>
+                            <ul>
+                                {fileList.map((file, index) => (
+                                    <li key={index}>
+                                        <NavLink to={file.media} target="_blank" rel="noopener noreferrer"  className={'nav-link'}>
+                                            {file.name || `File ${index + 1}`}
+                                            <i className="bi bi-box-arrow-up-right ms-2"></i>
+                                        </NavLink>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    </div>
+                )}
+
+                {!showImage && !showFiles && (
+                    <div
+                        style={{
+                            background: 'rgba(145, 151, 179, .7)',
+                            padding: '8px',
+                            borderRadius: '8px',
+                            color: '#fff',
+                            width: '158px',
+                            height: '151px',
+                            textTransform: 'capitalize',
+                        }}
+                        className="d-flex align-items-center file__attachments"
+                    >
+                        <p>No Attachments Added</p>
                     </div>
                 )}
                 <div className="prod__text">

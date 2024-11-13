@@ -11,11 +11,45 @@ import toast from 'react-hot-toast';
 import defaultImage from '../../assets/images.png';
 import NotificationIcon from '../notficationIconSec/NotificationIcon';
 import messageIcon from '../../assets/companyImages/messages-3.svg'
+import { GetAllChatsStore } from '../../store/AllChats';
+import { GetAllCountriesStore } from '../../store/AllCountries';
+import { GetAllIndustriesStore } from '../../store/AllIndustries';
+import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
+import { GetAllMainActivitiesStore } from '../../store/AllMainActivities';
+import { GetAllCompaniesStore } from '../../store/AllCompanies';
+import { GetAllRegionsStore } from '../../store/AllResions';
+import { GetAllCitizenshipsStore } from '../../store/AllCitizenships';
 
-export default function MyNavBar({ scrollToggle, token, loginType, allRead,totalCartItemsInCart, totalWishlistItems, setFireNotification, fireNotification }) {
+export default function MyNavBar({ scrollToggle, token, loginType, totalCartItemsInCart, totalWishlistItems, fireMessage, setFireNotification, fireNotification }) {
     const [showOffcanvas, setShowOffcanvas] = useState(false);
     const profileData = Cookies.get('currentLoginedData');
-    const [newMessages, setNewMessages] = useState(Cookies.get('allMessagesViewd') || '');
+    const getAllChats = GetAllChatsStore((state) => state.getAllChats);
+    const allRead = GetAllChatsStore((state) => state.allRead);
+    const getAllCountries = GetAllCountriesStore((state) => state.getAllCountries);
+    const getAllIndustries = GetAllIndustriesStore((state) => state.getAllIndustries);
+    const getAllMainCategories = GetAllMainCategoriesStore((state) => state.getAllMainCategories);
+    const getAllMainActivities = GetAllMainActivitiesStore((state) => state.getAllMainActivities);
+    const getAllCompanies = GetAllCompaniesStore((state) => state.getAllCompanies);
+    const getAllRegions = GetAllRegionsStore((state) => state.getAllRegions);
+    const getAllCitizenships = GetAllCitizenshipsStore((state) => state.getAllCitizenships);
+    useEffect(() => {
+        getAllCountries();
+        getAllMainCategories();
+        getAllIndustries();
+        getAllMainActivities();
+        getAllCompanies();
+        getAllRegions();
+        getAllCitizenships();
+    }, [getAllCountries, getAllIndustries, getAllCitizenships, getAllMainCategories, getAllMainActivities, getAllCompanies, getAllRegions]);
+
+    useEffect(() => {
+        if (token && loginType) {
+            getAllChats();
+        }
+    }, [getAllChats, loginType, token, fireMessage]);
+    useEffect(() => {
+        getAllCountries();
+    }, [getAllCountries]);
 
     function handleOffcanvasToggle() {
         setShowOffcanvas((prevShowOffcanvas) => !prevShowOffcanvas);

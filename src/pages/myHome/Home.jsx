@@ -6,13 +6,14 @@ import FranchiseSec from '../../components/franchiseSecc/FranchiseSec';
 import TrendingCompanySec from '../../components/trendingCompanySecc/TrendingCompanySec';
 import GrowBuisnessSec from '../../components/growBuisnessSecc/GrowBuisnessSec';
 import SingleCompanyNewsSec from '../../components/singleCompanyNewsSec/SingleCompanyNewsSec';
-import HeaderOfSec from '../../components/myHeaderOfSec/HeaderOfSec';
 import DownloadApp from '../../components/downloadAppSec/DownloadApp';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
+import { GetAllCountriesStore } from '../../store/AllCountries';
+import { GetAllIndustriesStore } from '../../store/AllIndustries';
+import { GetAllCompaniesStore } from '../../store/AllCompanies';
 
 
-export default function Home({ companies, token, countries, selectedIndustries, fetchCartItems, wishlistItems }) {
-
+export default function Home({ token }) {
   const [loading, setLoading] = useState(true);
   const arrOfCateg = [
     {
@@ -20,6 +21,16 @@ export default function Home({ companies, token, countries, selectedIndustries, 
       id: 1
     },
   ];
+  const getAllAllowedCountries = GetAllCountriesStore((state) => state.getAllAllowedCountries);
+  const getAllSelectedIndustries = GetAllIndustriesStore((state) => state.getAllSelectedIndustries);
+  useEffect(() => {
+    getAllAllowedCountries();
+    getAllSelectedIndustries();
+  }, [getAllAllowedCountries, getAllSelectedIndustries]);
+
+  const companies = GetAllCompaniesStore((state) => state.companies);
+  const allowedCountries = GetAllCountriesStore((state) => state.allowedCountries);
+  const selectedIndustries = GetAllIndustriesStore((state) => state.selectedIndustries);
 
   useEffect(() => {
     setTimeout(() => {
@@ -39,14 +50,14 @@ export default function Home({ companies, token, countries, selectedIndustries, 
               headText='Search for your next opportunity'
               paraPartOne='Unlock full potential by finding exactly what you need'
               categoryArr={arrOfCateg}
-              countries={countries}
+              countries={allowedCountries}
             />
-            
+
             {/* <AboutReachSec /> */}
             <div className='mt-5'>
-              <AllCategorySec selectedIndustries={selectedIndustries}/>
+              <AllCategorySec selectedIndustries={selectedIndustries} />
             </div>
-            
+
             <div className='mt-5'>
               <TrendingCompanySec companies={companies} token={token} />
             </div>
@@ -62,14 +73,14 @@ export default function Home({ companies, token, countries, selectedIndustries, 
               </div>
             }
             {/* <ReadyToByProductsHome fetchCartItems={fetchCartItems} wishlistItems={wishlistItems} token={token} secMAinTitle={`Ready-To-Buy Products`}/> */}
-            
+
             <GrowBuisnessSec />
             {/* <LastMinuteDeals setLoading={setLoading} token={token}/> */}
             <div className='mt-3'>
-              <HeaderOfSec
+              {/* <HeaderOfSec
                 secHead='Companies Insights'
                 secText='Stay informed with the latest updates, announcements, and specials from top companies'
-              />
+              /> */}
               <SingleCompanyNewsSec setLoading={setLoading} token={token} />
             </div>
             <DownloadApp />

@@ -396,14 +396,23 @@ export default function ShowSingleQuotation({ token }) {
     const [replyText, setReplyText] = useState('');
 
     const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [currNote, setCurrNote] = useState('');
+    const handleViewNotes = (id) =>{
+        const note = newData?.quotation_details?.find((row)=>+row?.id === +id)?.note
+        setShow(true);
+        setCurrNote(note);
+    };
+    // const handleShow = () => setShow(true);
 
     const [showFiles, setShowFiles] = useState(false);
+    const [currFile, setCurrFile] = useState([]);
 
-    const handleCloseFiles = () => setShow(false);
-    const handleShowFiles = () => setShow(true);
+    const handleViewFiles = (files) => {
+        setCurrFile(files); // Set files for the selected row
+        setShowFiles(true); // Open the modal
+    };
+    // const handleCloseFiles = () => setShow(false);
+    // const handleShowFiles = () => setShow(true);
 
     const [editExtrasNote, setEditExtrasNote] = useState(false);
     const [extrasNoteInput, setExtrasNoteInput] = useState(newData?.extras_note === 'N/A' ? '' : newData?.extras_note);
@@ -610,7 +619,7 @@ export default function ShowSingleQuotation({ token }) {
                             <td className='text-center'>
                                 {
                                 row?.note !== 'N/A' ?
-                                    <i onClick={() => setShow(true)} className="bi bi-eye cursorPointer"></i>
+                                    <i onClick={()=>handleViewNotes(row?.id)} className="bi bi-eye cursorPointer"></i>
                                     : 
                                     'No Notes'
                                 }
@@ -619,7 +628,7 @@ export default function ShowSingleQuotation({ token }) {
                                 <Modal.Header closeButton>
                                 <Modal.Title>Notes</Modal.Title>
                                 </Modal.Header>
-                                <Modal.Body>{row?.note}</Modal.Body>
+                                <Modal.Body>{currNote}</Modal.Body>
                                 <Modal.Footer>
                                 <Button variant="secondary" onClick={() => setShow(false)}>
                                     Close
@@ -629,7 +638,7 @@ export default function ShowSingleQuotation({ token }) {
                             <td className='text-center'>
                                {
                                row?.type === "customized" ? 
-                                <i onClick={() => setShowFiles(true)}
+                                <i onClick={() => handleViewFiles(row?.medias)}
                                     className="bi bi-box-arrow-up-right cursorPointer"
                                 >
                                 </i>
@@ -642,29 +651,41 @@ export default function ShowSingleQuotation({ token }) {
                                 <Modal.Header closeButton>
                                 <Modal.Title>Files</Modal.Title>
                                 </Modal.Header>
-                                <Modal.Body>
+                                <Modal.Body  
+                                    style={{
+                                            display: 'flex',
+                                            justifyContent: 'start',
+                                            height: 'calc(80vh - 250px)', 
+                                            overflowY:'auto'
+                                            }}
+                                >
                                     <div className="mediasModal__handler">
-                                        {
-                                            row?.medias &&(
-                                                row?.medias.map((media, i) => (
-                                                    <div key={i} className="media__handler">
-                                                        <NavLink to={media?.media} target="_blank">
-                                                            {
-                                                                media?.type === 'image' ? 
-                                                                <img src={media?.media} alt="media" 
-                                                                className='mb-3'
-                                                                style={{width: '200px', height: '200px', borderRaduis:"8px"}} />
-                                                                :
-                                                                'view file'
-                                                            }
-                                                            
-                                                        </NavLink>
-                                                    </div>
-                                                ))
-                                            )
-                                        }
+                                    {currFile && currFile.length > 0 ? (
+                            currFile.map((media, i) => (
+                                <div key={i} className="media__handler">
+                                    <NavLink to={media.media} target="_blank">
+                                        {media.type === "image" ? (
+                                            <img
+                                                src={media.media}
+                                                alt="media"
+                                                className="mb-3"
+                                                style={{
+                                                    maxWidth: '200px',
+                                                    maxHeight: '200px',
+                                                    objectFit: 'contain',
+                                                    borderRadius: "8px",
+                                                }}
+                                            />
+                                        ) : (
+                                            "View File"
+                                        )}
+                                    </NavLink>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No files available</p>
+                        )}
                                     </div>
-                                    
                                 </Modal.Body>
                                 <Modal.Footer>
                                 <Button variant="secondary" onClick={() => setShowFiles(false)}>
