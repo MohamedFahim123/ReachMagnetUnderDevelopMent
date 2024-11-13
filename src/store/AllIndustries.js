@@ -18,9 +18,7 @@ export const GetAllIndustriesStore = create((set, get) => ({
         }
         set({ industriesLoading: true });
         await axios.get(`${baseURL}/industries?t=${now}`, {
-            headers: {
-                Authorization: `Bearer ${Token}`
-            }
+            headers: Token ? { Authorization: `Bearer ${Token}` } : {}
         })
             .then(res => set(() => (
                 {
@@ -48,9 +46,7 @@ export const GetAllIndustriesStore = create((set, get) => ({
         }
         set({ countriesLoading: true });
         await axios.get(`${baseURL}/selected-industries`, {
-            headers: {
-                headers: Token ? { Authorization: `Bearer ${Token}` } : {}
-            }
+            headers: Token ? { Authorization: `Bearer ${Token}` } : {}
         })
             .then(res => set(() => (
                 {

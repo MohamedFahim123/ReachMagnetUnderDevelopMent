@@ -18,9 +18,7 @@ export const GetAllCountriesStore = create((set, get) => ({
         };
         set({ countriesLoading: true });
         await axios.get(`${baseURL}/countries`, {
-            headers: {
-                Authorization: `Bearer ${Token}`
-            }
+            headers: Token ? { Authorization: `Bearer ${Token}` } : {}
         })
             .then(res => set(() => (
                 {
@@ -48,9 +46,7 @@ export const GetAllCountriesStore = create((set, get) => ({
         }
         set({ countriesLoading: true });
         await axios.get(`${baseURL}/company-countries?t=${now}`, {
-            headers: {
-                headers: Token ? { Authorization: `Bearer ${Token}` } : {}
-            }
+            headers: Token ? { Authorization: `Bearer ${Token}` } : {}
         })
             .then(res => set(() => (
                 {

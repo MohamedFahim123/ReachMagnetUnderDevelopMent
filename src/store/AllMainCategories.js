@@ -17,9 +17,7 @@ export const GetAllMainCategoriesStore = create((set, get) => ({
         }
         set({ mainCategoriesLoading: true });
         await axios.get(`${baseURL}/main-categories`, {
-            headers: {
-                headers: Token ? { Authorization: `Bearer ${Token}` } : {}
-            }
+            headers: Token ? { Authorization: `Bearer ${Token}` } : {}
         })
             .then(res => set(() => (
                 {

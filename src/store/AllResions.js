@@ -17,9 +17,7 @@ export const GetAllRegionsStore = create((set, get) => ({
         }
         set({ regionsLoading: true });
         await axios.get(`${baseURL}/regions`, {
-            headers: {
-                Authorization: `Bearer ${Token}`
-            }
+            headers: Token ? { Authorization: `Bearer ${Token}` } : {}
         })
             .then(res => set(() => (
                 {
