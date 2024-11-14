@@ -16,7 +16,7 @@ import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 export default function NewCatalogItemForm({ token }) {
     const [unAuth, setUnAuth] = useState(false);
     const [loading, setLoading] = useState(true);
-    const loginType = localStorage.getItem('loginType')
+    const loginType = localStorage.getItem('loginType');
     const navigate = useNavigate();
     const { id } = useParams();
     const [currCatalog, setCurrCatalog] = useState([]);

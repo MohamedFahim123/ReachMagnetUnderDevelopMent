@@ -14,27 +14,20 @@ export const useDashBoardBookedAppointmentsStore = create((set, get) => ({
     lastFetched: null,
 
     fetchBookedAppointments: async (token, loginType, page = 1, filteration = {}) => {
-        const { lastFetched } = get();
-        const now = Date.now();
-        const threeMinutes = 3 * 60 * 1000;
-
-        if (lastFetched && now - lastFetched < threeMinutes) {
-            set({ loading: false });
-            return;
-        }
-
         set({ loading: true, unAuth: false });
+        
         const slug = loginType !== 'user' ? 'all-booked-appointments' : 'get-user-appointments';
         const queryParams = new URLSearchParams(filteration).toString();
+        
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/${slug}?page=${page}&${queryParams}&t=${now}`, {
+            const response = await axios.get(`${baseURL}/${loginType}/${slug}?page=${page}&${queryParams}&t=${Date.now()}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             set({
                 appointments: response?.data?.data?.bookedAppointments,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
-                lastFetched: now,
+                lastFetched: Date.now(),
             });
         } catch (error) {
             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
@@ -64,24 +57,42 @@ export const useDashBoardBookedAppointmentsStore = create((set, get) => ({
     },
 
     updateAppointmentStatus: async (token, loginType, id, status) => {
+        const toastId = toast.loading('Loading...')
         try {
             const response = await axios.post(`${baseURL}/${loginType}/update-booked-appointment-status/${id}&t=${new Date().getTime()}`, {
                 status,
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            toast.success(response?.data?.message || 'Status updated successfully');
+            toast.success(response?.data?.message || 'Status updated successfully',{
+                id: toastId,
+                duration: 1500,
+            });
             set((state) => ({
                 appointments: state.appointments.map((appointment) =>
                     appointment.id === id ? { ...appointment, status } : appointment
                 ),
             }));
         } catch (error) {
-            toast.error(error?.response?.data?.message || 'Error updating status');
+            toast.error(error?.response?.data?.message || 'Error updating status',{
+                id: toastId,
+                duration: 1500,
+            });
         }
     },
 
     setCurrentPage: (page) => set({ currentPage: page }),
+
     setFilteration: (filter) => set({ filteration: filter }),
-    setActiveRole: (role) => set({ activeRole: role }),
+
+    setActiveRole: (role, token, loginType) => {
+        const { fetchBookedAppointments } = get();
+        
+        set({ activeRole: role, currentPage: 1, lastFetched: null });
+
+        const newFilteration = { ...get().filteration, type: role === 'All' ? '' : role };
+        set({ filteration: newFilteration });
+
+        fetchBookedAppointments(token, loginType, 1, newFilteration);
+    },
 }));

@@ -7,10 +7,12 @@ import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import ContentViewHeader from '../../components/contentViewHeaderSec/ContentViewHeader';
 import AddNewItem from '../../components/addNewItemBtn/AddNewItem';
 import { useDashBoardAppointmentsStore } from '../../store/DashBoardAppointMents';
+import Cookies from 'js-cookie';
 
 export default function MyAppointments({ token }) {
     const loginType = localStorage.getItem('loginType');
-
+    const cookiesData = Cookies.get("currentLoginedData");
+    const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
     const {
         loading,
         appointments,
@@ -44,7 +46,7 @@ export default function MyAppointments({ token }) {
                 <div className='dashboard__handler d-flex'>
                     <MyNewSidebarDash />
                     <div className='main__content container'>
-                        <MainContentHeader currentUserLogin={null} search={false} />
+                        <MainContentHeader currentUserLogin={currentUserLogin} search={false} />
                         {unAuth ? (
                             <UnAuthSec />
                         ) : (

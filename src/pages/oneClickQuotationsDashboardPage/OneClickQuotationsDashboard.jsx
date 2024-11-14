@@ -6,6 +6,7 @@ import OneClickQuotationTable from '../../components/oneClickQuotationTableSec/O
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import { useDashBoardOneClickQuotationStore } from '../../store/DashBoardOneClickQutations';
+import Cookies from 'js-cookie';
 
 export default function OneClickQuotationsDashboard({ token }) {
   const {
@@ -20,7 +21,8 @@ export default function OneClickQuotationsDashboard({ token }) {
     setCurrentPage,
     setFilteration,
   } = useDashBoardOneClickQuotationStore();
-
+  const cookiesData = Cookies.get("currentLoginedData");
+  const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
   const loginType = localStorage.getItem("loginType");
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function OneClickQuotationsDashboard({ token }) {
           <MyNewSidebarDash />
           <div className='main__content container'>
             <MainContentHeader
+              currentUserLogin={currentUserLogin}
               name='code'
               search={true}
               filteration={filteration}

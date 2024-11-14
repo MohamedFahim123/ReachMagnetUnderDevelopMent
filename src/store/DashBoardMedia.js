@@ -13,20 +13,28 @@ export const useDashBoardMediaStore = create((set, get) => ({
     activeRole: 'All',
     lastFetched: null,
 
+    // Fetch media items, respecting cache and current filters
     fetchMedias: async (token, loginType, page = 1) => {
-        const { lastFetched } = get();
+        const { lastFetched, filteration, activeRole } = get();
         const now = Date.now();
         const threeMinutes = 3 * 60 * 1000;
 
-        if (lastFetched && now - lastFetched < threeMinutes) {
+        if (lastFetched && now - lastFetched < threeMinutes && activeRole === 'All') {
             set({ loading: false });
             return;
         }
 
         set({ loading: true, unAuth: false });
+        const params = new URLSearchParams();
+        for (const key in filteration) {
+            if (filteration[key]) {
+                params.append(key, filteration[key]);
+            }
+        }
+
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/company-portfolios?page=${page}&t=${now}`, {
-                headers: { Authorization: `Bearer ${token}` }
+            const response = await axios.get(`${baseURL}/${loginType}/company-portfolios?page=${page}&${params.toString()}&t=${now}`, {
+                headers: { Authorization: `Bearer ${token}` },
             });
             set({
                 mediaItems: response?.data?.data?.portfolio,
@@ -53,7 +61,7 @@ export const useDashBoardMediaStore = create((set, get) => ({
         }
         try {
             const response = await axios.get(`${baseURL}/${loginType}/filter-company-portfolios?${params.toString()}&page=${page}&t=${new Date().getTime()}`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
             set({
                 mediaItems: response?.data?.data?.portfolio,
@@ -85,6 +93,27 @@ export const useDashBoardMediaStore = create((set, get) => ({
     },
 
     setCurrentPage: (page) => set({ currentPage: page }),
-    setFilteration: (filter) => set({ filteration: filter }),
-    setActiveRole: (role) => set({ activeRole: role }),
+
+    setFilteration: (filter) => set((state) => ({
+        filteration: { ...state.filteration, ...filter },
+        lastFetched: null,
+    })),
+
+    setActiveRole: (role) => set({ activeRole: role, lastFetched: null }),
+
+    handleRoleChange: (role, token, loginType) => {
+        const { fetchMedias, filterMedias, setFilteration, setActiveRole, setCurrentPage } = get();
+        
+        setActiveRole(role);
+        setCurrentPage(1);
+
+        if (role === 'All') {
+            setFilteration({ type: '' });
+            fetchMedias(token, loginType);
+        } else {
+            const type = role === 'image' ? 'image' : 'link';
+            setFilteration({ type });
+            filterMedias(token, loginType, 1, { type });
+        }
+    },
 }));

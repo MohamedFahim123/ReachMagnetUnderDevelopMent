@@ -8,9 +8,12 @@ import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import AddNewItem from '../../components/addNewItemBtn/AddNewItem';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDashBoardCatalogStore } from '../../store/DashBoardCatalog';
+import Cookies from 'js-cookie';
 
 export default function MyCatalog({ token }) {
   const loginType = localStorage.getItem('loginType');
+  const cookiesData = Cookies.get("currentLoginedData");
+  const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
   const navigate = useNavigate();
   const {
     loading,
@@ -57,6 +60,7 @@ export default function MyCatalog({ token }) {
               filteration={filterCatalog}
               setFilteration={setFilterCatalog}
               name="title"
+              currentUserLogin={currentUserLogin} 
               placeholder="search catalog"
             />
             {unAuth ? (

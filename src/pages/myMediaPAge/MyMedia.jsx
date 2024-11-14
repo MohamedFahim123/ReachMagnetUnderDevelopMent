@@ -8,45 +8,47 @@ import AddNewItem from '../../components/addNewItemBtn/AddNewItem';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import { getYoutubeVideoId } from '../../functions/getYoutubeVideo';
 import { useDashBoardMediaStore } from '../../store/DashBoardMedia';
+import Cookies from 'js-cookie';
 
 export default function MyMedia({ token }) {
     const loginType = localStorage.getItem('loginType');
     const navigate = useNavigate();
+    const cookiesData = Cookies.get("currentLoginedData");
+    const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
 
+    // Destructure states and actions from the store
     const {
         loading,
         mediaItems,
         unAuth,
         totalPages,
         currentPage,
-        filteration,
         activeRole,
         fetchMedias,
-        filterMedias,
-        deleteMediaItem,
+        handleRoleChange,
         setCurrentPage,
+        deleteMediaItem,
         setFilteration,
         setActiveRole,
     } = useDashBoardMediaStore();
 
+    // Fetch initial media items based on activeRole and currentPage
     useEffect(() => {
-        fetchMedias(token, loginType, currentPage);
-    }, [token, loginType, currentPage, fetchMedias]);
-
-    useEffect(() => {
-        if (filteration.type) {
-            filterMedias(token, loginType, currentPage, filteration);
-        } else {
+        if (activeRole === 'All') {
             fetchMedias(token, loginType, currentPage);
+        } else {
+            handleRoleChange(activeRole, token, loginType);
         }
-    }, [filteration, token, loginType, currentPage, filterMedias]);
+    }, [token, loginType, currentPage, activeRole]);
 
+    // Handle pagination changes
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
         }
     };
 
+    // Handle media item deletion
     const handleDeleteMedia = (id) => {
         deleteMediaItem(token, loginType, id);
     };
@@ -59,19 +61,20 @@ export default function MyMedia({ token }) {
                 <div className="dashboard__handler d-flex">
                     <MyNewSidebarDash />
                     <div className="main__content container">
-                        <MainContentHeader currentUserLogin={null} search={false} />
+                        <MainContentHeader currentUserLogin={currentUserLogin} search={false} />
                         {unAuth ? (
                             <UnAuthSec />
                         ) : (
                             <div className="content__view__handler">
                                 <ContentViewHeader title="Medias For Company" />
                                 <AddNewItem link="/profile/media/addNewItem" />
+                                
+                                {/* Role Selection Buttons */}
                                 {loginType === 'employee' && (
                                     <div className="my__roles__actions mb-5 ps-0 ms-0">
                                         <button
                                             className={`def__btn px-5 ${activeRole === 'All' ? 'rolesActiveBtn' : ''}`}
                                             onClick={() => {
-                                                fetchMedias(token, loginType);
                                                 setFilteration({ type: '' });
                                                 setActiveRole('All');
                                             }}
@@ -98,6 +101,8 @@ export default function MyMedia({ token }) {
                                         </button>
                                     </div>
                                 )}
+                                
+                                {/* Media Items Display */}
                                 <div className="content__card__list">
                                     {mediaItems.length !== 0 ? (
                                         <div className="row">
@@ -135,6 +140,7 @@ export default function MyMedia({ token }) {
                                                     </div>
                                                 </div>
                                             ))}
+                                            {/* Pagination */}
                                             {totalPages > 1 && (
                                                 <div className="col-12 d-flex justify-content-center align-items-center mt-4">
                                                     <button

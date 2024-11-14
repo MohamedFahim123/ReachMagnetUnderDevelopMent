@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Table } from 'react-bootstrap';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
@@ -12,6 +12,22 @@ export default function MyBookedAppointments({ token }) {
     const loginType = localStorage.getItem('loginType');
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
     const cookiesData = Cookies.get('currentLoginedData');
+    const [visibleRowId, setVisibleRowId] = useState(null);
+    const toggleOptions = (rowId) => {
+        setVisibleRowId(prevId => (prevId === rowId ? null : rowId));
+    };
+    const optionsRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+                setVisibleRowId(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const {
         loading,
@@ -41,8 +57,6 @@ export default function MyBookedAppointments({ token }) {
 
     const handleDeleteAppointment = (id) => deleteAppointment(token, loginType, id);
 
-    const handleChangeStatus = (id, status) => updateAppointmentStatus(token, loginType, id, status);
-
     return (
         <>
             {loading ? (
@@ -65,22 +79,56 @@ export default function MyBookedAppointments({ token }) {
                         ) : (
                             <div className='content__view__handler'>
                                 <ContentViewHeader title={loginType !== 'user' ? 'Company Booked Appointments' : 'User Booked Appointments'} />
-                                {loginType === 'employee' && (
+                                {/* {loginType === 'employee' && (
                                     <div className="my__roles__actions my-4 ps-0 ms-0">
-                                        <button className={`def__btn px-5 ${activeRole === 'All' ? 'rolesActiveBtn' : ''}`} onClick={() => {
-                                            fetchBookedAppointments(token, loginType, currentPage, { ...filteration, type: '' });
-                                            setActiveRole('All');
-                                        }}>All</button>
-                                        <button className={`def__btn meddle_btn px-5 ${activeRole === 'reservedByOthers' ? 'rolesActiveBtn' : ''}`} onClick={() => {
-                                            setFilteration({ ...filteration, type: 'reservedByOthers' });
-                                            setActiveRole('reservedByOthers');
-                                        }}>Reserved By Others</button>
-                                        <button className={`cust__btn px-5 ${activeRole === 'reservedByUs' ? 'rolesActiveBtn' : ''}`} onClick={() => {
-                                            setFilteration({ ...filteration, type: 'reservedByUs' });
-                                            setActiveRole('reservedByUs');
-                                        }}>Reserved By Us</button>
+                                        <button className={`def__btn px-5 ${activeRole === 'All' ? 'rolesActiveBtn' : ''}`}
+                                            onClick={() => setActiveRole('All', token, loginType)}>
+                                            All
+                                        </button>
+                                        <button className={`def__btn meddle_btn px-5 ${activeRole === 'reservedByOthers' ? 'rolesActiveBtn' : ''}`}
+                                            onClick={() => setActiveRole('reservedByOthers', token, loginType)}>
+                                            Reserved By Others
+                                        </button>
+                                        <button className={`cust__btn px-5 ${activeRole === 'reservedByUs' ? 'rolesActiveBtn' : ''}`}
+                                            onClick={() => setActiveRole('reservedByUs', token, loginType)}>
+                                            Reserved By Us
+                                        </button>
                                     </div>
-                                )}
+                                )} */}
+                                {
+                                    loginType === 'employee' &&
+                                    <div className="my__roles__actions my-4 ps-0 ms-0">
+                                        <button
+                                            className={`def__btn px-5 ${activeRole === 'All' ? 'rolesActiveBtn ' : ''}`}
+                                            onClick={() => {
+                                                fetchBookedAppointments();
+                                                setFilteration({ ...filteration, type: '' })
+                                                setActiveRole('All', token, loginType)
+                                            }}
+                                        >
+                                            All
+                                        </button>
+                                        <button
+                                            className={`def__btn meddle_btn px-5 ${activeRole === 'reservedByOthers' ? 'rolesActiveBtn' : ''}`}
+                                            style={{ borderBottomLeftRadius: '0px', borderTopLeftRadius: '0px' }}
+                                            onClick={() => {
+                                                setFilteration({ ...filteration, type: 'reservedByOthers' })
+                                                setActiveRole('reservedByOthers', token, loginType)
+                                            }}
+                                        >
+                                            Reserved By Others
+                                        </button>
+                                        <button
+                                            className={`cust__btn px-5 ${activeRole === 'reservedByUs' ? 'rolesActiveBtn' : ''}`}
+                                            onClick={() => {
+                                                setFilteration({ ...filteration, type: 'reservedByUs' })
+                                                setActiveRole('reservedByUs', token, loginType)
+                                            }}
+                                        >
+                                            Reserved By Us
+                                        </button>
+                                    </div>
+                                }
                                 {appointments.length ? (
                                     <div className="row">
                                         <div className="col-12">
@@ -100,23 +148,55 @@ export default function MyBookedAppointments({ token }) {
                                                     <tbody>
                                                         {appointments.map((row, index) => (
                                                             <tr key={index}>
-                                                                <td>{row?.booked_by_name}</td>
-                                                                <td>{row?.company_name || row?.companyName}</td>
-                                                                <td>{row?.reason}</td>
+                                                                <td className='text-start' style={{ fontSize: '12px' }}>
+                                                                    <div className={`product__statue text-start`}>
+                                                                        <p>
+                                                                            {row?.booked_by_name}
+                                                                        </p>
+                                                                    </div>
+                                                                </td>
+                                                                <td className='text-start' style={{ fontSize: '12px' }}>
+                                                                    <div className="product__created">
+                                                                        <p>
+                                                                            {row?.company_name || row?.companyName}
+                                                                        </p>
+                                                                    </div>
+                                                                </td>
+                                                                <td style={{ fontSize: '12px' }}>
+                                                                    <div className='bookedAppointementReason'>
+                                                                        {row?.reason}
+                                                                    </div>
+                                                                </td>
                                                                 <td>{row?.date}</td>
                                                                 <td>{row?.time}</td>
                                                                 <td><span className={`bookedAppointementStatus ${row?.status}`}>{row?.status}</span></td>
-                                                                {loginType === 'employee' && (
-                                                                    <td>
-                                                                        {row?.type === 'reservedByOthers' ? (
-                                                                            <div className='position-relative actions'>
-                                                                                <i className="bi bi-trash-fill" onClick={() => handleDeleteAppointment(row?.id)}></i>
-                                                                                <i className="bi bi-three-dots-vertical ms-2" onClick={() => handleChangeStatus(row?.id, 'rejected')}></i>
-                                                                                <i className="bi bi-check-lg ms-2" onClick={() => handleChangeStatus(row?.id, 'accepted')}></i>
-                                                                            </div>
-                                                                        ) : 'No Action'}
+                                                                {
+                                                                    loginType === 'employee' &&
+                                                                    <td style={{ fontSize: '12px' }}>
+                                                                        {
+                                                                            row?.type === 'reservedByOthers' ?
+                                                                                <div className='position-relative actions'>
+                                                                                    <i className="bi bi-trash-fill" onClick={() => handleDeleteAppointment(row?.id)}></i>
+                                                                                    <i style={{ cursor: 'pointer' }} className="bi bi-three-dots-vertical ms-2" onClick={() => toggleOptions(row?.id)}></i>
+                                                                                    {visibleRowId === row?.id && (
+                                                                                        <div className="options-box" ref={optionsRef}>
+                                                                                            <p className="option mb-1 text-danger" onClick={() => {
+                                                                                                updateAppointmentStatus(token, loginType, row?.id, 'rejected');
+                                                                                                setVisibleRowId(null);
+                                                                                            }}>Reject</p>
+                                                                                            <p className=" option mb-0 text-success" onClick={() => {
+                                                                                                updateAppointmentStatus(token, loginType, row?.id, 'accepted');
+                                                                                                setVisibleRowId(null);
+                                                                                            }}>Accept</p>
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                                :
+                                                                                'No Action'
+                                                                        }
+
                                                                     </td>
-                                                                )}
+                                                                }
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -145,8 +225,10 @@ export default function MyBookedAppointments({ token }) {
                             </div>
                         )}
                     </div>
-                </div>
-            )}
+                </div >
+            )
+            }
         </>
     );
 }
+//

@@ -8,9 +8,12 @@ import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import ContentViewHeader from '../../components/contentViewHeaderSec/ContentViewHeader';
 import AddNewItem from '../../components/addNewItemBtn/AddNewItem';
 import { useNetworkStore } from '../../store/DashBoardNetwork';
+import Cookies from 'js-cookie';
 
 export default function MyNetwork({ token }) {
   const loginType = localStorage.getItem('loginType');
+  const cookiesData = Cookies.get("currentLoginedData");
+  const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
 
   const {
     loading,
@@ -18,22 +21,14 @@ export default function MyNetwork({ token }) {
     unAuth,
     totalPages,
     currentPage,
-    filterCatalog,
     fetchNetwork,
-    filterCatalogs,
     deleteNetwork,
     setCurrentPage,
-    setFilterCatalog
   } = useNetworkStore();
 
-  // Fetch networks with pagination and filters
   useEffect(() => {
-    if (filterCatalog.title.length >= 3 || filterCatalog.status) {
-      filterCatalogs(token, loginType, currentPage, filterCatalog);
-    } else {
-      fetchNetwork(token, loginType, currentPage);
-    }
-  }, [token, loginType, currentPage, filterCatalog, filterCatalogs, fetchNetwork]);
+    fetchNetwork(token, loginType, currentPage);
+  }, [token, loginType, currentPage, fetchNetwork]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -53,7 +48,7 @@ export default function MyNetwork({ token }) {
         <div className="dashboard__handler d-flex">
           <MyNewSidebarDash />
           <div className="main__content container">
-            <MainContentHeader />
+            <MainContentHeader currentUserLogin={currentUserLogin} />
             {unAuth ? (
               <UnAuthSec />
             ) : (

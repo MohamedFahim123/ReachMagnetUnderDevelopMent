@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { baseURL } from '../functions/baseUrl';
 import toast from 'react-hot-toast';
-import { debounce } from 'lodash';
 
 export const useNetworkStore = create((set, get) => ({
     loading: true,
@@ -43,28 +42,6 @@ export const useNetworkStore = create((set, get) => ({
         }
     },
 
-    filterCatalogs: debounce(async (token, loginType, page = 1, filterCatalog) => {
-        set({ loading: true });
-        const params = new URLSearchParams();
-        for (const key in filterCatalog) {
-            if (filterCatalog[key]) {
-                params.append(key, filterCatalog[key]);
-            }
-        }
-        try {
-            const response = await axios.get(`${baseURL}/${loginType}/filter-catalogs?${params.toString()}&page=${page}&t=${new Date().getTime()}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            set({
-                networks: response?.data?.data?.catalogs,
-                totalPages: response?.data?.data?.meta?.last_page,
-                loading: false,
-            });
-        } catch (error) {
-            toast.error(error?.response?.data?.message || 'Something Went Wrong!');
-            set({ loading: false });
-        }
-    }, 1000),
 
     deleteNetwork: async (token, loginType, id) => {
         try {

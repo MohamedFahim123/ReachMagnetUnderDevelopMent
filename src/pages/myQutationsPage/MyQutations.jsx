@@ -6,6 +6,7 @@ import MyNewSidebarDash from '../../components/myNewSidebarDash/MyNewSidebarDash
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import { useDashBoardQuotationStore } from '../../store/DashBoardQuotations';
+import Cookies from 'js-cookie';
 
 export default function MyQuotations({ token }) {
   const {
@@ -20,8 +21,9 @@ export default function MyQuotations({ token }) {
     setCurrentPage,
     setFilteration,
   } = useDashBoardQuotationStore();
-
   const loginType = localStorage.getItem('loginType');
+  const cookiesData = Cookies.get("currentLoginedData");
+  const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
 
   useEffect(() => {
     if (token) {
@@ -42,6 +44,7 @@ export default function MyQuotations({ token }) {
           <MyNewSidebarDash />
           <div className="main__content container">
             <MainContentHeader
+              currentUserLogin={currentUserLogin}
               search={true}
               placeholder={'Quotation Code'}
               filteration={filteration}

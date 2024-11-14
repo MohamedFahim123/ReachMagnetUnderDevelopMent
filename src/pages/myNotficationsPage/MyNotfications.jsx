@@ -6,46 +6,21 @@ import Cookies from 'js-cookie';
 import MyNewSidebarDash from '../../components/myNewSidebarDash/MyNewSidebarDash';
 import MainContentHeader from '../../components/mainContentHeaderSec/MainContentHeader';
 import { Table } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { scrollToTop } from '../../functions/scrollToTop';
-import checkIcon from '../../assets/icons/check-lg.svg'
+import { useNavigate } from 'react-router-dom';
 import { handleApiError, rateLimiter } from '../../functions/requestUtils';
 export default function MyNotfications({ token, fireNotification, setFireNotification }) {
     const loginType = localStorage.getItem('loginType');
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
-    const [unAuth, setUnAuth] = useState(false);
     const [allNotifications, setAllNotifications] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const navigate = useNavigate()
 
-    //     const slug = loginType === 'user' ? `${loginType}/all-notifications`
-    //     :
-    //     `${loginType}/company-all-notifications`
-    //     await axios.get(`${baseURL}/${slug}${params ? `${params}&` : '?'}page=${currentPage}?t=${new Date().getTime()}`, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //     })
-    //         .then(response => {
-    //             setAllNotifications(response?.data?.data?.notifications);
-    //             setTotalPages(response?.data?.data?.meta?.last_page);
-    //         })
-    //         .catch(error => {
-    //             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
-    //                 setUnAuth(true);
-    //             };
-    //             toast.error(error?.response?.data?.message || 'Something Went Wrong');
-    //         });
-    //         setFireNotification(false)
-    // };
     const getAllNotifications = async (params) => {
-        // Apply rate limiting
         if (!rateLimiter('getAllNotifications')) {
             toast.error('You are requesting notifications too quickly. Please wait a moment.');
             return;
-        }
-
+        };
         const slug = loginType === 'user' ? `${loginType}/all-notifications` : `${loginType}/company-all-notifications`;
         try {
             const response = await axios.get(`${baseURL}/${slug}${params ? `${params}&` : '?'}page=${currentPage}&t=${new Date().getTime()}`, {

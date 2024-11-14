@@ -7,10 +7,13 @@ import MyLoader from '../../components/myLoaderSec/MyLoader';
 import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import AddNewItem from '../../components/addNewItemBtn/AddNewItem';
 import { useDashBoardServiceStore } from '../../store/DashBoardServices';
+import Cookies from 'js-cookie';
 
 export default function MyService({ token }) {
     const loginType = localStorage.getItem('loginType');
     const navigate = useNavigate();
+    const cookiesData = Cookies.get("currentLoginedData");
+    const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
 
     const {
         loading,
@@ -53,7 +56,7 @@ export default function MyService({ token }) {
                 <div className="dashboard__handler d-flex">
                     <MyNewSidebarDash />
                     <div className="main__content container">
-                        <MainContentHeader search={true} filteration={filterService} setFilteration={setFilterService} name="title" placeholder="search service" />
+                        <MainContentHeader currentUserLogin={currentUserLogin} search={true} filteration={filterService} setFilteration={setFilterService} name="title" placeholder="search service" />
                         {unAuth ? (
                             <UnAuthSec />
                         ) : (
