@@ -32,6 +32,7 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
     const getAllCompanies = GetAllCompaniesStore((state) => state.getAllCompanies);
     const getAllRegions = GetAllRegionsStore((state) => state.getAllRegions);
     const getAllCitizenships = GetAllCitizenshipsStore((state) => state.getAllCitizenships);
+
     useEffect(() => {
         getAllCountries();
         getAllMainCategories();

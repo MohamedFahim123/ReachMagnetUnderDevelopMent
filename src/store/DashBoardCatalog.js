@@ -2,19 +2,30 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { baseURL } from '../functions/baseUrl';
 import toast from 'react-hot-toast';
+import debounce from "lodash/debounce";
 
-export const useDashBoardCatalogStore = create((set) => ({
+export const useDashBoardCatalogStore = create((set, get) => ({
     loading: true,
     catalogs: [],
     unAuth: false,
     totalPages: 1,
     currentPage: 1,
     filterCatalog: { status: 'active', title: '' },
+    lastFetched: null,
 
     fetchCatalogs: async (token, loginType, page) => {
+        const { lastFetched } = get();
+        const now = Date.now();
+        const threeMinutes = 3 * 60 * 1000;
+
+        if (lastFetched && now - lastFetched < threeMinutes) {
+            set({ loading: false });
+            return;
+        }
+
         set({ loading: true, unAuth: false });
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/all-catalogs?page=${page}&t=${new Date().getTime()}`, {
+            const response = await axios.get(`${baseURL}/${loginType}/all-catalogs?page=${page}&t=${now}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -23,6 +34,7 @@ export const useDashBoardCatalogStore = create((set) => ({
                 catalogs: response?.data?.data?.catalogs,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
+                lastFetched: now,
             });
         } catch (error) {
             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
@@ -33,14 +45,15 @@ export const useDashBoardCatalogStore = create((set) => ({
         }
     },
 
-    filterCatalogs: async (token, loginType, page, filterCatalog) => {
-        set({ loading: true });
+    filterCatalogs: debounce(async (token, loginType, page, filterCatalog) => {
         const params = new URLSearchParams();
         for (const key in filterCatalog) {
             if (filterCatalog[key]) {
                 params.append(key, filterCatalog[key]);
             }
         }
+
+        set({ loading: true });
         try {
             const response = await axios.get(`${baseURL}/${loginType}/filter-catalogs?${params.toString()}&page=${page}&t=${new Date().getTime()}`, {
                 headers: {
@@ -51,12 +64,13 @@ export const useDashBoardCatalogStore = create((set) => ({
                 catalogs: response?.data?.data?.catalogs,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
+                lastFetched: Date.now(),  // Update timestamp on success only
             });
         } catch (error) {
             toast.error(error?.response?.data?.message || 'Something Went Wrong!');
             set({ loading: false });
         }
-    },
+    }, 1000),  
 
     deleteCatalog: async (token, loginType, id) => {
         try {

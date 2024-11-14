@@ -1,133 +1,72 @@
-import React, { useEffect, useState } from 'react'
-import QuotationStateSec from '../../components/quotationsStateSecc/QuotationStateSec'
-import QuotationTableSec from '../../components/quotationTableSecc/QuotationTableSec'
-import MainContentHeader from '../../components/mainContentHeaderSec/MainContentHeader'
-import MyNewSidebarDash from '../../components/myNewSidebarDash/MyNewSidebarDash'
-import MyLoader from '../../components/myLoaderSec/MyLoader'
-import Cookies from 'js-cookie'
-import UnAuthSec from '../../components/unAuthSection/UnAuthSec'
-import axios from 'axios'
-import { baseURL } from '../../functions/baseUrl'
-import toast from 'react-hot-toast'
+import React, { useEffect } from 'react';
+import QuotationStateSec from '../../components/quotationsStateSecc/QuotationStateSec';
+import QuotationTableSec from '../../components/quotationTableSecc/QuotationTableSec';
+import MainContentHeader from '../../components/mainContentHeaderSec/MainContentHeader';
+import MyNewSidebarDash from '../../components/myNewSidebarDash/MyNewSidebarDash';
+import MyLoader from '../../components/myLoaderSec/MyLoader';
+import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
+import { useDashBoardQuotationStore } from '../../store/DashBoardQuotations';
 
-export default function MyQutations({ token }) {
-  const [loading, setLoading] = useState(true);
-  const loginType = localStorage.getItem('loginType')
-  const [currentUserLogin, setCurrentUserLogin] = useState(null);
-  const [unAuth, setUnAuth] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [newData, setNewdata] = useState([]);
-  const [filteration, setFilteration] = useState(
-    {
-      type: '',
-      date_from: '',
-      date_to: '',
-      code: '',
-    }
-  );
-  function objectToParams(obj) {
-    const params = new URLSearchParams();
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key) && obj[key] !== '') {
-        params.append(key, obj[key]);
-      };
-    };
-    return params.toString();
-  };
+export default function MyQuotations({ token }) {
+  const {
+    loading,
+    quotations,
+    unAuth,
+    totalPages,
+    currentPage,
+    filteration,
+    fetchAllQuotations,
+    filterQuotations,
+    setCurrentPage,
+    setFilteration,
+  } = useDashBoardQuotationStore();
 
-  const fetchAllQuotations = async () => {
-    const slug = loginType === 'user' ? `${loginType}/my-quotations`
-      :
-      `${loginType}/all-quotations`
-    try {
-      const response = await axios.get(`${baseURL}/${slug}?page=${currentPage}?t=${new Date().getTime()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setNewdata(response?.data?.data?.quotations);
-      setTotalPages(response?.data?.data?.meta?.last_page);
-    } catch (error) {
-      if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
-        setUnAuth(true);
-      };
-      toast.error(error?.response?.data.message || 'Something Went Wrong!');
-    }
-  };
+  const loginType = localStorage.getItem('loginType');
 
   useEffect(() => {
     if (token) {
-      fetchAllQuotations();
-    };
-  }, [loginType, token]);
-
-  const filterQuotation = async () => {
-    const urlParams = objectToParams(filteration);
-    if (urlParams) {
-      await axios.get(`${baseURL}/${loginType}/filter-quotations?${urlParams}&page=${currentPage}?t=${new Date().getTime()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          setNewdata(res?.data?.data?.quotations);
-        })
-        .catch(err => {
-          toast.error(err?.response?.data?.message || 'Something Went Wrong!');
-        });
-    } else {
-      fetchAllQuotations();
-    };
-  };
-  useEffect(() => {
-    filterQuotation();
-  }, [filteration]);
-
-  useEffect(() => {
-    const cookiesData = Cookies.get('currentLoginedData');
-    if (!currentUserLogin) {
-      const newShape = JSON.parse(cookiesData);
-      setCurrentUserLogin(newShape);
+      fetchAllQuotations(token, loginType, currentPage);
     }
-  }, [Cookies.get('currentLoginedData'), currentUserLogin]);
+  }, [token, loginType, currentPage, fetchAllQuotations]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  }, [loading]);
+    filterQuotations(token, loginType, currentPage, filteration);
+  }, [filteration, token, loginType, currentPage, filterQuotations]);
 
   return (
     <>
-      {
-        loading ?
-          <MyLoader />
-          :
-          <div className='dashboard__handler d-flex'>
-            <MyNewSidebarDash />
-            <div className='main__content container'>
-              <MainContentHeader search={true} placeholder={'Quotation Code'} filteration={filteration} name={'code'} setFilteration={setFilteration} currentUserLogin={currentUserLogin} />
-              <div className='myQuotations__handler '>
-                <QuotationStateSec />
-                {
-                  unAuth ?
-                    <UnAuthSec />
-                    :
-                    <QuotationTableSec
-                      fetchAllQuotations={fetchAllQuotations}
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      setCurrentPage={setCurrentPage}
-                      setTotalPages={setTotalPages}
-                      newData={newData}
-                      setNewdata={setNewdata}
-                      filteration={filteration} setFilteration={setFilteration} filterQuotation={filterQuotation} setUnAuth={setUnAuth} token={token} />
-                }
-              </div>
+      {loading ? (
+        <MyLoader />
+      ) : (
+        <div className="dashboard__handler d-flex">
+          <MyNewSidebarDash />
+          <div className="main__content container">
+            <MainContentHeader
+              search={true}
+              placeholder={'Quotation Code'}
+              filteration={filteration}
+              name={'code'}
+              setFilteration={setFilteration}
+            />
+            <div className="myQuotations__handler ">
+              <QuotationStateSec />
+              {unAuth ? (
+                <UnAuthSec />
+              ) : (
+                <QuotationTableSec
+                  fetchAllQuotations={() => fetchAllQuotations(token, loginType, currentPage)}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  setCurrentPage={setCurrentPage}
+                  quotations={quotations}
+                  filteration={filteration}
+                  setFilteration={setFilteration}
+                />
+              )}
             </div>
           </div>
-      }
+        </div>
+      )}
     </>
-  )
+  );
 }

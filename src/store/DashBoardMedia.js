@@ -3,7 +3,7 @@ import axios from 'axios';
 import { baseURL } from '../functions/baseUrl';
 import toast from 'react-hot-toast';
 
-export const useDashBoardMediaStore = create((set) => ({
+export const useDashBoardMediaStore = create((set, get) => ({
     loading: true,
     mediaItems: [],
     unAuth: false,
@@ -11,17 +11,28 @@ export const useDashBoardMediaStore = create((set) => ({
     currentPage: 1,
     filteration: { type: '' },
     activeRole: 'All',
+    lastFetched: null,
 
     fetchMedias: async (token, loginType, page = 1) => {
+        const { lastFetched } = get();
+        const now = Date.now();
+        const threeMinutes = 3 * 60 * 1000;
+
+        if (lastFetched && now - lastFetched < threeMinutes) {
+            set({ loading: false });
+            return;
+        }
+
         set({ loading: true, unAuth: false });
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/company-portfolios?page=${page}&t=${new Date().getTime()}`, {
+            const response = await axios.get(`${baseURL}/${loginType}/company-portfolios?page=${page}&t=${now}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             set({
                 mediaItems: response?.data?.data?.portfolio,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
+                lastFetched: now,
             });
         } catch (error) {
             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {

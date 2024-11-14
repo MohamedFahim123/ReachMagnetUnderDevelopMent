@@ -3,23 +3,34 @@ import axios from 'axios';
 import { baseURL } from '../functions/baseUrl';
 import toast from 'react-hot-toast';
 
-export const useDashBoardFaqsStore = create((set) => ({
+export const useDashBoardFaqsStore = create((set, get) => ({
     faqs: [],
     loading: true,
     unAuth: false,
     totalPages: 1,
     currentPage: 1,
+    lastFetched: null,
 
     fetchFaqs: async (token, loginType, page = 1) => {
+        const { lastFetched } = get();
+        const now = Date.now();
+        const fiveMinutes = 5 * 60 * 1000;
+
+        if (lastFetched && now - lastFetched < fiveMinutes) {
+            set({ loading: false });
+            return;
+        }
+
         set({ loading: true, unAuth: false });
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/all-faqs?page=${page}&t=${new Date().getTime()}`, {
+            const response = await axios.get(`${baseURL}/${loginType}/all-faqs?page=${page}&t=${now}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             set({
                 faqs: response?.data?.data?.faqs,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
+                lastFetched: now,
             });
         } catch (error) {
             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {

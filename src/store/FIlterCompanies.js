@@ -2,6 +2,7 @@ import axios from "axios";
 import { create } from "zustand";
 import { baseURL } from "../functions/baseUrl";
 import { Token } from "../functions/Token";
+import debounce from "lodash/debounce";
 
 export const useCompaniesStore = create((set) => ({
     companies: [],
@@ -12,7 +13,8 @@ export const useCompaniesStore = create((set) => ({
     subCategories: [],
     companiesError: null,
     companiesLoading: false,
-    fetchCompanies: async (currentPage, formData) => {
+
+    fetchCompanies: debounce(async (currentPage, formData) => {
         set({ companiesLoading: true, companiesError: null });
         try {
             const hasFilters = () => formData && Object.keys(formData).length > 0;
@@ -71,5 +73,7 @@ export const useCompaniesStore = create((set) => ({
                 companiesLoading: false,
             });
         }
-    },
+    }, 1000),
+
 }));
+

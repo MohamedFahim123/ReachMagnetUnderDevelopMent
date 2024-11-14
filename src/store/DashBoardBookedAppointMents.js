@@ -3,7 +3,7 @@ import axios from 'axios';
 import { baseURL } from '../functions/baseUrl';
 import toast from 'react-hot-toast';
 
-export const useDashBoardBookedAppointmentsStore = create((set) => ({
+export const useDashBoardBookedAppointmentsStore = create((set, get) => ({
     loading: true,
     appointments: [],
     unAuth: false,
@@ -11,19 +11,30 @@ export const useDashBoardBookedAppointmentsStore = create((set) => ({
     currentPage: 1,
     filteration: { date: '', type: '' },
     activeRole: 'All',
+    lastFetched: null,
 
     fetchBookedAppointments: async (token, loginType, page = 1, filteration = {}) => {
+        const { lastFetched } = get();
+        const now = Date.now();
+        const threeMinutes = 3 * 60 * 1000;
+
+        if (lastFetched && now - lastFetched < threeMinutes) {
+            set({ loading: false });
+            return;
+        }
+
         set({ loading: true, unAuth: false });
         const slug = loginType !== 'user' ? 'all-booked-appointments' : 'get-user-appointments';
         const queryParams = new URLSearchParams(filteration).toString();
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/${slug}?page=${page}&${queryParams}&t=${new Date().getTime()}`, {
+            const response = await axios.get(`${baseURL}/${loginType}/${slug}?page=${page}&${queryParams}&t=${now}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             set({
                 appointments: response?.data?.data?.bookedAppointments,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
+                lastFetched: now,
             });
         } catch (error) {
             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {

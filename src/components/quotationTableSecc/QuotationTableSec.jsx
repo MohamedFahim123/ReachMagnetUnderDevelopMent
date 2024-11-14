@@ -4,7 +4,7 @@ import ContentViewHeader from '../contentViewHeaderSec/ContentViewHeader'
 import { Table } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
-export default function QuotationTableSec({fetchAllQuotations ,newData , setCurrentPage , currentPage ,totalPages , filteration , setFilteration  }) {
+export default function QuotationTableSec({fetchAllQuotations ,quotations , setCurrentPage , currentPage ,totalPages , filteration , setFilteration  }) {
     const [activeRole, setActiveRole] = useState('All');
     const loginType = localStorage.getItem('loginType');
 
@@ -66,7 +66,7 @@ export default function QuotationTableSec({fetchAllQuotations ,newData , setCurr
                         </thead>
                         <tbody>
                             {
-                                newData?.map((row, index) => (
+                                quotations?.map((row, index) => (
                                     <tr key={index}>
                                         <td className='mx-0 px-0'>
                                             <NavLink to={`/profile/quotations/${row?.id}`} className={'nav-link fw-bold'}>
@@ -127,7 +127,7 @@ export default function QuotationTableSec({fetchAllQuotations ,newData , setCurr
                         </thead>
                         <tbody>
                             {
-                                newData?.map((row, index) => (
+                                quotations?.map((row, index) => (
                                     <tr key={index}>
                                         <td className='mx-0 px-0'>
                                             <NavLink to={`/profile/quotations/${row?.id}`} className={'nav-link fw-bold'}>

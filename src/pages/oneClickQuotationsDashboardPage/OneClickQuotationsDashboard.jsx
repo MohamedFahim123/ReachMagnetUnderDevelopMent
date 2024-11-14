@@ -14,7 +14,7 @@ export default function OneClickQuotationsDashboard({ token }) {
   const [loading, setLoading] = useState(true);
   const [currentUserLogin, setCurrentUserLogin] = useState(null);
   const [unAuth, setUnAuth] = useState(false);
-  const [filteration,setFilteration] = useState({
+  const [filteration, setFilteration] = useState({
     code: '',
     type: '',
   });
@@ -90,9 +90,9 @@ export default function OneClickQuotationsDashboard({ token }) {
     };
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     filterQuotation();
-  },[filteration]);
+  }, [filteration]);
 
   return (
     <>
@@ -110,11 +110,11 @@ export default function OneClickQuotationsDashboard({ token }) {
                   unAuth ?
                     <UnAuthSec />
                     :
-                    <OneClickQuotationTable 
-                      filteration={filteration} 
-                      setFilteration={setFilteration} 
-                      setUnAuth={setUnAuth} 
-                      token={token} 
+                    <OneClickQuotationTable
+                      filteration={filteration}
+                      setFilteration={setFilteration}
+                      setUnAuth={setUnAuth}
+                      token={token}
                       fetchAllQuotations={fetchAllQuotations}
                       currentPage={currentPage}
                       setCurrentPage={setCurrentPage}
