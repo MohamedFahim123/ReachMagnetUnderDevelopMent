@@ -1,46 +1,32 @@
+// stores/oneClickQuotationStore.js
 import { create } from 'zustand';
 import axios from 'axios';
 import { baseURL } from '../functions/baseUrl';
 import toast from 'react-hot-toast';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 
-let cache = {
-    data: null,
-    filterData: null,
-    lastFetch: 0,
-    lastFilterFetch: 0,
-};
-
-export const useDashBoardQuotationStore = create((set) => ({
+export const useDashBoardOneClickQuotationStore = create((set, get) => ({
     loading: true,
     quotations: [],
     unAuth: false,
     totalPages: 1,
     currentPage: 1,
-    filteration: { type: '', date_from: '', date_to: '', code: '' },
-    activeRole: 'All',
-    
+    filteration: { code: '', type: '', activeRole: 'All' }, // Add activeRole here
+
     fetchAllQuotations: async (token, loginType, page = 1) => {
-        const now = Date.now();
-        if (cache.data && (now - cache.lastFetch < 180000)) {
-            set({ quotations: cache.data, loading: false });
-            return;
-        }
-
+        const slug = loginType === 'user'
+            ? `${loginType}/my-one-click-quotations`
+            : `${loginType}/all-one-click-quotations`;
         set({ loading: true, unAuth: false });
-        const slug = loginType === 'user' ? `${loginType}/my-quotations` : `${loginType}/all-quotations`;
-
         try {
             const response = await axios.get(`${baseURL}/${slug}?page=${page}&t=${new Date().getTime()}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            const quotations = response?.data?.data?.quotations;
             set({
-                quotations,
+                quotations: response?.data?.data?.one_click_quotations,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
             });
-            cache = { ...cache, data: quotations, lastFetch: now };
         } catch (error) {
             if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
                 set({ unAuth: true });
@@ -50,15 +36,15 @@ export const useDashBoardQuotationStore = create((set) => ({
         }
     },
 
-    filterQuotations: debounce(async (token, loginType, page = 1, filterParams = {}) => {
-        set({ loading: true });
+    filterQuotations: debounce(async (token, loginType, filterParams, page = 1) => {
         const params = new URLSearchParams(filterParams).toString();
+        set({ loading: true });
         try {
-            const response = await axios.get(`${baseURL}/${loginType}/filter-quotations?${params}&page=${page}&t=${new Date().getTime()}`, {
+            const response = await axios.get(`${baseURL}/${loginType}/filter-one-click-quotations?${params}&page=${page}&t=${new Date().getTime()}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             set({
-                quotations: response?.data?.data?.quotations,
+                quotations: response?.data?.data?.one_click_quotations,
                 totalPages: response?.data?.data?.meta?.last_page,
                 loading: false,
             });
@@ -69,6 +55,5 @@ export const useDashBoardQuotationStore = create((set) => ({
     }, 1000),
 
     setCurrentPage: (page) => set({ currentPage: page }),
-    setFilteration: (filter) => set({ filteration: filter }),
-    setActiveRole: (role) => set((state) => ({ activeRole: role, filteration: { ...state.filteration, type: role === 'All' ? '' : role.toLowerCase() }})), // Update active role and filter
+    setFilteration: (filter) => set({ filteration: filter }), // Pass new activeRole here as needed
 }));

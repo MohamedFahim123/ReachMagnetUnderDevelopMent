@@ -3,7 +3,7 @@ import './myNavBar.css';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Cookies from 'js-cookie';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { scrollToTop } from '../../functions/scrollToTop';
 import axios from 'axios';
 import { baseURL } from '../../functions/baseUrl';
@@ -41,7 +41,7 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
         getAllCompanies();
         getAllRegions();
         getAllCitizenships();
-    }, [getAllCountries, getAllIndustries, getAllCitizenships, getAllMainCategories, getAllMainActivities, getAllCompanies, getAllRegions]);
+    }, [getAllCountries, getAllIndustries,  getAllCitizenships, getAllMainCategories, getAllMainActivities, getAllCompanies, getAllRegions]);
 
     useEffect(() => {
         if (token && loginType) {

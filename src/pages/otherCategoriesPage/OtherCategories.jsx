@@ -5,6 +5,7 @@ import axios from 'axios'
 import { baseURL } from '../../functions/baseUrl'
 import toast from 'react-hot-toast'
 import CategoryOctagonShape from '../../components/categoryOctagonShapeSec/CategoryOctagonShape'
+
 export default function OtherCategories() {
     const [loading, setLoading] = useState(true);
 
@@ -18,13 +19,14 @@ export default function OtherCategories() {
             setNewdata(response?.data?.data?.industries);
             setTotalPages(response?.data?.data?.meta?.last_page);
         } catch (error) {
-
             toast.error(error?.response?.data.message || 'Something Went Wrong!');
         }
     };
+
     useEffect(() => {
         fetchAllIndustries();
     }, []);
+
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);

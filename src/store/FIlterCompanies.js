@@ -4,17 +4,8 @@ import { baseURL } from "../functions/baseUrl";
 import { Token } from "../functions/Token";
 import debounce from "lodash/debounce";
 
-export const useCompaniesStore = create((set) => ({
-    companies: [],
-    totalPages: 1,
-    uniqueAllowedCompNames: [],
-    uniqueAllowedCompTypes: [],
-    categories: [],
-    subCategories: [],
-    companiesError: null,
-    companiesLoading: false,
-
-    fetchCompanies: debounce(async (currentPage, formData) => {
+export const useCompaniesStore = create((set) => {
+    const directFetchCompanies = async (currentPage, formData) => {
         set({ companiesLoading: true, companiesError: null });
         try {
             const hasFilters = () => formData && Object.keys(formData).length > 0;
@@ -73,7 +64,35 @@ export const useCompaniesStore = create((set) => ({
                 companiesLoading: false,
             });
         }
-    }, 1000),
+    };
 
-}));
+    const debouncedFetchCompanies = debounce(directFetchCompanies, 1000);
 
+    return {
+        companies: [],
+        totalPages: 1,
+        uniqueAllowedCompNames: [],
+        uniqueAllowedCompTypes: [],
+        categories: [],
+        subCategories: [],
+        companiesError: null,
+        companiesLoading: false,
+
+        hasFilters: (formData) => {
+            return Object.values(formData).some((value) => {
+                if (Array.isArray(value)) return value.length > 0;
+                return value && value !== "";
+            });
+        },
+
+        fetchCompanies: (currentPage, formData) => {
+            const { hasFilters } = useCompaniesStore.getState();
+
+            if (hasFilters(formData)) {
+                debouncedFetchCompanies(currentPage, formData);
+            } else {
+                directFetchCompanies(currentPage, formData);
+            }
+        },
+    };
+});

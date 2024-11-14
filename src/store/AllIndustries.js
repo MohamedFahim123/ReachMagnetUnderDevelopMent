@@ -50,7 +50,7 @@ export const GetAllIndustriesStore = create((set, get) => ({
         })
             .then(res => set(() => (
                 {
-                    selectedIndustries: res?.data?.data?.countries,
+                    selectedIndustries: res?.data?.data?.industries,
                     countriesError: null,
                     countriesLoading: false,
                     lastFetched: now,

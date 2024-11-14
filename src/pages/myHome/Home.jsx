@@ -21,8 +21,10 @@ export default function Home({ token }) {
       id: 1
     },
   ];
+
   const getAllAllowedCountries = GetAllCountriesStore((state) => state.getAllAllowedCountries);
   const getAllSelectedIndustries = GetAllIndustriesStore((state) => state.getAllSelectedIndustries);
+
   useEffect(() => {
     getAllAllowedCountries();
     getAllSelectedIndustries();
