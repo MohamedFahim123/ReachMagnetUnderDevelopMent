@@ -497,7 +497,7 @@ export default function BusinessSignUpFormMainSec({ countries, citizenships, ind
           };
         });
         if (data.logo) {
-          formData.append('logo', data.logo[0]);
+          formData.append('logo', data.logo);
         }
         await axios.post(`${baseURL}/company-registeration-step-one`, formData, {
           headers: {
