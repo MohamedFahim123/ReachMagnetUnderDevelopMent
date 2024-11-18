@@ -273,8 +273,8 @@ const onSubmit = async (data) => {
     };
   }, [watch('password_confirmation')]);
 
-  console.log(watch('image'));
-  console.log(watch('official_id_or_passport'));
+  console.log(imagePreview);
+  console.log(passportPreview);
 
   return (
     <>
