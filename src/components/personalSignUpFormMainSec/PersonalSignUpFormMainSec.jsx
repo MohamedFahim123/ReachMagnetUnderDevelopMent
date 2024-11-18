@@ -167,11 +167,11 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
         formData.append(key, data[key]);
       };
     });
-    if (data.image && data.image[0]) {
-      formData.append('image', data.image[0]);
+    if (data.image) {
+      formData.append('image', data.image);
     }
-    if (data.official_id_or_passport && data.official_id_or_passport[0]) {
-      formData.append('official_id_or_passport', data.official_id_or_passport[0]);
+    if (data.official_id_or_passport) {
+      formData.append('official_id_or_passport', data.official_id_or_passport);
     }
     const currentSlug = isSignUp ? 'user/register' : 'employee/add-employee';
     const currentHeaders = isSignUp ? {
@@ -272,6 +272,10 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
       clearErrors("password_confirmation");
     };
   }, [watch('password_confirmation')]);
+
+
+  console.log(watch('image'));
+  console.log(watch('official_id_or_passport'));
 
   return (
     <>
@@ -658,7 +662,6 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                           <input
                             type='file'
                             id='signUpProfileImage'
-                            {...register('image')}
                             className={`newUploadBtn form-control ${errors.image ? 'inputError' : ''}`}
                             onChange={handleImageChange}
                           />
@@ -681,7 +684,6 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                           <input
                             type='file'
                             id='signUpProfileofficial_id_or_passport'
-                            {...register('official_id_or_passport')}
                             className={`newUploadBtn form-control ${errors.official_id_or_passport ? 'inputError' : ''}`}
                             onChange={handlePassportChange}
                           />
