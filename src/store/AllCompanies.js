@@ -12,7 +12,7 @@ export const GetAllCompaniesStore = create((set) => ({
         set({ companiesLoading: true, companiesError: null });
 
         try {
-            const response = await axios.get(`${baseURL}/companies`, {
+            const response = await axios.get(`${baseURL}/companies?t=${new Date().getTime()}`, {
                 headers: Token ? { Authorization: `Bearer ${Token}` } : {}
             });
 

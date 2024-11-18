@@ -53,14 +53,16 @@ export default function NewFaqForm({ token }) {
     },[id]);
 
     useEffect(()=>{
-        if(+currFaq?.id === +id){
-            formData.question_ar = currFaq?.question;
-            formData.question_en = currFaq?.question;
-            formData.answer_ar = currFaq?.answer;
-            formData.answer_en = currFaq?.answer;
-            formData.status = currFaq?.status;
+        if(currFaq?.id && +currFaq?.id === +id){
+            setFormData({
+                question_ar: currFaq?.question_ar || '',
+                question_en:  currFaq?.question_en || '',
+                answer_ar: currFaq?.answer_ar || '',
+                answer_en: currFaq?.answer_en || '',
+                status: 'active'
+            });
         };
-    },[currFaq]);
+    },[currFaq, id]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -92,9 +94,16 @@ export default function NewFaqForm({ token }) {
             } else {
                 toast.error(id ? 'Failed to update Faq item' : 'Failed to add Faq item');
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.message || 'Something Went Wrong!');
-        };
+        }  catch (error) {
+            if (error?.response?.data?.errors) {
+                const validationErrors = Object.values(error.response.data.errors)
+                    .flat()
+                    .join('\n'); // Join with newline for separate lines
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+            } else {
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+            }
+        }
     };
 
     useEffect(() => {

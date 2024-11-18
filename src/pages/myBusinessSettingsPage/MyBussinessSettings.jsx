@@ -15,6 +15,7 @@ import CompanyWorkHourForm from '../../components/companyWorkHourFormItem/Compan
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
+import CompanyFollowIndustryFrom from '../../components/companyFollowIndustryFormSec/CompanyFollowIndustryFrom';
 
 localStorage.setItem('updatingCompany', 'notUpdating');
 localStorage.setItem('updatingCompanyActivities', 'notUpdating');
@@ -99,6 +100,7 @@ export default function MyBussinessSettings({ token }) {
     const items = [
         { name: 'Company Settings', active: activeItem === 'Company Settings' },
         { name: 'Company Activities', active: activeItem === 'Company Activities' },
+        { name: 'Company Industries', active: activeItem === 'Company Industries' },
         { name: 'Company Work Hours', active: activeItem === 'Company Work Hours' },
     ];
     const handleItemClick = (itemName) => {
@@ -240,6 +242,13 @@ export default function MyBussinessSettings({ token }) {
                                                     {activeItem === 'Company Work Hours'
                                                         &&
                                                         <CompanyWorkHourForm
+                                                            setUnAuth={setUnAuth}
+                                                            token={token}
+                                                        />
+                                                    }
+                                                    {activeItem === 'Company Industries'
+                                                        &&
+                                                        <CompanyFollowIndustryFrom
                                                             setUnAuth={setUnAuth}
                                                             token={token}
                                                         />

@@ -53,13 +53,15 @@ export default function NewMediaForm({token}) {
     }, [id]);
 
     useEffect(() => {
-        if (+currMedia?.id === +id) {
-            formData.type = currMedia?.type;
-            formData.image = currMedia?.link;
-            formData.link = currMedia?.link;
+        if(currMedia?.id && +currMedia?.id === +id){
+            setFormData({
+                type: currMedia?.type || '',
+                image: currMedia?.link || '',
+                link: currMedia?.link || '',
+            });
             
         };
-    }, [currMedia]);
+    }, [currMedia, id]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -106,11 +108,15 @@ export default function NewMediaForm({token}) {
                 toast.error(id ? 'Failed to update Media item!' : 'Failed to add Media item!');
             }
         } catch (error) {
-            if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
-                setUnAuth(true);
-            };
-            toast.error(error?.response?.data.message || 'Something Went Wrong!');
-        };
+            if (error?.response?.data?.errors) {
+                const validationErrors = Object.values(error.response.data.errors)
+                    .flat()
+                    .join('\n'); // Join with newline for separate lines
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+            } else {
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+            }
+        }
     };
 
     useEffect(() => {

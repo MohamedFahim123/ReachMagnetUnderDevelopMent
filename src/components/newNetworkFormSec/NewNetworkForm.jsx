@@ -54,13 +54,12 @@ export default function NewNetworkForm({token}) {
         if(currNetwork?.id && +currNetwork.id === +id){
             setFormData({
                 name: currNetwork?.name || '',
-                label: currNetwork?.label || '',
+                label: '',
                 logo: currNetwork?.logo || '',
             });
             
         };
     },[currNetwork, id]);
-console.log(currNetwork);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -102,9 +101,16 @@ console.log(currNetwork);
             } else {
                 toast.error(id ? 'Failed to update the network' : 'Failed to add network');
             };
-        } catch (error) {
-            toast.error(error?.response?.data?.message || 'Something Went Wrong!');
-        };
+        }  catch (error) {
+            if (error?.response?.data?.errors) {
+                const validationErrors = Object.values(error.response.data.errors)
+                    .flat()
+                    .join('\n'); // Join with newline for separate lines
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+            } else {
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+            }
+        }
     };
 
     useEffect(() => {
@@ -159,7 +165,7 @@ console.log(currNetwork);
                                             <option value="" disabled>Select partner label</option>
                                             <option value="client">Client</option>
                                             <option value="partener">Partner</option>
-                                            <option value="agent">Agent</option>
+                                            {/* <option value="agent">Agent</option> */}
                                         </select>
                                     </div>
                                 </div>

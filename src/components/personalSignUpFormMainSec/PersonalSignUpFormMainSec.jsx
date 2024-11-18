@@ -114,8 +114,46 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
       })();
     };
   }, []);
+//   const handleImageChange = (e) => {
+//     const file = e.target.files[0];
+//     if (file) {
+//         if (file.size > 5 * 1024 * 1024) { // Limit size to 5MB
+//             toast.error('File size should not exceed 5MB');
+//             return;
+//         }
+//         if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
+//             toast.error('Unsupported file format. Please upload JPEG, PNG, or PDF.');
+//             return;
+//         }
+//         setImagePreview(URL.createObjectURL(file));
+//     }
+// };
 
-  const onSubmit = async (data) => {
+// const handlePassportChange = (e) => {
+//   const file = e.target.files[0];
+//   if (file) {
+//       if (file.size > 5 * 1024 * 1024) { // Limit size to 5MB
+//           toast.error('File size should not exceed 5MB');
+//           return;
+//       }
+//       if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
+//           toast.error('Unsupported file format. Please upload JPEG, PNG, or PDF.');
+//           return;
+//       }
+//       if (file.type.startsWith('image/')) {
+//           setPassPortPreview(URL.createObjectURL(file));
+//           setFileName('');
+//       } else {
+//           setPassPortPreview(null);
+//           setFileName(file.name);
+//       }
+//   } else {
+//       setPassPortPreview(null);
+//       setFileName('');
+//   }
+// };
+  
+const onSubmit = async (data) => {
     data.industry_id = selectedIndustries?.map(indust => indust?.id);
     console.log(data);
     const toastId = toast.loading('Please Wait...');
@@ -186,6 +224,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
 
   const [imagePreview, setImagePreview] = useState(null);
   const [passportPreview, setPassPortPreview] = useState(null);
+  const [fileName, setFileName] = useState('');
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -193,12 +232,24 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
       setImagePreview(URL.createObjectURL(file));
     }
   };
+
   const handlePassportChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPassPortPreview(URL.createObjectURL(file));
-    };
+      if (file.type.startsWith('image/')) {
+        setPassPortPreview(URL.createObjectURL(file));
+        setFileName(''); 
+      } else {
+        setPassPortPreview(null); 
+        setFileName(file.name); 
+      }
+    } else {
+      setPassPortPreview(null);
+      setFileName('');
+    }
   };
+
+
 
   const handleSelectIndust = (el) => {
     const currIndust = industries?.find(indust => +indust?.id === +el);
@@ -639,10 +690,20 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                             &&
                             (<p className='errorMessage'>{errors.official_id_or_passport.message}</p>)
                           }
-                          {passportPreview && (
-                            <div className='image-preview'>
-                              <img src={passportPreview} alt="Selected profile" style={{ maxWidth: '100px', height: '100px', marginTop: '10px', borderRadius: '12px' }} />
-                            </div>
+                          {passportPreview ? (
+                              <div className='image-preview'>
+                                <img 
+                                  src={passportPreview} 
+                                  alt="Selected profile" 
+                                  style={{ maxWidth: '100px', height: '100px', marginTop: '10px', borderRadius: '12px' }} 
+                                />
+                              </div>
+                            ) : (
+                              fileName && (
+                                <p className='file-name' style={{ marginTop: '10px', color: '#555' }}>
+                                  {fileName}
+                                </p>
+                              )
                           )}
                         </div>
                         {

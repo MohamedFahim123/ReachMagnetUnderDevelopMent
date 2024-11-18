@@ -41,10 +41,10 @@ export default function LastMinuteCard({
                 </div>
                 <div className="product__info">
                     <div className="main__info">
-                        <NavLink className={'nav-link'} to={productLink ? productLink : ''} onClick={() => {
+                        <NavLink target="_blank" className={'nav-link'} to={productLink ? productLink : ''} onClick={() => {
                             scrollToTop();
                         }}>
-                            <h3>{productName}</h3>
+                            <h3 className='text-capitalize' title={productName}> {productName.length > 14 ? `${productName.slice(0, 14)}...` : productName}</h3>
 
                         </NavLink>
                         {showCustomContent ? (
@@ -61,7 +61,8 @@ export default function LastMinuteCard({
                     </div>
                     <div className="sub__info">
                         {/* <p>{dealQuantity}</p> */}
-                        <NavLink to={productLink ? productLink : ''} className="pageMainBtnStyle terquase mb-2">More Info</NavLink>
+                        <NavLink target="_blank" to={productLink ? productLink : ''} className="pageMainBtnStyle terquase mb-2">More Info <i class="bi bi-box-arrow-up-right"></i>
+                        </NavLink>
                         <span className={`pageMainBtnStyle d-flex justify-content-center ${buttonClass}`} onClick={handleButtonClick}>
                             {buttonLabel}
                         </span>

@@ -136,8 +136,8 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
                 
             </div>
             <div className="card__description">
-                <p>
-                    {cardDesc}
+                <p title={cardDesc}>
+                {cardDesc.length > 200 ? `${cardDesc.slice(0, 200)}...` : cardDesc}
                 </p>
             </div>
         </div>

@@ -335,420 +335,420 @@ export default function SingleCompanyQuote({ token }) {
                             paraPartOne='Save  thousands to millions of bucks by using tool great skills, be a cool React Developer'
                         />
                         <>
-                            <div className="singleCompanyQuote__contents">
-                                <div className="container">
-                                    <div className="singleCompanyQuote__headText">
-                                        <h1>
-                                            Get a Quote from <span>{companyName}</span>
-                                        </h1>
-                                    </div>
-                                    <div className="singleCompanyQuote__mainFrom">
-                                        <form action="" onSubmit={handleFormSubmit} className='row'>
-                                            <div className="col-12 d-flex justify-content-end align-items-center mb-5">
-                                                <span onClick={handleResetCurrentQuotation} className='deleteRuleBtn mt-3 me-5'>Reset Quote</span>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="row">
-                                                    <div className="col-12 singleQuote__searchInput">
-                                                        <h3>
-                                                            Filter Items By
-                                                        </h3>
-                                                    </div>
-                                                    <div className="col-lg-4">
-                                                        <div className="singleQuoteInput">
-                                                            <label htmlFor="qoutationSelectTheType" className='position-relative'>
-                                                                Type
-                                                                <i title='select type of Quotaion you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                            </label>
-                                                            <select
-                                                                className='form-select w-100'
-                                                                id="qoutationSelectTheType"
-                                                                value={requestIntries?.type}
-                                                                onChange={(event) => {
-                                                                    setRequestIntries({ ...requestIntries, type: event?.target?.value })
-                                                                }}
-                                                            >
-                                                                <option value={''} disabled>Select Type</option>
-                                                                {
-                                                                    typesOfQuotations?.map(type => (
-                                                                        <option className='text-capitalize' value={type?.name} key={type?.id}>
-                                                                            {type?.name}
-                                                                        </option>
-                                                                    ))
-                                                                }
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-4">
-                                                        <div className="singleQuoteInput">
-                                                            <label htmlFor="quotationSelectMainCategory"
-                                                                className='position-relative'
-                                                            >
-                                                                Category
-                                                                <i title='select category of item' className="bi bi-info-circle ms-2 cursorPointer" style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                            </label>
-                                                            <select
-                                                                className='form-select w-100'
-                                                                id="quotationSelectMainCategory"
-                                                                value={requestIntries?.category_id}
-                                                                onChange={handleGettingCurrentSubCategories}
-                                                            >
-                                                                <option value={''} disabled>Select Category</option>
-                                                                {currentCategories?.map(cat => (
-                                                                    <option
-                                                                        value={cat?.id}
-                                                                        key={cat?.id}
-                                                                    >{cat?.name}</option>
-                                                                ))}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-4">
-                                                        <div className="singleQuoteInput">
-                                                            <label htmlFor="qouteSelectSubCategory"
-                                                                className='position-relative'
-                                                            >
-                                                                Sub-category
-                                                                <i title='select sub-category of item' className="bi bi-info-circle ms-2 cursorPointer" style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                            </label>
-                                                            <select
-                                                                value={requestIntries?.sub_category_id}
-                                                                className='form-select w-100'
-                                                                id="qouteSelectSubCategory"
-                                                                onChange={(event) => {
-                                                                    setRequestIntries({ ...requestIntries, sub_category_id: event?.target?.value })
-                                                                }}
-                                                            >
-                                                                <option value="" disabled>Select Sub-Category</option>
-                                                                {
-                                                                    currentSubCategories?.map(subCat => (
-                                                                        <option value={subCat?.id} key={subCat?.id}>{subCat?.name}</option>
-                                                                    ))
-                                                                }
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="row">
-                                                    <div className="col-lg-6">
-                                                        <div className="singleQuote__searchInput mt-3">
-                                                            <h3 className='fs-4 position-relative'>
-                                                                Or Search For a Specific Item
-                                                                <i title='Search For a Specific Item' className="bi bi-info-circle ms-2 cursorPointer" style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                            </h3>
-                                                            <input className='form-control' type="text" placeholder='Search here' value={requestIntries?.title} onChange={(event) => setRequestIntries({ ...requestIntries, title: event?.target?.value })} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                {
-                                                    loadingCart ?
-                                                        <div className="permissionsLoader"></div>
-                                                        :
-                                                        <div className="singleQuote__slideProducts ">
-                                                            <Swiper
-                                                                className='mySwiper'
-                                                                modules={[Autoplay]}
-                                                                autoplay={{
-                                                                    delay: 2500,
-                                                                    pauseOnMouseEnter: true,
-                                                                    disableOnInteraction: false
-                                                                }}
-                                                                breakpoints={{
-                                                                    300: {
-                                                                        slidesPerView: 1.1,
-                                                                        spaceBetween: 10
-                                                                    },
-                                                                    426: {
-                                                                        slidesPerView: 1.2,
-                                                                        spaceBetween: 20
-                                                                    },
-                                                                    600: {
-                                                                        slidesPerView: 2.2,
-                                                                        spaceBetween: 15
-                                                                    },
-                                                                    768: {
-                                                                        slidesPerView: 2.2,
-                                                                        spaceBetween: 15
-                                                                    },
-                                                                    995: {
-                                                                        slidesPerView: 3.2,
-                                                                        spaceBetween: 20
-                                                                    },
-                                                                }}
-                                                            >
-                                                                {
-                                                                    currentProd?.map((el) => {
-                                                                        const isAdded = cart?.some(
-                                                                            (selectedProduct) => selectedProduct.item.slug === el?.slug
-                                                                        );
-                                                                        return (
-                                                                            <SwiperSlide className="my-3" key={el?.id}>
-                                                                                <LastMinuteCard
-                                                                                    productImage={
-                                                                                        el?.image
-                                                                                            ? el?.image
-                                                                                            : el?.media[0].image
-                                                                                                ? el?.media[0].image
-                                                                                                : el.media[0]
-                                                                                    }
-                                                                                    productName={el?.title}
-                                                                                    productLink={`/show-company/${companyIdWantedToHaveQuoteWith}/${el?.type === "catalog" ? "catalog-details" : "service-details"
-                                                                                        }/${el?.id}`}
-                                                                                    dealQuantity={el?.dealQuantity}
-                                                                                    showCustomContent={true}
-                                                                                    buttonLabel={isAdded ? "Added" : "Add"}
-                                                                                    onAddClick={() => handleAddProduct(el)}
-                                                                                    borderColor={
-                                                                                        isAdded ? "rgba(7, 82, 154, 1)" : "rgba(0, 0, 0, 0.5)"
-                                                                                    }
-                                                                                />
-                                                                            </SwiperSlide>
-                                                                        );
-                                                                    })
-                                                                }
-                                                            </Swiper>
-                                                        </div>
-                                                }
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="row">
-                                                    <div className="col-lg-8">
-                                                        <div className="selectedProducts__handler">
-                                                            <h3>
-                                                                Selected Products
-                                                            </h3>
-                                                            {(cart?.length === 0) ? (
-                                                                <p>No products selected</p>
-                                                            ) : (
-                                                                cart?.map((el) => {
-                                                                    const hasImage = el?.item?.image || el?.item?.medias?.some((media) => media.type === 'image');
-                                                                    const hasFile = el?.item?.medias?.some((media) => media.type === 'file');
-                                                                    return <CartProduct
-                                                                        key={el?.quotation_cart_id}
-                                                                        title={el?.item?.title}
-                                                                        description={el?.item?.description}
-                                                                        notes={el?.note}
-                                                                        imageSrc={el?.item?.image || el?.item?.medias?.find((media) => media.type === 'image')?.media}
-                                                                        showImage={hasImage}
-                                                                        showFiles={hasFile}
-                                                                        fileList={el?.item?.medias?.filter((media) => media.type === 'file') || []}
-                                                                        quantity={el?.quantity}
-                                                                        cartId={el?.quotation_cart_id}
-                                                                        companyIdWantedToHaveQuoteWith={companyIdWantedToHaveQuoteWith}
-                                                                        token={token}
-                                                                        setCart={setCart}
-                                                                    />
-                                                                })
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {
-                                                customizationCondition &&
-                                                <div className="col-12">
-                                                    <div className="customizationQuote__handler">
-                                                        <h3 className='text-capitalize customizationHead'>
-                                                            Can’t find what you’re looking for?
-                                                            <br />
-                                                            <span>{companyName}</span> tailors solutions to fit your unique needs
-                                                        </h3>
-                                                        <div className="customization__form row">
-                                                            <div className="col-lg-7">
-                                                                <div className="singleQuoteInput">
-                                                                    <label htmlFor="qoutationSelectTheType"
-                                                                        className='position-relative'
-                                                                    >
-                                                                        Type
-                                                                        <i title='select type of Quotaion you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                                    </label>
-                                                                    <select
-                                                                        className='form-select w-100'
-                                                                        id="qoutationSelectTheType"
-                                                                        name='type'
-                                                                        value={customProduct?.type}
-                                                                        onChange={handleCustomProductChange}
-                                                                    >
-                                                                        <option value={''} disabled>Select Type</option>
-                                                                        {
-                                                                            typesOfQuotations?.map(type => (
-                                                                                <option className='text-capitalize' value={type?.name} key={type?.id}>
-                                                                                    {type?.name}
-                                                                                </option>
-                                                                            ))
-                                                                        }
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-6">
-                                                                <div className="singleQuoteInput">
-                                                                    <label htmlFor="customProductTitle"
-                                                                        className='position-relative'
-                                                                    >
-                                                                        Title
-                                                                        <i title='name what you want from company' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                                    </label>
-                                                                    <input
-                                                                        id="customProductTitle"
-                                                                        name="title"
-                                                                        className='form-control customizedInput'
-                                                                        type="text"
-                                                                        placeholder='Ex: L-Shape Sofa-Grey'
-                                                                        value={customProduct?.title}
-                                                                        onChange={handleCustomProductChange}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-6">
-                                                                <div className="singleQuoteInput">
-                                                                    <label htmlFor="customProductQuantity"
-                                                                        className='position-relative'
-                                                                    >
-                                                                        Quantity
-                                                                        <i title='select quantity of what you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                                    </label>
-                                                                    <input
-                                                                        id="customProductQuantity"
-                                                                        name="quantity"
-                                                                        className='form-control customizedInput'
-                                                                        type="number"
-                                                                        placeholder='Ex: 0'
-                                                                        min={0}
-                                                                        value={customProduct?.quantity}
-                                                                        onChange={handleCustomProductChange}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-12">
-                                                                <div className="singleQuoteInput">
-                                                                    <label htmlFor="customProductDescription"
-                                                                        className='position-relative'
-                                                                    >
-                                                                        Description
-                                                                        <i title='descripe how you want your thing' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                                    </label>
-                                                                    <textarea
-                                                                        id="customProductDescription"
-                                                                        name="description"
-                                                                        className="form-control customizedInput"
-                                                                        rows="3"
-                                                                        placeholder='Ex: The L-shaped sofa is the relax version of the long sofa. Its main feature is the extended terminal seat, which can be placed on the left or right side, on the basis of the living room design and the personal needs.'
-                                                                        value={customProduct?.description}
-                                                                        onChange={handleCustomProductChange}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-6">
-                                                                <div className="customizationQuote__actions singleQuoteInput">
-                                                                    <label className=' position-relative'>UpLoad A Reference <span className='optional'>
-                                                                        (max 3 files)
-                                                                    </span>
-                                                                        <i title='upload images or files descripe what you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                                    </label>
-                                                                    <p className='fw-light mb-2'>It’s recommended to upload a photo or file as a reference for better clarity on your request</p>
-                                                                    <input
-                                                                        type='file'
-                                                                        id='customProductImageBtn'
-                                                                        multiple
-                                                                        ref={fileInputRef}
-                                                                        onChange={handleCustomProductChangeImage}
-                                                                        className={`form-control`}
-                                                                    />
-                                                                    {
-                                                                        customProduct.file.length > 0 &&
-                                                                        <small className="hintForAddedFiles d-block">Attachments has been added</small>
-                                                                    }
-                                                                    <span className='pageMainBtnStyle addItemToQuoteBtn mt-4' onClick={handleAddCustomProduct}>
-                                                                        Add Item to Quotation
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            <div className="col-12">
-                                                <div className="quotaionCheckInputs__handler mt-5">
-                                                    <div className="form-check">
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="checkbox"
-                                                            name={'include_shipping'}
-                                                            checked={distinationData?.include_shipping}
-                                                            onChange={handleCheckboxChange}
-                                                            id="flexCheckDefault" />
-                                                        <label className="form-check-label position-relative" htmlFor="flexCheckDefault"
-
-                                                        >
-                                                            Include Shipping Cost In The Quotation
-                                                            <i title='want Shipping to your place' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                        </label>
-                                                    </div>
+                <div className="singleCompanyQuote__contents">
+                    <div className="container">
+                        <div className="singleCompanyQuote__headText">
+                            <h1>
+                                Get a Quote from <span>{companyName}</span>
+                            </h1>
+                        </div>
+                        <div className="singleCompanyQuote__mainFrom">
+                            <form action="" onSubmit={handleFormSubmit} className='row'>
+                                <div className="col-12 d-flex justify-content-end align-items-center mb-5">
+                                    <span onClick={handleResetCurrentQuotation} className='deleteRuleBtn mt-3 me-5'>Reset Quote</span>
+                                </div>
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-12 singleQuote__searchInput">
+                                            <h3>
+                                                Filter Items By
+                                            </h3>
+                                        </div>
+                                        <div className="col-lg-4">
+                                            <div className="singleQuoteInput">
+                                                <label htmlFor="qoutationSelectTheType" className='position-relative'>
+                                                    Type
+                                                    <i title='select type of Quotaion you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                </label>
+                                                <select
+                                                    className='form-select w-100'
+                                                    id="qoutationSelectTheType"
+                                                    value={requestIntries?.type}
+                                                    onChange={(event) => {
+                                                        setRequestIntries({ ...requestIntries, type: event?.target?.value })
+                                                    }}
+                                                >
+                                                    <option value={''} disabled>Select Type</option>
                                                     {
-                                                        distinationData?.include_shipping &&
-                                                        <div className="form-check">
-                                                            <input
-                                                                className="form-check-input"
-                                                                type="checkbox"
-                                                                name={'include_insurance'}
-                                                                checked={distinationData?.include_insurance}
-                                                                onChange={handleCheckboxChange}
-                                                                id="flexCheckDefault2" />
-                                                            <label className="form-check-label position-relative" htmlFor="flexCheckDefault2">
-                                                                Include Insurance
-                                                                <i title='Include Insurance' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                            </label>
-                                                        </div>
+                                                        typesOfQuotations?.map(type => (
+                                                            <option className='text-capitalize' value={type?.name} key={type?.id}>
+                                                                {type?.name}
+                                                            </option>
+                                                        ))
                                                     }
-                                                </div>
+                                                </select>
                                             </div>
-                                            {distinationData?.include_shipping && (
-                                                <div className="col-12">
-                                                    <DestinationForm isOneClickQuotation={false} countries={countries} distinationData={distinationData} setDistinationData={setDistinationData} />
-                                                </div>
-                                            )}
-
-                                            <div className="col-12">
-                                                <div className="customizationQuote__handler">
-                                                    <h3 className='text-capitalize customizationHead'>
-
-                                                    </h3>
-                                                    <div className="customization__form row">
-                                                        <div className="col-lg-12">
-                                                            <div className="singleQuoteInput">
-                                                                <label htmlFor="quotationNote" className='position-relative'>
-                                                                    Add Note To Quotation
-                                                                    <i title='write a note for your full quote that very important to you' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
-                                                                </label>
-                                                                <textarea
-                                                                    id="quotationNote"
-                                                                    name="request_by_notes"
-                                                                    className="form-control customizedInput"
-                                                                    rows="3"
-                                                                    defaultValue={distinationData?.request_by_notes}
-                                                                    placeholder='Ex: Add any notes or specific terms and conditions for your request in this section.'
-                                                                    onChange={(e) => {
-                                                                        setDistinationData({ ...distinationData, [e.target.name]: e.target.value })
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        <div className="col-lg-4">
+                                            <div className="singleQuoteInput">
+                                                <label htmlFor="quotationSelectMainCategory"
+                                                    className='position-relative'
+                                                >
+                                                    Category
+                                                    <i title='select category of item' className="bi bi-info-circle ms-2 cursorPointer" style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                </label>
+                                                <select
+                                                    className='form-select w-100'
+                                                    id="quotationSelectMainCategory"
+                                                    value={requestIntries?.category_id}
+                                                    onChange={handleGettingCurrentSubCategories}
+                                                >
+                                                    <option value={''} disabled>Select Category</option>
+                                                    {currentCategories?.map(cat => (
+                                                        <option
+                                                            value={cat?.id}
+                                                            key={cat?.id}
+                                                        >{cat?.name}</option>
+                                                    ))}
+                                                </select>
                                             </div>
-                                            <div className="col-12">
-                                                <button type='submit' disabled={loadingSubmit} className='addedButtonStyle btnSubmitQuote mt-5'>
-                                                    Submit quotation
-                                                </button>
+                                        </div>
+                                        <div className="col-lg-4">
+                                            <div className="singleQuoteInput">
+                                                <label htmlFor="qouteSelectSubCategory"
+                                                    className='position-relative'
+                                                >
+                                                    Sub-category
+                                                    <i title='select sub-category of item' className="bi bi-info-circle ms-2 cursorPointer" style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                </label>
+                                                <select
+                                                    value={requestIntries?.sub_category_id}
+                                                    className='form-select w-100'
+                                                    id="qouteSelectSubCategory"
+                                                    onChange={(event) => {
+                                                        setRequestIntries({ ...requestIntries, sub_category_id: event?.target?.value })
+                                                    }}
+                                                >
+                                                    <option value="" disabled>Select Sub-Category</option>
+                                                    {
+                                                        currentSubCategories?.map(subCat => (
+                                                            <option value={subCat?.id} key={subCat?.id}>{subCat?.name}</option>
+                                                        ))
+                                                    }
+                                                </select>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <div className="singleQuote__searchInput mt-3">
+                                                <h3 className='fs-4 position-relative'>
+                                                    Or Search For a Specific Item
+                                                    <i title='Search For a Specific Item' className="bi bi-info-circle ms-2 cursorPointer" style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                </h3>
+                                                <input className='form-control' type="text" placeholder='Search here' value={requestIntries?.title} onChange={(event) => setRequestIntries({ ...requestIntries, title: event?.target?.value })} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12">
+                                    {
+                                        loadingCart ?
+                                            <div className="permissionsLoader"></div>
+                                            :
+                                            <div className="singleQuote__slideProducts ">
+            <Swiper
+                className='mySwiper'
+                modules={[Autoplay]}
+                autoplay={{
+                    delay: 2500,
+                    pauseOnMouseEnter: true,
+                    disableOnInteraction: false
+                }}
+                breakpoints={{
+                    300: {
+                        slidesPerView: 1.1,
+                        spaceBetween: 10
+                    },
+                    426: {
+                        slidesPerView: 1.2,
+                        spaceBetween: 20
+                    },
+                    600: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 15
+                    },
+                    768: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 15
+                    },
+                    995: {
+                        slidesPerView: 3.2,
+                        spaceBetween: 20
+                    },
+                }}
+            >
+                {
+                    currentProd?.map((el) => {
+                        const isAdded = cart?.some(
+                            (selectedProduct) => selectedProduct.item.slug === el?.slug
+                        );
+                        return (
+                            <SwiperSlide className="my-3" key={el?.id}>
+                                <LastMinuteCard
+                                    productImage={
+                                        el?.image
+                                            ? el?.image
+                                            : el?.media[0].image
+                                                ? el?.media[0].image
+                                                : el.media[0]
+                                    }
+                                    productName={el?.title}
+                                    productLink={`/show-company/${companyIdWantedToHaveQuoteWith}/${el?.type === "catalog" ? "catalog-details" : "service-details"
+                                        }/${el?.id}`}
+                                    dealQuantity={el?.dealQuantity}
+                                    showCustomContent={true}
+                                    buttonLabel={isAdded ? "Added" : "Add"}
+                                    onAddClick={() => handleAddProduct(el)}
+                                    borderColor={
+                                        isAdded ? "rgba(7, 82, 154, 1)" : "rgba(0, 0, 0, 0.5)"
+                                    }
+                                />
+                            </SwiperSlide>
+                        );
+                    })
+                }
+            </Swiper>
+                                            </div>
+                                    }
+                                </div>
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-lg-8">
+                                            <div className="selectedProducts__handler">
+                                                <h3>
+                                                    Selected Products
+                                                </h3>
+                                                {(cart?.length === 0) ? (
+                                                    <p>No products selected</p>
+                                                ) : (
+                                                    cart?.map((el) => {
+                                                        const hasImage = el?.item?.image || el?.item?.medias?.some((media) => media.type === 'image');
+                                                        const hasFile = el?.item?.medias?.some((media) => media.type === 'file');
+                                                        return <CartProduct
+                                                            key={el?.quotation_cart_id}
+                                                            title={el?.item?.title}
+                                                            description={el?.item?.description}
+                                                            notes={el?.note}
+                                                            imageSrc={el?.item?.image || el?.item?.medias?.find((media) => media.type === 'image')?.media}
+                                                            showImage={hasImage}
+                                                            showFiles={hasFile}
+                                                            fileList={el?.item?.medias?.filter((media) => media.type === 'file') || []}
+                                                            quantity={el?.quantity}
+                                                            cartId={el?.quotation_cart_id}
+                                                            companyIdWantedToHaveQuoteWith={companyIdWantedToHaveQuoteWith}
+                                                            token={token}
+                                                            setCart={setCart}
+                                                        />
+                                                    })
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {
+                                    customizationCondition &&
+                                    <div className="col-12">
+                                        <div className="customizationQuote__handler">
+                                            <h3 className='text-capitalize customizationHead'>
+                                                Can’t find what you’re looking for?
+                                                <br />
+                                                <span>{companyName}</span> tailors solutions to fit your unique needs
+                                            </h3>
+                                            <div className="customization__form row">
+                                                <div className="col-lg-7">
+                                                    <div className="singleQuoteInput">
+                                                        <label htmlFor="qoutationSelectTheType"
+                                                            className='position-relative'
+                                                        >
+                                                            Type
+                                                            <i title='select type of Quotaion you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                        </label>
+                                                        <select
+                                                            className='form-select w-100'
+                                                            id="qoutationSelectTheType"
+                                                            name='type'
+                                                            value={customProduct?.type}
+                                                            onChange={handleCustomProductChange}
+                                                        >
+                                                            <option value={''} disabled>Select Type</option>
+                                                            {
+                                                                typesOfQuotations?.map(type => (
+                                                                    <option className='text-capitalize' value={type?.name} key={type?.id}>
+                                                                        {type?.name}
+                                                                    </option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <div className="singleQuoteInput">
+                                                        <label htmlFor="customProductTitle"
+                                                            className='position-relative'
+                                                        >
+                                                            Title
+                                                            <i title='name what you want from company' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                        </label>
+                                                        <input
+                                                            id="customProductTitle"
+                                                            name="title"
+                                                            className='form-control customizedInput'
+                                                            type="text"
+                                                            placeholder='Ex: L-Shape Sofa-Grey'
+                                                            value={customProduct?.title}
+                                                            onChange={handleCustomProductChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <div className="singleQuoteInput">
+                                                        <label htmlFor="customProductQuantity"
+                                                            className='position-relative'
+                                                        >
+                                                            Quantity
+                                                            <i title='select quantity of what you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                        </label>
+                                                        <input
+                                                            id="customProductQuantity"
+                                                            name="quantity"
+                                                            className='form-control customizedInput'
+                                                            type="number"
+                                                            placeholder='Ex: 0'
+                                                            min={0}
+                                                            value={customProduct?.quantity}
+                                                            onChange={handleCustomProductChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-12">
+                                                    <div className="singleQuoteInput">
+                                                        <label htmlFor="customProductDescription"
+                                                            className='position-relative'
+                                                        >
+                                                            Description
+                                                            <i title='descripe how you want your thing' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                        </label>
+                                                        <textarea
+                                                            id="customProductDescription"
+                                                            name="description"
+                                                            className="form-control customizedInput"
+                                                            rows="3"
+                                                            placeholder='Ex: The L-shaped sofa is the relax version of the long sofa. Its main feature is the extended terminal seat, which can be placed on the left or right side, on the basis of the living room design and the personal needs.'
+                                                            value={customProduct?.description}
+                                                            onChange={handleCustomProductChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <div className="customizationQuote__actions singleQuoteInput">
+                                                        <label className=' position-relative'>UpLoad A Reference <span className='optional'>
+                                                            (max 3 files)
+                                                        </span>
+                                                            <i title='upload images or files descripe what you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                        </label>
+                                                        <p className='fw-light mb-2'>It’s recommended to upload a photo or file as a reference for better clarity on your request</p>
+                                                        <input
+                                                            type='file'
+                                                            id='customProductImageBtn'
+                                                            multiple
+                                                            ref={fileInputRef}
+                                                            onChange={handleCustomProductChangeImage}
+                                                            className={`form-control`}
+                                                        />
+                                                        {
+                                                            customProduct.file.length > 0 &&
+                                                            <small className="hintForAddedFiles d-block">Attachments has been added</small>
+                                                        }
+                                                        <span className='pageMainBtnStyle addItemToQuoteBtn mt-4' onClick={handleAddCustomProduct}>
+                                                            Add Item to Quotation
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div className="col-12">
+                                    <div className="quotaionCheckInputs__handler mt-5">
+                                        <div className="form-check">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                name={'include_shipping'}
+                                                checked={distinationData?.include_shipping}
+                                                onChange={handleCheckboxChange}
+                                                id="flexCheckDefault" />
+                                            <label className="form-check-label position-relative" htmlFor="flexCheckDefault"
+
+                                            >
+                                                Include Shipping Cost In The Quotation
+                                                <i title='want Shipping to your place' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                            </label>
+                                        </div>
+                                        {
+                                            distinationData?.include_shipping &&
+                                            <div className="form-check">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    name={'include_insurance'}
+                                                    checked={distinationData?.include_insurance}
+                                                    onChange={handleCheckboxChange}
+                                                    id="flexCheckDefault2" />
+                                                <label className="form-check-label position-relative" htmlFor="flexCheckDefault2">
+                                                    Include Insurance
+                                                    <i title='Include Insurance' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                </label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                {distinationData?.include_shipping && (
+                                    <div className="col-12">
+                                        <DestinationForm isOneClickQuotation={false} countries={countries} distinationData={distinationData} setDistinationData={setDistinationData} />
+                                    </div>
+                                )}
+
+                                <div className="col-12">
+                                    <div className="customizationQuote__handler">
+                                        <h3 className='text-capitalize customizationHead'>
+
+                                        </h3>
+                                        <div className="customization__form row">
+                                            <div className="col-lg-12">
+                                                <div className="singleQuoteInput">
+                                                    <label htmlFor="quotationNote" className='position-relative'>
+                                                        Add Note To Quotation
+                                                        <i title='write a note for your full quote that very important to you' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                    </label>
+                                                    <textarea
+                                                        id="quotationNote"
+                                                        name="request_by_notes"
+                                                        className="form-control customizedInput"
+                                                        rows="3"
+                                                        defaultValue={distinationData?.request_by_notes}
+                                                        placeholder='Ex: Add any notes or specific terms and conditions for your request in this section.'
+                                                        onChange={(e) => {
+                                                            setDistinationData({ ...distinationData, [e.target.name]: e.target.value })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12">
+                                    <button type='submit' disabled={loadingSubmit} className='addedButtonStyle btnSubmitQuote mt-5'>
+                                        Submit quotation
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                         </>
                     </div>
             }

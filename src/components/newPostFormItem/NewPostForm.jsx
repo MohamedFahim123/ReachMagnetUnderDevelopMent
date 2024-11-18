@@ -100,9 +100,16 @@ export default function NewPostForm({ token }) {
             } else {
                 toast.error(id ? 'Failed to update the post' : 'Failed to add post');
             };
-        } catch (error) {
-            toast.error(error?.response?.data?.message || 'Something Went Wrong!');
-        };
+        }  catch (error) {
+            if (error?.response?.data?.errors) {
+                const validationErrors = Object.values(error.response.data.errors)
+                    .flat()
+                    .join('\n'); // Join with newline for separate lines
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+            } else {
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+            }
+        }
     };
 
     useEffect(() => {

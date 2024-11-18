@@ -28,6 +28,7 @@ export default function CompanyActivitiesForm(token, setUnAuth) {
         });
       });
   }, []);
+console.log(allActivities);
 
   const {
     handleSubmit,

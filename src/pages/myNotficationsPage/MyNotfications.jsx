@@ -129,7 +129,10 @@ export default function MyNotfications({ token, fireNotification, setFireNotific
             navigate(`/profile/quotation-orders/${id}`);
         } else if (target === 'followers') {
             navigate(`/profile/followers`);
-        } else {
+        }else if (target === 'new_industry') {
+            navigate(`/show-company/${id}`);
+        }
+         else {
             console.warn(`Unhandled target: ${target}`);
         }
     };
@@ -215,7 +218,7 @@ export default function MyNotfications({ token, fireNotification, setFireNotific
                                     <i className="bi bi-box-arrow-up-right" onClick={() => {
                                         handleReadOneNotification(el?.id)
                                         // navigate(`${el?.target === 'followers' ? '/profile/followers' : '/profile'}`)
-                                        handleNavigation(el.target, el?.sender_id)
+                                        handleNavigation(el?.target, el?.sender_id)
                                     }}></i>
                                 </td>
                             </tr>

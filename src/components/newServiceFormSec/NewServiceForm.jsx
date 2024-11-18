@@ -154,11 +154,15 @@ export default function NewServiceForm({ token }) {
                 toast.error(id ? 'Failed to update service item!' : 'Failed to add service item!');
             }
         } catch (error) {
-            if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
-                setUnAuth(true);
-            };
-            toast.error(error?.response?.data.message || 'Something Went Wrong!');
-        };
+            if (error?.response?.data?.errors) {
+                const validationErrors = Object.values(error.response.data.errors)
+                    .flat()
+                    .join('\n'); // Join with newline for separate lines
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+            } else {
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+            }
+        }
     };
 
     useEffect(() => {

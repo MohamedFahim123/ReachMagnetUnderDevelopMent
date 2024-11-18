@@ -206,16 +206,32 @@ export default function ShowSingleQuotation({ token }) {
                         duration: 1000,
                     });
                 })
-                .catch(error => {
-                    if (error?.response?.data?.message === 'Server Error' || error?.response?.data?.message === 'Unauthorized') {
+                .catch((error) => {
+                    if (error?.response?.data?.errors) {
+                        // Extract and format validation errors
+                        const validationErrors = Object.values(error.response.data.errors)
+                            .flat()
+                            .join('\n'); // Separate errors by newlines
+                        toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>, {
+                            id: toastId,
+                            duration: 1000,
+                        });
+                    } else {
+                        toast.error(
+                            error?.response?.data?.message || 'Error!',
+                            {
+                                id: toastId,
+                                duration: 1000,
+                            }
+                        );
+                    }
+    
+                    if (
+                        error?.response?.data?.message === 'Server Error' ||
+                        error?.response?.data?.message === 'Unauthorized'
+                    ) {
                         setUnAuth(true);
-                    };
-                    toast.error(
-                        error?.response?.data?.message ||
-                        'Error!', {
-                        id: toastId,
-                        duration: 1000
-                    });
+                    }
                 });
         })();
     };

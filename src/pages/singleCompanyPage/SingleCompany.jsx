@@ -84,12 +84,14 @@ export default function SingleCompany({ token }) {
         { name: 'Services', active: activeItem === 'Services' },
         { name: 'Product Catalog', active: activeItem === 'Product Catalog' },
         { name: 'Media', active: activeItem === 'Media' },
-        { name: 'Networks', active: activeItem === 'Networks' },
+        { name: 'Clients', active: activeItem === 'Clients' },
+        { name: 'Partners', active: activeItem === 'Partners' },
     ];
 
     const handleItemClick = (itemName) => {
         setActiveItem(itemName);
     };
+    console.log(companyNetworks?.data?.networks);
 
     useEffect(() => {
         setTimeout(() => {
@@ -338,62 +340,143 @@ export default function SingleCompany({ token }) {
                                     </>
                                 }
                                 {
-                                    activeItem === 'Networks' &&
-                                    <>
-                                        {
-                                            companyNetworks?.data?.networks?.length !== 0 ?
-                                                <Swiper
-                                                    className='mySwiper'
-                                                    modules={[Autoplay]}
-                                                    autoplay={{
-                                                        delay: 2500,
-                                                        pauseOnMouseEnter: true,
-                                                        disableOnInteraction: false
-                                                    }}
-                                                    breakpoints={{
-                                                        300: {
-                                                            slidesPerView: 1.1,
-                                                            spaceBetween: 10
-                                                        },
-                                                        426: {
-                                                            slidesPerView: 1.2,
-                                                            spaceBetween: 20
-                                                        },
-                                                        600: {
-                                                            slidesPerView: 2.2,
-                                                            spaceBetween: 15
-                                                        },
-                                                        768: {
-                                                            slidesPerView: 2.2,
-                                                            spaceBetween: 15
-                                                        },
-                                                        995: {
-                                                            slidesPerView: 3.2,
-                                                            spaceBetween: 20
-                                                        },
-                                                    }}
-                                                >
-                                                    {companyNetworks?.data?.networks?.networks?.map((el) => {
-                                                        return (
-                                                            <SwiperSlide className=' my-3' key={el?.id}>
-                                                                <CompanyMediaCard type={'image'} mediaSrc={el?.logo}
-                                                                    mainInfo={true}
-                                                                    mainInfoName={el?.name}
-                                                                    mainInfoType={el?.label}
-                                                                    mainInfoLink={''}
-                                                                />
-                                                            </SwiperSlide>
-                                                        )
-                                                    })}
-                                                </Swiper>
-                                                :
-                                                <h5 className='text-center text-danger text-capitalize mb-4'>
-                                                    No added media for this company
-                                                </h5>
-                                        }
-
-                                    </>
-                                }
+    activeItem === 'Clients' &&
+    <>
+        {
+            companyNetworks?.data?.networks?.networks ?
+                (() => {
+                    const clientNetwork = companyNetworks.data.networks.networks.find(
+                        (el) => el.label === 'Client'
+                    );
+                    return clientNetwork ? (
+                        <Swiper
+                            className="mySwiper"
+                            modules={[Autoplay]}
+                            autoplay={{
+                                delay: 2500,
+                                pauseOnMouseEnter: true,
+                                disableOnInteraction: false,
+                            }}
+                            breakpoints={{
+                                300: {
+                                    slidesPerView: 1.1,
+                                    spaceBetween: 10,
+                                },
+                                426: {
+                                    slidesPerView: 1.2,
+                                    spaceBetween: 20,
+                                },
+                                600: {
+                                    slidesPerView: 2.2,
+                                    spaceBetween: 15,
+                                },
+                                768: {
+                                    slidesPerView: 2.2,
+                                    spaceBetween: 15,
+                                },
+                                995: {
+                                    slidesPerView: 3.2,
+                                    spaceBetween: 20,
+                                },
+                            }}
+                        >
+                            {companyNetworks.data.networks.networks
+                                .filter((el) => el.label === 'Client')
+                                .map((el) => (
+                                    <SwiperSlide className="my-3" key={el?.id}>
+                                        <CompanyMediaCard
+                                            type={"image"}
+                                            mediaSrc={el?.logo}
+                                            mainInfo={true}
+                                            mainInfoName={el?.name}
+                                            mainInfoType={el?.label}
+                                            mainInfoLink={""}
+                                        />
+                                    </SwiperSlide>
+                                ))}
+                        </Swiper>
+                    ) : (
+                        <h5 className="text-center text-danger text-capitalize mb-4">
+                            No added client type for this company
+                        </h5>
+                    );
+                })()
+                :
+                <h5 className="text-center text-danger text-capitalize mb-4">
+                    No added network for this company
+                </h5>
+        }
+    </>
+}
+{
+    activeItem === 'Partners' &&
+    <>
+        {
+            companyNetworks?.data?.networks?.networks ?
+                (() => {
+                    const clientNetwork = companyNetworks.data.networks.networks.find(
+                        (el) => el.label === 'Partener'
+                    );
+                    return clientNetwork ? (
+                        <Swiper
+                            className="mySwiper"
+                            modules={[Autoplay]}
+                            autoplay={{
+                                delay: 2500,
+                                pauseOnMouseEnter: true,
+                                disableOnInteraction: false,
+                            }}
+                            breakpoints={{
+                                300: {
+                                    slidesPerView: 1.1,
+                                    spaceBetween: 10,
+                                },
+                                426: {
+                                    slidesPerView: 1.2,
+                                    spaceBetween: 20,
+                                },
+                                600: {
+                                    slidesPerView: 2.2,
+                                    spaceBetween: 15,
+                                },
+                                768: {
+                                    slidesPerView: 2.2,
+                                    spaceBetween: 15,
+                                },
+                                995: {
+                                    slidesPerView: 3.2,
+                                    spaceBetween: 20,
+                                },
+                            }}
+                        >
+                            {companyNetworks.data.networks.networks
+                                .filter((el) => el.label === "Partener")
+                                .map((el) => (
+                                    <SwiperSlide className="my-3" key={el?.id}>
+                                        <CompanyMediaCard
+                                            type={"image"}
+                                            mediaSrc={el?.logo}
+                                            mainInfo={true}
+                                            mainInfoName={el?.name}
+                                            mainInfoType={el?.label}
+                                            mainInfoLink={""}
+                                        />
+                                    </SwiperSlide>
+                                ))}
+                        </Swiper>
+                    ) : (
+                        <h5 className="text-center text-danger text-capitalize mb-4">
+                            No added client type for this company
+                        </h5>
+                    );
+                })()
+                :
+                <h5 className="text-center text-danger text-capitalize mb-4">
+                    No added network for this company
+                </h5>
+        }
+    </>
+}
                             </div>
                         }
                         {

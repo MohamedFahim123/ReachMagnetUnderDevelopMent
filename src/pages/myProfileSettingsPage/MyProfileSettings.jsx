@@ -10,6 +10,7 @@ import UpdatePassword from '../../components/updatePasswordSec/UpdatePassword'
 import Cookies from 'js-cookie';
 import MyLoader from '../../components/myLoaderSec/MyLoader'
 import { GetAllCountriesStore } from '../../store/AllCountries'
+import CompanyFollowIndustryFrom from '../../components/companyFollowIndustryFormSec/CompanyFollowIndustryFrom'
 
 localStorage.setItem('updatingProfile', 'notUpdating');
 
@@ -36,10 +37,17 @@ export default function MyProfileSettings({ token }) {
     }, [Cookies.get('currentLoginedData'), currentUserLogin]);
 
     const [activeItem, setActiveItem] = useState('Account Settings');
-    const items = [
+    let items = [
         { name: 'Account Settings', active: activeItem === 'Account Settings' },
         { name: 'Password Settings', active: activeItem === 'Password Settings' },
     ];
+    if (loginType === 'user') {
+        items = [
+            { name: 'Account Settings', active: activeItem === 'Account Settings' },
+            { name: 'User Industries', active: activeItem === 'User Industries' },
+            { name: 'Password Settings', active: activeItem === 'Password Settings' },
+        ];
+    }
     const handleItemClick = (itemName) => {
         setActiveItem(itemName);
     };
@@ -135,9 +143,13 @@ export default function MyProfileSettings({ token }) {
                                                     countries={countries}
                                                     token={token}
                                                 />}
+                                                {activeItem === 'User Industries' && <CompanyFollowIndustryFrom
+                                                token={token}
+                                            />}
                                             {activeItem === 'Password Settings' && <UpdatePassword
                                                 token={token}
                                             />}
+
                                         </div>
                                     </div>
                                 </div>

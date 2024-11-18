@@ -12,6 +12,7 @@ import ContentViewHeader from '../contentViewHeaderSec/ContentViewHeader';
 import './showOneOrderInfo.css'
 import { Table } from 'react-bootstrap';
 import defaulImg from '../../assets/servicesImages/default-store-350x350.jpg'
+import fileImage from '../../assets/productImages/file-txt-1-icon-512x510-5cj0091t.png'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { findRenderedDOMComponentWithTag } from 'react-dom/test-utils';
@@ -75,6 +76,7 @@ export default function ShowOneOrderInfo({ token }) {
             })            
         };
 
+console.log(newData);
 
     useEffect(() => {
         setTimeout(() => {
@@ -82,9 +84,21 @@ export default function ShowOneOrderInfo({ token }) {
         }, 500);
     }, [loading]);
     const [show, setShow] = useState(false);
+    const [currNote, setCurrNote] = useState('');
+    const handleViewNotes = (id) =>{
+        const note = newData?.quotation_order_details?.find((row)=>+row?.id === +id)?.notes
+        setShow(true);
+        setCurrNote(note);
+    };
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+const [showFiles, setShowFiles] = useState(false);
+const [currFile, setCurrFile] = useState([]);
+
+const handleViewFiles = (files) => {
+    setCurrFile(files); // Set files for the selected row
+    setShowFiles(true); // Open the modal
+};
+
 
     console.log(newData);
     
@@ -247,11 +261,12 @@ export default function ShowOneOrderInfo({ token }) {
     <tr className='' key={index}>
         <td className='product__breif__detail d-flex '>
             <div className="product__img">
-            <img src={
-                row?.medias?.length > 0 
-                ? row?.medias[0]?.media 
-                : row?.image || defaulImg
-            } alt="product" />
+            <img  src={
+    row?.medias?.find((media) => media.type === 'image')?.media || 
+    (row?.medias?.every((media) => media.type === 'file') 
+      ? fileImage 
+      : row?.image || defaulImg) 
+  } alt="product" />
             </div>
             <div className="product__info">
                 <h2 className='cursorPointer' title={row?.title}>
@@ -282,27 +297,82 @@ export default function ShowOneOrderInfo({ token }) {
             {currencySymbol}{row?.total_price}
         </td>
         <td className='text-center'>
-        {
-        row?.notes !== 'N/A' ?
-            <i onClick={handleShow} className="bi bi-eye cursorPointer"></i>
-            : 
-            'No Notes'
-        }
-        </td>
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-            <Modal.Title>Notes</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>{row?.notes}</Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button>
-            </Modal.Footer>
-        </Modal>
-        <td className='text-center'>
-            <i className="bi bi-cloud-download cursorPointer"></i>
-        </td>
+                                {
+                                row?.note !== 'N/A' ?
+                                    <i onClick={()=>handleViewNotes(row?.id)} className="bi bi-eye cursorPointer"></i>
+                                    : 
+                                    'No Notes'
+                                }
+                            </td>
+                            <Modal show={show} onHide={() => setShow(false)}>
+                                <Modal.Header closeButton>
+                                <Modal.Title>Notes</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>{currNote}</Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={() => setShow(false)}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            <td className='text-center'>
+                               {
+                               row?.type === "customized" ? 
+                                <i onClick={() => handleViewFiles(row?.medias)}
+                                    className="bi bi-box-arrow-up-right cursorPointer"
+                                >
+                                </i>
+                                :
+                                'No Files'
+                                }
+
+                            </td>
+                            <Modal show={showFiles} onHide={() => setShowFiles(false)}>
+                                <Modal.Header closeButton>
+                                <Modal.Title>Files</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body  
+                                    style={{
+                                            display: 'flex',
+                                            justifyContent: 'start',
+                                            height: 'calc(80vh - 250px)', 
+                                            overflowY:'auto'
+                                            }}
+                                >
+                                    <div className="mediasModal__handler">
+                                    {currFile && currFile.length > 0 ? (
+                            currFile.map((media, i) => (
+                                <div key={i} className="media__handler">
+                                    <NavLink to={media.media} target="_blank">
+                                        {media.type === "image" ? (
+                                            <img
+                                                src={media.media}
+                                                alt="media"
+                                                className="mb-3"
+                                                style={{
+                                                    maxWidth: '200px',
+                                                    maxHeight: '200px',
+                                                    objectFit: 'contain',
+                                                    borderRadius: "8px",
+                                                }}
+                                            />
+                                        ) : (
+                                            "View File"
+                                        )}
+                                    </NavLink>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No files available</p>
+                        )}
+                                    </div>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={() => setShowFiles(false)}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                            </Modal>
     </tr>
 ))}
     </tbody>
