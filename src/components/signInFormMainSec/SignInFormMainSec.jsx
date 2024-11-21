@@ -84,7 +84,7 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
                         setError(key, { message: error.response.data.errors[key] });
                     });
                 };
-                toast.error(error?.response?.data?.message?.password || error?.response?.data?.message, {
+                toast.error(error?.response?.data?.errors?.password || error?.response?.data?.message, {
                     id: toastId,
                     duration: 2000,
                 });
