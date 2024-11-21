@@ -3,9 +3,9 @@ import './myLogin.css';
 import SignInFormMainSec from '../../components/signInFormMainSec/SignInFormMainSec';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 
-export default function MyLogin({type,setType}) {
+export default function MyLogin({ type, setType }) {
     const [loading, setLoading] = useState(true);
-    const [loginType , setLoginType] = useState(localStorage.getItem('loginType'));
+    const [loginType, setLoginType] = useState(localStorage.getItem('loginType'));
 
     useEffect(() => {
         setTimeout(() => {
@@ -13,9 +13,9 @@ export default function MyLogin({type,setType}) {
         }, 500);
     }, [loading]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setType(loginType);
-    },[type,loginType])
+    }, [type, loginType]);
 
     return (
         <>

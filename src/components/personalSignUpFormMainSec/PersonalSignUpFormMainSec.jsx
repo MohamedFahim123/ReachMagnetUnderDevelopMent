@@ -638,7 +638,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                         {
                           !isSignUp &&
                           <div className='col-lg-12 mb-4'>
-                            <label htmlFor="addEmployeeofficial_id_or_passport" >
+                            <label className='text-capitalize' htmlFor="addEmployeeofficial_id_or_passport" >
                               Official ID Or Passport<span className="requiredStar"> *</span>
                             </label>
                             <input
