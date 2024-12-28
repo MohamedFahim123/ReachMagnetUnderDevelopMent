@@ -8,7 +8,9 @@ export default function CompanyMediaCard({ type, mediaSrc, mainInfo, mainInfoNam
             <div className="cardMedia__type">
                 {
                     type === 'image' &&
-                    <img src={mediaSrc} alt="media-img" />
+                    <NavLink to={mediaSrc} target='_blank'>
+                        <img src={mediaSrc} alt="media-img" />
+                    </NavLink>
                 }
                 {
                     type === 'link' &&

@@ -17,8 +17,24 @@ export default function Home({ token }) {
   const [loading, setLoading] = useState(true);
   const arrOfCateg = [
     {
+      value: 'all',
+      name: 'All',
+      id: 1,
+    },
+    {
+      value: 'company',
       name: 'Companies',
-      id: 1
+      id: 2
+    },
+    {
+      value: 'catalog',
+      name: 'Products',
+      id: 3
+    },
+    {
+      value: 'service',
+      name: 'Services',
+      id: 4
     },
   ];
 
@@ -66,6 +82,7 @@ export default function Home({ token }) {
             {
               <div className='oneClickQuotation__handler'>
                 <FranchiseSec
+                  token={token}
                   pageName='discover'
                   headText='One-click Quotation'
                   paraText='Submit your request with ReachMagnets one-click tool and receive multiple quotations from companies, allowing you to compare and choose the best offer'

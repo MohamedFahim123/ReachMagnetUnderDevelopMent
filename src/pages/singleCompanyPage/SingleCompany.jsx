@@ -79,26 +79,55 @@ export default function SingleCompany({ token }) {
 
     const [activeItem, setActiveItem] = useState('Overview');
 
+    // const items = [
+    //     { name: 'Overview', active: activeItem === 'Overview' },
+    //     { name: 'Services', active: activeItem === 'Services' },
+    //     { name: 'Product Catalog', active: activeItem === 'Product Catalog'},
+    //     { name: 'Media', active: activeItem === 'Media' },
+    //     { name: 'Clients', active: activeItem === 'Clients' },
+    //     { name: 'Partners', active: activeItem === 'Partners' },
+    // ];
     const items = [
-        { name: 'Overview', active: activeItem === 'Overview' },
-        { name: 'Services', active: activeItem === 'Services' },
-        { name: 'Product Catalog', active: activeItem === 'Product Catalog' },
-        { name: 'Media', active: activeItem === 'Media' },
-        { name: 'Clients', active: activeItem === 'Clients' },
-        { name: 'Partners', active: activeItem === 'Partners' },
-    ];
+        { 
+            name: 'Overview', 
+            active: activeItem === 'Overview' 
+        },
+        { 
+            name: 'Services', 
+            active: activeItem === 'Services', 
+            render: showCompaniesQuery?.data?.company?.companyServices?.length > 0
+        },
+        { 
+            name: 'Product Catalog', 
+            active: activeItem === 'Product Catalog', 
+            render: showCompaniesQuery?.data?.company?.companyCatalogs?.length > 0 
+        },
+        { 
+            name: 'Media', 
+            active: activeItem === 'Media', 
+            render: showCompaniesQuery?.data?.company?.companyPortfolio?.length > 0 
+        },
+        { 
+            name: 'Clients', 
+            active: activeItem === 'Clients', 
+            render: companyNetworks?.data?.networks?.networks?.some(el => el.label === 'Client') 
+        },
+        { 
+            name: 'Partners', 
+            active: activeItem === 'Partners', 
+            render: companyNetworks?.data?.networks?.networks?.some(el => el.label === 'Partener') 
+        },
+    ].filter(item => item.render !== false);
 
     const handleItemClick = (itemName) => {
         setActiveItem(itemName);
     };
-    console.log(companyNetworks?.data?.networks);
 
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
         }, 500);
     }, [loading]);
-
     return (
         <>
             {
@@ -106,7 +135,7 @@ export default function SingleCompany({ token }) {
                     <MyLoader />
                     :
                     <div className='singleCompany__handler'>
-                        <HeroOnlyCover />
+                        <HeroOnlyCover companyCover={showCompaniesQuery?.data?.company?.companyCover}/>
                         <CompanyInfoCard handleShow={handleShow} showCompaniesQuery={showCompaniesQuery?.data?.company} token={token} />
                         <div className='my-5'>
                             <ProductDetailsFilterationBar items={items} onItemClick={handleItemClick} />
@@ -180,7 +209,6 @@ export default function SingleCompany({ token }) {
                                     activeItem === 'Product Catalog' &&
                                     <>
                                         {
-                                            showCompaniesQuery?.data?.company?.companyCatalogs?.length !== 0 ?
                                                 <Swiper
                                                     className='mySwiper'
                                                     modules={[Autoplay]}
@@ -227,10 +255,6 @@ export default function SingleCompany({ token }) {
                                                         )
                                                     })}
                                                 </Swiper>
-                                                :
-                                                <h5 className='text-center text-danger text-capitalize mb-4'>
-                                                    No Product Catalog for this company
-                                                </h5>
                                         }
 
                                     </>
@@ -289,7 +313,6 @@ export default function SingleCompany({ token }) {
                                     activeItem === 'Media' &&
                                     <>
                                         {
-                                            showCompaniesQuery?.data?.company?.companyPortfolio?.length !== 0 ?
                                                 <Swiper
                                                     className='mySwiper'
                                                     modules={[Autoplay]}
@@ -331,10 +354,6 @@ export default function SingleCompany({ token }) {
                                                         )
                                                     })}
                                                 </Swiper>
-                                                :
-                                                <h5 className='text-center text-danger text-capitalize mb-4'>
-                                                    No added media for this company
-                                                </h5>
                                         }
 
                                     </>
@@ -493,7 +512,7 @@ export default function SingleCompany({ token }) {
                         {/* <ReadyToBuySec fetchCartItems={fetchCartItems} wishlistItems={wishlistItems} token={token} showCompaniesQuery={showCompaniesQuery} companies={showCompaniesQuery?.data?.company} secMAinTitle={`Ready-To-Buy From ${showCompaniesQuery?.data?.company?.companyName}`} /> */}
 
 
-                        <SingleCompanyNewsSec token={token} />
+                        <SingleCompanyNewsSec companyId={companyId} token={token} />
                         {/* <SingleCompanyAffiliate /> */}
                         {
                             token &&

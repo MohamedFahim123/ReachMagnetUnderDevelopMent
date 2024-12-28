@@ -354,6 +354,7 @@ export default function CompanySettingsForm(
           id='dashboardCompanyabout_us'
           className={`form-control signUpInput mt-2 ${errors?.about_us ? 'inputError' : ''}`}
           {...register('about_us')}
+          rows={7}
           type="text"
           disabled={profileUpdateStatus === 'notUpdating'}
         />

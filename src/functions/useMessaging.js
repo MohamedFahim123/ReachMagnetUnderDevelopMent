@@ -21,7 +21,7 @@ export default function useMessaging(token, loginType, loginnedUserId, setFireMe
         const channel = pusher.subscribe(channelName);
         if (!isEventBound.current) {
             channel.bind('chat-notification-event', (data) => {
-                toast.success(`${data?.body}`);
+                // toast.success(`${data?.body}`);
                 console.log(data);
                 setFireMessage(true);
             });

@@ -665,6 +665,7 @@ export default function BusinessSignUpFormMainSec({ countries, citizenships, ind
       clearErrors("employee_password_confirmation");
     };
   }, [watch('employee_password_confirmation')]);
+console.log(citizenships);
 
   return (
     <>

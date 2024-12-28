@@ -32,6 +32,7 @@ export default function MyMainHeroSec({ countries, handleChangeFilterInputs, her
             navigate(`reach-magnet?${slug}`);
         }
     };
+console.log(countries);
 
     return (
         <div className={`myMainHero__handler `}>
@@ -62,7 +63,7 @@ export default function MyMainHeroSec({ countries, handleChangeFilterInputs, her
                                                             {
                                                                 categoryArr?.map(el => {
                                                                     return (
-                                                                        <option key={el.id} value={el.id}>{el.name}</option>
+                                                                        <option key={el.id} value={el.value}>{el.name}</option>
                                                                     )
                                                                 })
                                                             }
@@ -74,7 +75,7 @@ export default function MyMainHeroSec({ countries, handleChangeFilterInputs, her
                                             }
                                             <div className="form__part input__search__part">
                                                 <i className="bi bi-search"></i>
-                                                <input id='searchByNameHomePage' name='name' type="text" defaultValue={''} onChange={handleChangeSearchData} placeholder='Search....' />
+                                                <input id='searchByNameHomePage' name='name' type="text" defaultValue={''} onChange={handleChangeSearchData} placeholder='Search by Companies, Products and Services' />
                                             </div>
                                             <div className="form__part select__area__part ">
                                                 <select

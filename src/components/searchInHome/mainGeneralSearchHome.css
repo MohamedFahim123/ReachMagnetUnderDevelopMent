@@ -1,0 +1,45 @@
+.generalSearchCatalogCard .product__image img{
+    width: 100%;
+    height: 250px;
+    /* object-fit: contain; */
+    border-radius: 8px;
+}
+.generalSearchCatalogCard .addButtonStyle{
+    display: none !important;
+}
+.generalSearchCatalogCard .main__info p{
+    display: none !important;
+}
+.generalSearchCatalogCard .sub__info{
+    text-align: end;
+}
+.generalSearchCatalogCard .product__info{
+    display: block;
+}
+@media screen and (max-width: 992px) {
+    .generalSearchCatalogCard .product__image img{
+        width: 100%;
+        height: 100px;
+    }
+    .generalSearchCatalogCard .main__info h3{
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    .generalSearchCatalogCard .pageMainBtnStyle{
+        font-size: 10px;
+        padding: 3px;
+    }
+}
+@media screen and (max-width: 600px){
+    .generalSearchCatalogCard .product__image img{
+        width: 100%;
+        height: 100px;
+    }
+    .generalSearchCatalogCard .lastMinuteCard__handler{
+        height: 180px;
+    }
+    .generalSearchCatalogCard{
+        display: flex;
+        justify-content: center;
+    }
+}

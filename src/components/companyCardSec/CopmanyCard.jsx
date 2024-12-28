@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './companyCard.css'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { scrollToTop } from '../../functions/scrollToTop';
@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrentFollowedCompanies , coverImg, companyProfile, companyName, companyUser, productsCount, dealsCount, ownerCount, cardDesc, companyId }) {
     const loginType = localStorage.getItem('loginType');
     const navigate = useNavigate();
-
+    const [expandedDesc, setExpandedDesc] = useState(false);
     const handleToggleFollowCompany = async (id) => {
         const currentCompanyWantedToFollow = {
             company_id: `${id}`
@@ -42,6 +42,9 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
             });
     };
 
+    const toggleDescription = () => {
+        setExpandedDesc(!expandedDesc);
+      };
     return (
         <div className='companyCard__item'>
             <div className="card__cover">
@@ -62,11 +65,11 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
                             </NavLink>
                         </h2>
                     </div>
-                    <div className="company__user">
+                    {/* <div className="company__user">
                         <h5>
                             {companyUser}
                         </h5>
-                    </div>
+                    </div> */}
                     <div className="company__data">
                         <div className="company__products compDataStyle">
                             <h3>
@@ -84,61 +87,87 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
                                 services
                             </p>
                         </div>
-                        <div className="company__owner compDataStyle">
+                        {/* <div className="company__owner compDataStyle">
                             <h3>
                                 {ownerCount}
                             </h3>
                             <p>
                                 orders
                             </p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 {
                     
                     <div className="card__actions">
-                    {
-                        (token) ? 
-                            (currentFollowedCompanies) ?
-                            currentFollowedCompanies?.find(el => +el?.companyId === +companyId) ?
-                                <button 
-                                    className='pageMainBtnStyle unFollowCompanyBtn'
-                                    onClick={()=> handleToggleFollowCompany(companyId)}
-                                >
-                                    unFollow
-                                </button>
-                                :
-                                <button 
+                        {
+                            token ? (
+                                // Check if loginType is 'user' and verified
+                                localStorage.getItem('loginType') === 'user' && Cookies.get('verified') === 'false' ? (
+                                    <button
+                                        className='pageMainBtnStyle followCompanyBtn'
+                                        onClick={() => {
+                                            toast.error('You need to verify your account first!');
+                                            setTimeout(() => {
+                                                navigate('/user-verification');
+                                                scrollToTop();
+                                            }, 1000);
+                                        }}
+                                    >
+                                        + follow
+                                    </button>
+                                ) : (
+                                    currentFollowedCompanies ? (
+                                        currentFollowedCompanies.find(el => +el?.companyId === +companyId) ? (
+                                            <button
+                                                className='pageMainBtnStyle unFollowCompanyBtn'
+                                                onClick={() => handleToggleFollowCompany(companyId)}
+                                            >
+                                                unFollow
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className='pageMainBtnStyle followCompanyBtn'
+                                                onClick={() => handleToggleFollowCompany(companyId)}
+                                            >
+                                                + follow
+                                            </button>
+                                        )
+                                    ) : ''
+                                )
+                            ) : (
+                                <button
                                     className='pageMainBtnStyle followCompanyBtn'
-                                    onClick={() => handleToggleFollowCompany(companyId)}
+                                    onClick={() => {
+                                        toast.error(`${loginType === 'user' ? 'You Should Login First!' : 'Only Users Can Follow Companies!'}`);
+                                        if (loginType === 'user') {
+                                            setTimeout(() => {
+                                                navigate('/login');
+                                                scrollToTop();
+                                            }, 1000);
+                                        }
+                                    }}
                                 >
                                     + follow
                                 </button>
-                            : ''
-                        : 
-                        <button 
-                            className='pageMainBtnStyle followCompanyBtn'
-                            onClick={()=> {
-                                toast.error(`${loginType === 'user' ? 'You Should Login First!' : 'Only Users Can Follow Companies!'}`);
-                                if(loginType === 'user'){
-                                    setTimeout(()=>{
-                                        navigate('/login');
-                                        scrollToTop();
-                                    },1000);
-                                };
-                            }}
-                        >
-                            + follow
-                        </button>
-                    }
+                            )
+                        }
                     </div>
                 }
                 
             </div>
-            <div className="card__description">
+             <div className="card__description">
                 <p title={cardDesc}>
-                {cardDesc.length > 200 ? `${cardDesc.slice(0, 200)}...` : cardDesc}
+                {expandedDesc || cardDesc.length <= 200
+                    ? cardDesc
+                    : `${cardDesc.slice(0, 200)}...`}
+                    {/* {cardDesc.length > 200 && (
+                        <span className="read-more-btn" onClick={toggleDescription}>
+                            {expandedDesc ? 'Read Less' : 'Read More'}
+                        </span>
+                    )} */}
                 </p>
+                
             </div>
         </div>
     )

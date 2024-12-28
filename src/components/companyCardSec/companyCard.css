@@ -1,6 +1,7 @@
 .companyCard__item{
     background: var(--primary-white);
     border-radius: 9px;
+    width: 100%;
 }
 .companyCard__item .card__content{
     display: flex;
@@ -9,9 +10,12 @@
     padding:20px 30px;
 }
 .card__content .company__profile{
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     margin-top: -40px;
+    background: #e3e3e3;
+    border-radius: 50%;
+    /* padding: 3px; */
     /* margin-left: 30px; */
 }
 .card__content .company__profile img{

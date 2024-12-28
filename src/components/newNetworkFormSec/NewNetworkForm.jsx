@@ -78,7 +78,7 @@ export default function NewNetworkForm({token}) {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const submissionData = new FormData();
-
+        const toastId = toast.loading('Loading...');
         Object.keys(formData).forEach((key) => {
             submissionData.append(key, formData[key]);
         });
@@ -97,18 +97,30 @@ export default function NewNetworkForm({token}) {
 
                 navigate('/profile/network')
                 scrollToTop()
-                toast.success(response?.data?.message || (id ? 'network updated successfully' : 'network added successfully'));
+                toast.success(response?.data?.message || (id ? 'network updated successfully' : 'network added successfully'),{
+                    id: toastId,
+                    duration: 1000
+                });
             } else {
-                toast.error(id ? 'Failed to update the network' : 'Failed to add network');
+                toast.error(id ? 'Failed to update the network' : 'Failed to add network',{
+                        id: toastId,
+                        duration: 2000
+                });
             };
         }  catch (error) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
                     .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
+                        id: toastId,
+                        duration: 2000
+                }); // Preserve line breaks
             } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                        id: toastId,
+                        duration: 2000
+                });
             }
         }
     };
@@ -135,7 +147,7 @@ export default function NewNetworkForm({token}) {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="catalog__new__input">
-                                        <label htmlFor="name">Partner Name<span className="requiredStar"> *</span>
+                                        <label htmlFor="name">Add Company Name<span className="requiredStar"> *</span>
                                         <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                         </label>
                                         <input
@@ -153,7 +165,7 @@ export default function NewNetworkForm({token}) {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="catalog__new__input">
-                                        <label htmlFor="label">partner Label <span className="requiredStar"> *</span>
+                                        <label htmlFor="label">Type of Connection<span className="requiredStar"> *</span>
                                         <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                         </label>
                                         <select
@@ -162,7 +174,7 @@ export default function NewNetworkForm({token}) {
                                             value={formData?.label}
                                             onChange={handleInputChange}
                                         >
-                                            <option value="" disabled>Select partner label</option>
+                                            <option value="" disabled>Select Type of Connection</option>
                                             <option value="client">Client</option>
                                             <option value="partener">Partner</option>
                                             {/* <option value="agent">Agent</option> */}
@@ -170,7 +182,9 @@ export default function NewNetworkForm({token}) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="upload__image__btn">
+                            <div className="upload__image__btn ">
+                                <label htmlFor="label" className='mb-2'>Add Company logo<span className="requiredStar"> *</span>
+                                </label>
                                 <input
                                     type="file"
                                     name="logo"

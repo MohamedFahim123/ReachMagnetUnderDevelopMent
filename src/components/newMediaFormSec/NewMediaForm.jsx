@@ -81,6 +81,7 @@ export default function NewMediaForm({token}) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const toastId = toast.loading('Loading...');
         const submissionData = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key === 'image' && formData[key] instanceof File) {
@@ -103,18 +104,30 @@ export default function NewMediaForm({token}) {
             if (response.status === 200) {
                 navigate('/profile/media');
                 scrollToTop()
-                toast.success(response?.data?.message || (id ? 'Media item Updated Successfully!' : 'Media item added successfully!'));
+                toast.success(response?.data?.message || (id ? 'Media item Updated Successfully!' : 'Media item added successfully!'),{
+                        id: toastId,
+                        duration: 1000
+                });
             } else {
-                toast.error(id ? 'Failed to update Media item!' : 'Failed to add Media item!');
+                toast.error(id ? 'Failed to update Media item!' : 'Failed to add Media item!',{
+                        id: toastId,
+                        duration: 1000
+                });
             }
         } catch (error) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
                     .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
+                        id: toastId,
+                        duration: 1000
+                }); // Preserve line breaks
             } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                        id: toastId,
+                        duration: 1000
+                });
             }
         }
     };

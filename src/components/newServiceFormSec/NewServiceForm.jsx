@@ -41,7 +41,32 @@ export default function NewServiceForm({ token }) {
         status: 'active',
         code: '',
         image: '',
+        options: []
     });
+    const handleAddOption = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            options: [...prevState.options, { attribute: '', values: [{ name: '', price: '' }] }]
+        }));
+    };
+
+    const handleAddValue = (optionIndex) => {
+        const updatedOptions = [...formData.options];
+        updatedOptions[optionIndex].values.push({ name: '', price: '' });
+        setFormData({ ...formData, options: updatedOptions });
+    };
+
+    const handleOptionChange = (index, field, value) => {
+        const updatedOptions = [...formData.options];
+        updatedOptions[index][field] = value;
+        setFormData({ ...formData, options: updatedOptions });
+    };
+
+    const handleValueChange = (optionIndex, valueIndex, field, value) => {
+        const updatedOptions = [...formData.options];
+        updatedOptions[optionIndex].values[valueIndex][field] = value;
+        setFormData({ ...formData, options: updatedOptions });
+    };
 
     useEffect(() => {
         if (id && loginType === 'employee') {
@@ -127,15 +152,23 @@ export default function NewServiceForm({ token }) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const toastId = toast.loading('Loading...');
         const submissionData = new FormData();
         Object.keys(formData).forEach((key) => {
-            if (key === 'image' && formData[key] instanceof File) {
+            if (key !== 'options' && key === 'image' && formData[key] instanceof File) {
                 submissionData.append(key, formData[key]);
-            } else {
+            } 
+            else {
                 submissionData.append(key, formData[key]);
             };
         });
-
+        formData.options.forEach((option, optionIndex) => {
+            submissionData.append(`options[${optionIndex}][attribute]`, option.attribute);
+            option.values.forEach((value, valueIndex) => {
+                submissionData.append(`options[${optionIndex}][values][${valueIndex}][name]`, value.name);
+                submissionData.append(`options[${optionIndex}][values][${valueIndex}][price]`, value.price);
+            });
+        });
         try {
             const slugCompletion = id ? `update-service/${id}` : 'add-service';
             const response = await axios.post(`${baseURL}/${loginType}/${slugCompletion}`, submissionData, {
@@ -149,18 +182,30 @@ export default function NewServiceForm({ token }) {
             if (response.status === 200) {
                 navigate('/profile/service');
                 scrollToTop()
-                toast.success(response?.data?.message || (id ? 'Service item Updated Successfully!' : 'service item added successfully!'));
+                toast.success(response?.data?.message || (id ? 'Service item Updated Successfully!' : 'service item added successfully!'),{
+                    id: toastId,
+                    duration: 1000
+                });
             } else {
-                toast.error(id ? 'Failed to update service item!' : 'Failed to add service item!');
+                toast.error(id ? 'Failed to update service item!' : 'Failed to add service item!',{
+                    id: toastId,
+                    duration: 2000
+                });
             }
         } catch (error) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
                     .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
+                    id: toastId,
+                    duration: 2000
+                }); // Preserve line breaks
             } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                    id: toastId,
+                    duration: 2000
+                });
             }
         }
     };
@@ -315,6 +360,66 @@ export default function NewServiceForm({ token }) {
                                                     className="form-control"
                                                 />
                                             </div>
+                                            <div className="row">
+        <div className="col-lg-12">
+            <div className="catalog__new__input">
+                <label>Options</label>
+                <button type="button" className="btn btn-link" onClick={handleAddOption}>Add Option</button>
+                {formData?.options?.map((option, index) => (
+                    <div key={index} className="option-group">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <input
+                                    type="text"
+                                    placeholder="Attribute (e.g., Storage)"
+                                    value={option?.attribute}
+                                    onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                    className="form-control"
+                                />
+                            </div>
+                        </div>
+                        {option?.values?.map((value, valueIndex) => (
+                            <div key={valueIndex} className="row">
+                                <div className="col-lg-6">
+                                    <input
+                                        type="text"
+                                        placeholder="Option Name (e.g., 128 GB)"
+                                        value={value?.name}
+                                        onChange={(e) =>
+                                            handleValueChange(
+                                                index,
+                                                valueIndex,
+                                                'name',
+                                                e.target.value
+                                            )
+                                        }
+                                        className="form-control"
+                                    />
+                                </div>
+                                <div className="col-lg-6">
+                                    <input
+                                        type="text"
+                                        placeholder="Price Impact"
+                                        value={value?.price}
+                                        onChange={(e) =>
+                                            handleValueChange(
+                                                index,
+                                                valueIndex,
+                                                'price',
+                                                e.target.value
+                                            )
+                                        }
+                                        className="form-control"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                        <button type="button" onClick={() => handleAddValue(index)} className="btn btn-link">Add Value</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
                                             <div className="form__submit__button">
                                                 <button type="submit" className="btn btn-primary">
                                                     {id ? 'Update Service' : 'Add Service'}

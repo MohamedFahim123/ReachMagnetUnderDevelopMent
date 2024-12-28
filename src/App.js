@@ -181,7 +181,7 @@ function App() {
 
         {/* <Route path='/lastMinuteDeals/:singleDeal' element={<LastMinuteDetails token={token} />} /> */}
         <Route path='/About-ReachMagnet' element={<AboutUs />} />
-        <Route path='/contact-us' element={<MyContactUs />} />
+        <Route path='/contact-us' element={<MyContactUs token={token} />} />
         <Route path='/all-companies' element={<MyAllCompanies token={token} />} />
         <Route path='/show-company/:companyId' element={<SingleCompany token={token} />} />
         <Route path='/show-company/:companyId/catalog-details/:catalogId' element={<MyCatalogDetails token={token} />} />

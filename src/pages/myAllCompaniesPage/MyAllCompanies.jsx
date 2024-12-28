@@ -133,6 +133,7 @@ export default function MyAllCompanies() {
             scrollToTop(500);
         }
     };
+console.log(companies);
 
     return (
         <>
@@ -294,14 +295,20 @@ export default function MyAllCompanies() {
                                                 <div key={el?.id} className="col-12">
                                                     <div className="CompanyContentItem">
                                                         <div className="compImage">
+                                                            <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
                                                             <img src={el?.companyLogo} alt={el?.companyName} />
+                                                            </NavLink>
                                                         </div>
                                                         <div className="compMainInfo">
-                                                            <h5 className="mb-2">{el?.companyName}</h5>
+                                                            <h5 className="mb-2">
+                                                                <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                                                {el?.companyName}
+                                                                </NavLink>
+                                                            </h5>
                                                             <div className="companySubInfo mb-2">
                                                                 <div className="subInfoItem">
                                                                     <img src={userIcon} alt="user-icon" />
-                                                                    <span>{el?.companySubCategory}</span>
+                                                                    <span>{el?.companyIndustries[0]?.industryName}</span>
                                                                 </div>
                                                                 <div className="subInfoItem">
                                                                     <img src={locationIcon} alt="location-icon" />
@@ -309,7 +316,11 @@ export default function MyAllCompanies() {
                                                                 </div>
                                                             </div>
                                                             <div className="companyDescrip mb-2">
-                                                                <p>{el?.companyAboutUs}</p>
+                                                                <p className="cursorPointer" title={el?.companyAboutUs}>
+                                                                {el?.companyAboutUs?.length > 200
+                                                                ? `${el.companyAboutUs.slice(0, 200)}...`
+                                                                : el.companyAboutUs}
+                                                                </p>
                                                             </div>
                                                             <div className="companyMainCountry">
                                                                 <i className="bi bi-crosshair2"></i>

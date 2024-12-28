@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { Offcanvas } from 'react-bootstrap';
-import icon1 from '../../assets/sidebar-icons/key-square.svg';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import icon2 from '../../assets/sidebar-icons/3d-square 1.svg';
-import icon3 from '../../assets/sidebar-icons/user-square 1.svg';
-import icon4 from '../../assets/sidebar-icons/wallet-money 2.svg';
-import icon5 from '../../assets/sidebar-icons/status-up.svg';
+import icon9 from '../../assets/sidebar-icons/discount-shape 1.svg';
 import icon6 from '../../assets/sidebar-icons/messages-3.svg';
 import icon7 from '../../assets/sidebar-icons/notification.svg';
-import icon8 from '../../assets/sidebar-icons/call-add.svg';
-import icon9 from '../../assets/sidebar-icons/discount-shape 1.svg';
-import icon10 from '../../assets/sidebar-icons/message-question 1.svg';
 import icon11 from '../../assets/sidebar-icons/people.svg';
-import currencyIcon from '../../assets/icons/cash-stack.svg'
+import icon5 from '../../assets/sidebar-icons/status-up.svg';
+import icon3 from '../../assets/sidebar-icons/user-square 1.svg';
+import icon4 from '../../assets/sidebar-icons/wallet-money 2.svg';
+import SideBar from '../sideBar/SideBar';
 
 export default function MyNewSidebarDash({ token }) {
     const location = useLocation();
     const [show, setShow] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+    const [collapsed, setCollapsed] = useState(false);
     const [showSettingsSubmenu, setShowSettingsSubmenu] = useState(false);
     const activePath = location.pathname;
     const navigate = useNavigate();
@@ -53,7 +51,7 @@ export default function MyNewSidebarDash({ token }) {
         { title: "Followers", link: "/profile/followers", icon: icon11 },
         { title: "Product Catalog", link: "/profile/catalog", icon: icon2 },
         { title: "Services", link: "/profile/service", icon: icon2 },
-        { title: "Medias", link: "/profile/media", icon: icon2 },
+        { title: "Media", link: "/profile/media", icon: icon2 },
         { title: "E-commerce Products", link: "/profile/products", icon: icon4 },
         { title: "Network", link: "/profile/network", icon: icon4 },
         { title: "E-commerce Orders", link: "/profile/product-order", icon: icon4 },
@@ -101,6 +99,13 @@ export default function MyNewSidebarDash({ token }) {
                 title: "Settings",
                 link: "/profile/profile-settings",
                 icon: icon9,
+                subminue: (localStorage.getItem('loginType') === 'user') ? [
+                    { title: "Profile Settings", link: "/profile/profile-settings" }
+                ] : [
+                    { title: "Profile Settings", link: "/profile/profile-settings" },
+                    { title: "Business Settings", link: "/profile/business-settings" },
+                    { title: "Employees Management", link: "/profile/users-management" }
+                ]
             }
         ];
     }
@@ -221,9 +226,9 @@ export default function MyNewSidebarDash({ token }) {
                         <Offcanvas.Header closeButton>
                             <Offcanvas.Title>
                                 <h1 className="logo__text cursorPointer">
-                                   <NavLink className={'nav-link'} to={'/'}>
-                                   ReachMag<span className='letter__color'>n</span>et
-                                   </NavLink>
+                                    <NavLink className={'nav-link'} to={'/'}>
+                                        ReachMag<span className='letter__color'>n</span>et
+                                    </NavLink>
                                 </h1>
                             </Offcanvas.Title>
                         </Offcanvas.Header>
@@ -233,14 +238,19 @@ export default function MyNewSidebarDash({ token }) {
                     </Offcanvas>
                 </>
             ) : (
-                <div className="mySidebar__handler">
-                    <div className="container">
-                                <h1 className="logo__text cursorPointer">
-                                   <NavLink className={'nav-link'} to={'/'}>
-                                   ReachMag<span className='letter__color'>n</span>et
-                                   </NavLink>
-                                </h1>
-                        {renderSidebarContent()}
+                <div className="mySidebar__handler mySideBarNewContainer">
+                    <div>
+                        {
+                            !collapsed &&
+                            <h1 className="logo__text mb-3 cursorPointer">
+                                <NavLink className={'nav-link'} to={'/'}>
+                                    ReachMag<span className='letter__color'>n</span>et
+                                </NavLink>
+                            </h1>
+                        }
+                        <SideBar collapsed={collapsed} setCollapsed={setCollapsed} sidebarItems={sidebarItems} />
+
+                        {/* {renderSidebarContent()} */}
                     </div>
                 </div>
             )}

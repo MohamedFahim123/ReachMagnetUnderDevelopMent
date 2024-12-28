@@ -6,8 +6,10 @@
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
+    width: 100%;
 }
 .headOfNews__card-leftPart .image img {
+    background: #e3e3e3;
     width: 50px;
     height: 50px;
     border-radius: 50%;

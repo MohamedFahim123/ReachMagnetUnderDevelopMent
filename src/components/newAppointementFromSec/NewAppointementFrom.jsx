@@ -42,6 +42,7 @@ export default function NewAppointementFrom({token}) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const toastId = toast.loading('Loading...');
         const submissionData = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key === 'image' && formData[key] instanceof File) {
@@ -63,18 +64,30 @@ export default function NewAppointementFrom({token}) {
             if (response.status === 200) {
                 navigate('/profile/appointments');
                 scrollToTop()
-                toast.success(response?.data?.message || ('Appointments item added successfully!'));
+                toast.success(response?.data?.message || ('Appointments item added successfully!'),{
+                    id: toastId,
+                    duration: 1000
+                });
             } else {
-                toast.error('Failed to add Appointments item!');
+                toast.error('Failed to add Appointments item!',{
+                    id: toastId,
+                    duration: 2000
+                });
             }
         }  catch (error) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
                     .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
+                    id: toastId,
+                    duration: 2000
+                }); // Preserve line breaks
             } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                    id: toastId,
+                    duration: 2000
+                });
             }
         }
     };

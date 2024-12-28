@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { baseURL } from '../../functions/baseUrl';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export default function UserVirificationFormSec({ token }) {
   const navigate = useNavigate();
@@ -23,6 +24,35 @@ export default function UserVirificationFormSec({ token }) {
     resolver: zodResolver(UserVirificationSchema),
   });
 
+  // const onSubmit = async (data) => {
+  //   const toastId = toast.loading('Loading...');
+  //   await axios
+  //     .post(`${baseURL}/user/verify-account`, data, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //         Accept: 'application/json',
+  //       },
+  //     })
+  //     .then((res) => {
+  //       Cookies.set('verified', 'true', { expires: 365 });
+  //       toast.success(res?.data?.message || 'Verified Successfully!', {
+  //         id: toastId,
+  //         duration: 1000,
+  //       });
+  //       navigate(`/profile/profile-settings`);
+  //       toast.success('your account will be verified by our admin team ... within 7 days',{
+  //         duration: 7000,
+  //       })
+  //     })
+  //     .catch((err) => {
+  //       toast.error(err?.response?.data?.message || 'Something Went Wrong!', {
+  //         id: toastId,
+  //         duration: 1000,
+  //       });
+  //     });
+  // };
+
   const onSubmit = async (data) => {
     const toastId = toast.loading('Loading...');
     await axios
@@ -34,23 +64,35 @@ export default function UserVirificationFormSec({ token }) {
         },
       })
       .then((res) => {
+        Cookies.set('verified', 'true', { expires: 365 });
         toast.success(res?.data?.message || 'Verified Successfully!', {
           id: toastId,
           duration: 1000,
         });
         navigate(`/profile/profile-settings`);
-        toast.success('your account will be verified by our admin team ... within 7 days',{
+        toast.success('Your account will be verified by our admin team within 7 days.', {
           duration: 7000,
-        })
+        });
       })
       .catch((err) => {
-        toast.error(err?.response?.data?.message || 'Something Went Wrong!', {
-          id: toastId,
-          duration: 1000,
-        });
+        toast.dismiss(toastId);
+  
+        if (err?.response?.status === 422 && err?.response?.data?.errors) {
+          // Display all error messages
+          Object.entries(err.response.data.errors).forEach(([key, messages]) => {
+            messages.forEach((message) => {
+              toast.error(message, { duration: 3000 });
+            });
+          });
+        } else {
+          // Handle generic error
+          toast.error(err?.response?.data?.message || 'Something Went Wrong!', {
+            duration: 3000,
+          });
+        }
       });
   };
-
+  
   const handleResendCode = async () => {
     const toastId = toast.loading('Loading...');
     setIsButtonDisabled(true);

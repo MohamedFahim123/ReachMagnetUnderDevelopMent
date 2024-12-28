@@ -107,7 +107,7 @@ export default function BookAppointMentFrom({ show, handleClose, companyId, comp
                                 {
                                     selectedAppointMent?.slots?.map((slot, idx) => (
                                         (slot?.booked === false) &&
-                                        <option key={idx} value={idx}>{slot?.time}</option>
+                                        <option key={idx} value={idx}>{slot?.show_time}</option>
                                     ))
                                 }
                             </select>

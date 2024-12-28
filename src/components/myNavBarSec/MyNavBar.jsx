@@ -3,7 +3,7 @@ import './myNavBar.css';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Cookies from 'js-cookie';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { scrollToTop } from '../../functions/scrollToTop';
 import axios from 'axios';
 import { baseURL } from '../../functions/baseUrl';
@@ -21,6 +21,7 @@ import { GetAllRegionsStore } from '../../store/AllResions';
 import { GetAllCitizenshipsStore } from '../../store/AllCitizenships';
 
 export default function MyNavBar({ scrollToggle, token, loginType, totalCartItemsInCart, totalWishlistItems, fireMessage, setFireNotification, fireNotification }) {
+    const navigate = useNavigate()
     const [showOffcanvas, setShowOffcanvas] = useState(false);
     const profileData = Cookies.get('currentLoginedData');
     const getAllChats = GetAllChatsStore((state) => state.getAllChats);
@@ -81,12 +82,20 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
                 Cookies.remove('currentUpdatedCompanyData');
                 Cookies.remove('currentUpdatingActivities');
                 Cookies.remove('allMessagesViewd');
+                // Cookies.remove('verified');
+                if (loginType === 'user') {
+                    Cookies.remove('verified');
+                }
+    
                 localStorage.removeItem('updatingData');
                 localStorage.removeItem('updatingCompany');
                 localStorage.removeItem('updatingProfile');
                 localStorage.removeItem('updatingCompanyActivities');
             } catch (error) {
                 Cookies.remove('authToken');
+                if (loginType === 'user') {
+                    Cookies.remove('verified');
+                }
                 toast.error(`${JSON.stringify(error?.response?.data?.message)}`);
                 window.location.reload();
             };
@@ -94,10 +103,10 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
         closeOffcanvas();
         fetchData();
     };
-
+    
     return (
         <>
-            <Navbar expand="lg" className={`nav__Bg ${scrollToggle ? "nav__fixed py-3 navTransformationDown" : "nav__relative pb-3"} align-items-center`}>
+            <Navbar expand="lg" className={`nav__Bg ${scrollToggle ? "nav__fixed navTransformationDown" : "nav__relative pb-3"} align-items-center`}>
                 <Container>
                     <Navbar.Brand className='d-flex align-items-center'>
                         <NavLink className='logo__text' to={`/`}>
@@ -116,20 +125,30 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
                             >
                                 <NotificationIcon setFireNotification={setFireNotification} fireNotification={fireNotification} token={token} />
                             </NavLink>
-                            <NavLink onClick={() => {
-                                scrollToTop();
-                            }}
+                            <NavLink
+                                onClick={(e) => {
+                                    const isVerified = Cookies.get('verified') === 'true';
+                                    if ( !isVerified && loginType === 'user') {
+                                        // Prevent navigation and prompt verification
+                                        e.preventDefault();
+                                        toast.error('You need to verify your account first!');
+                                        setTimeout(() => {
+                                            navigate('/user-verification');
+                                            scrollToTop();
+                                        }, 1000);
+                                    } else {
+                                        // Proceed with default navigation
+                                        scrollToTop();
+                                    }
+                                }}
                                 to={'/your-messages'}
                                 title='your messages'
                                 className='nav-link nav__link__style logoutBtn showNumHandler addResponsive position-relative'
                                 aria-label="Close"
                             >
-                                <button className={`btn__companyActions messageMainBtn online__btn`} >
+                                <button className={`btn__companyActions messageMainBtn online__btn`}>
                                     <img src={messageIcon} alt="message-icon" />
-                                    {
-                                        allRead === false &&
-                                        <span className="red__dot"></span>
-                                    }
+                                    {allRead === false && <span className="red__dot"></span>}
                                 </button>
                             </NavLink>
                         </div>
@@ -207,34 +226,63 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
 
                                         </NavLink>
                                         <NavLink
-                                            to={'/your-messages'}
-                                            title='Your Messages'
-                                            className={`nav-link nav__link__style logoutBtn showNumHandler position-relative`}
-                                            aria-label="Close"
-                                        >
-                                            <button
-                                                style={{ width: '50px', height: '50px', background: 'rgba(221, 221, 221, 0.719)', borderRadius: '50%' }}
-                                                className={`btn__companyActions online__btn`} >
-                                                <img src={messageIcon} alt="message-icon" />
-                                                {
-                                                    allRead === false &&
-                                                    <span className="red__dot"></span>
-                                                }
-                                            </button>
-                                        </NavLink>
-                                        <NavLink
-                                            onClick={() => {
-                                                scrollToTop();
-                                            }}
-                                            aria-label="Close"
-                                            className='nav-link nav__link__style nav__profileData'
-                                            to='/profile/profile-settings'
-                                            title='Profile'
-                                        >
-                                            <img src={profileData ? JSON.parse(profileData)?.image : defaultImage}
-                                                alt='img-check'
-                                            />
-                                        </NavLink>
+    onClick={(e) => {
+        const isVerified = Cookies.get('verified') === 'true';
+
+        if (!isVerified && loginType === 'user') {
+            // Prevent navigation and prompt verification
+            e.preventDefault();
+            toast.error('You need to verify your account first!');
+            setTimeout(() => {
+                navigate('/user-verification');
+            }, 1000);
+        }
+    }}
+    to={'/your-messages'}
+    title='Your Messages'
+    className={`nav-link nav__link__style logoutBtn showNumHandler position-relative`}
+    aria-label="Close"
+>
+    <button
+        style={{
+            width: '50px',
+            height: '50px',
+            background: 'rgba(221, 221, 221, 0.719)',
+            borderRadius: '50%',
+        }}
+        className={`btn__companyActions online__btn`}
+    >
+        <img src={messageIcon} alt="message-icon" />
+        {allRead === false && <span className="red__dot"></span>}
+    </button>
+</NavLink>
+<NavLink
+    onClick={(e) => {
+        const isVerified = Cookies.get('verified') === 'true';
+
+        if (loginType === 'user' && !isVerified) {
+            // Prevent navigation and prompt verification
+            e.preventDefault();
+            toast.error('You need to verify your account first!');
+            setTimeout(() => {
+                navigate('/user-verification');
+                scrollToTop();
+            }, 1000);
+        } else {
+            // Proceed with navigation
+            scrollToTop();
+        }
+    }}
+    aria-label="Close"
+    className='nav-link nav__link__style nav__profileData'
+    to='/profile/profile-settings'
+    title='Profile'
+>
+    <img
+        src={profileData ? JSON.parse(profileData)?.companyLogo ? JSON.parse(profileData)?.companyLogo : JSON.parse(profileData)?.image: defaultImage}
+        alt='img-check'
+    />
+</NavLink>
 
                                         {/* {
                                             loginType === 'user' &&
@@ -320,18 +368,35 @@ export default function MyNavBar({ scrollToggle, token, loginType, totalCartItem
                                         <NavLink onClick={handleLogout} to='/' title='Logout' className='nav-link nav__link__style logoutBtn'>
                                             <i className="bi bi-box-arrow-left"></i>
                                         </NavLink>
-                                        <NavLink onClick={() => {
-                                            scrollToTop();
-                                            closeOffcanvas();
-                                        }}
-                                            className='nav-link nav__link__style nav__profileData'
-                                            to='/profile/profile-settings'
-                                            title='Profile'
-                                        >
-                                            <img src={profileData ? JSON.parse(profileData)?.image : defaultImage}
-                                                alt='img-check'
-                                            />
-                                        </NavLink>
+                                        <NavLink
+    onClick={(e) => {
+        const isVerified = Cookies.get('verified') === 'true'; // Check verified status
+
+        if (loginType === 'user' && !isVerified) {
+            // Prevent navigation for unverified users
+            e.preventDefault();
+            toast.error('You need to verify your account first!');
+            setTimeout(() => {
+                navigate('/user-verification');
+                scrollToTop();
+                closeOffcanvas();
+            }, 1000);
+        } else {
+            // Allow navigation for verified users or other login types
+            scrollToTop();
+            closeOffcanvas();
+        }
+    }}
+    className='nav-link nav__link__style nav__profileData'
+    to='/profile/profile-settings'
+    title='Profile'
+>
+    <img
+        src={profileData ? JSON.parse(profileData)?.companyLogo ? JSON.parse(profileData)?.companyLogo : JSON.parse(profileData)?.image: defaultImage}
+        alt='img-check'
+    />
+</NavLink>
+
 
                                     </>
                                 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './notificationIcon.css'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { baseURL } from '../../functions/baseUrl'
 import toast from 'react-hot-toast'
@@ -13,7 +13,27 @@ export default function NotificationIcon({ token, fireNotification, setFireNotif
     const [notsCount, setNotsCount] = useState(0)
     const notificationRef = useRef(null);
     const iconRef = useRef(null);
-
+    const navigate = useNavigate()
+    const handleNavigation = (target, id) => {
+        if (target === 'booked_appointments') {
+            navigate(`/profile/booked-appointments`);
+        } else if (target === 'one_click_quotation') {
+            navigate(`/profile/companyoneclick-quotations/${id}`);
+        } else if (target === 'quotation') {
+            navigate(`/profile/quotations/${id}`);
+        } else if (target === 'quotation_order') {
+            navigate(`/profile/quotation-orders/${id}`);
+        } else if (target === 'followers') {
+            console.log('Navigating to /profile/followers');
+            navigate(`/profile/followers`);
+        }else if (target === 'new_industry') {
+            navigate(`/show-company/${id}`);
+        }
+         else {
+            console.warn(`Unhandled target: ${target}`);
+        }
+        setShowNotifications(false);
+    };
     const toggleNotifications = () => {
         setShowNotifications(prevState => !prevState);
     };
@@ -61,26 +81,6 @@ export default function NotificationIcon({ token, fireNotification, setFireNotif
         })();
     }, [fireNotification])
 
-    // const getLatestNotifications = async () => {
-    //     // Apply rate limiting
-    //     if (!rateLimiter('getLatestNotifications')) {
-    //         toast.error('You are requesting notifications too quickly. Please wait a moment.');
-    //         return;
-    //     }
-
-    //     const slug = loginType === 'user' ? `${loginType}/latest-notifications` : `${loginType}/company-latest-notifications`;
-    //     try {
-    //         const response = await axios.get(`${baseURL}/${slug}?t=${new Date().getTime()}`, {
-    //             headers: { Authorization: `Bearer ${token}` }
-    //         });
-    //         setNotsItems(response?.data?.data?.notifications);
-    //         setNotsCount(response?.data?.data?.count);
-    //         setFireNotification(false);
-    //     } catch (error) {
-    //         handleApiError(error, setUnAuth); // Use centralized error handling
-    //     }
-    // };
-
     const markLatestRead = async () => {
         // Apply rate limiting
         if (!rateLimiter('markLatestRead')) {
@@ -100,28 +100,14 @@ export default function NotificationIcon({ token, fireNotification, setFireNotif
     };
 
 
-    // const handleNavigation = (target, id) => {
-    //     if (target === 'booked_appointments') {
-    //         navigate(`/profile/booked-appointments`);
-    //     } else if (target === 'one_click_quotation') {
-    //         navigate(`/profile/companyoneclick-quotations/${id}`);
-    //     } else if (target === 'quotation') {
-    //         navigate(`/profile/quotations/${id}`);
-    //     } else if (target === 'quotation_order') {
-    //         navigate(`/profile/quotation-orders/${id}`);
-    //     } else if (target === 'followers') {
-    //         navigate(`/profile/followers`);
-    //     } else {
-    //         console.warn(`Unhandled target: ${target}`);
-    //     }
+
+
+
+    // window.onscroll = () => {
+    //     if (showNotifications === true) {
+    //         setShowNotifications(false);
+    //     };
     // };
-
-
-    window.onscroll = () => {
-        if (showNotifications === true) {
-            setShowNotifications(false);
-        };
-    };
 
     useEffect(() => {
         getLatestNotifications();
@@ -163,6 +149,13 @@ export default function NotificationIcon({ token, fireNotification, setFireNotif
 
                                         key={idx}
                                         className="notItem d-flex align-items-center gap-2"
+                                        onClick={(event) => {
+                                            console.log('Clicked:', el);
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                            handleNavigation(el?.target, el?.sender_id);
+                                        }}
+                                        style={{ cursor: 'pointer' }}
                                     >
                                         <img src={el?.image} alt="" />
                                         <div className="itemInfo">
@@ -172,17 +165,9 @@ export default function NotificationIcon({ token, fireNotification, setFireNotif
                                             <p>
                                                 {el?.message}
                                             </p>
-                                            {/* <button 
-                                            onClick={
-                                                () => handleNavigation(el.target, el.id)
-                                                } 
-                                            >
-                                                view details
-                                            </button> */}
+                                            
                                         </div>
-                                        {/* <NavLink to={() => handleNavigation(el.target, el.id)} className={'nav-link'}>
-                                            view details
-                                        </NavLink> */}
+                                        
                                     </div>
                                 ))
                             }

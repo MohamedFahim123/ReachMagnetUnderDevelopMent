@@ -19,6 +19,8 @@
 }
 .yourAvatarImage{
     position: relative;
+    background: #e3e3e3;
+    border-radius: 50%;
 }
 .yourAvatarImage span{
     position: absolute;

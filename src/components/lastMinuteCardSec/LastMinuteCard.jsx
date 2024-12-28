@@ -44,7 +44,10 @@ export default function LastMinuteCard({
                         <NavLink target="_blank" className={'nav-link'} to={productLink ? productLink : ''} onClick={() => {
                             scrollToTop();
                         }}>
-                            <h3 className='text-capitalize' title={productName}> {productName.length > 14 ? `${productName.slice(0, 14)}...` : productName}</h3>
+                            <h3 className='text-capitalize' title={productName}> 
+                                {productName.length > 20 ? `${productName.slice(0, 25)}...` : productName}
+                                {/* {productName} */}
+                            </h3>
 
                         </NavLink>
                         {showCustomContent ? (

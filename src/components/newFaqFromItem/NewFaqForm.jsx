@@ -74,6 +74,7 @@ export default function NewFaqForm({ token }) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const toastId = toast.loading('Loading...');
         const submissionData = new FormData();
         Object.keys(formData).forEach((key) => {
             submissionData.append(key, formData[key]);
@@ -90,18 +91,30 @@ export default function NewFaqForm({ token }) {
             if (response.status === 200) {
                 navigate('/profile/faqs')
                 scrollToTop()
-                toast.success(response?.data?.message || (id ? 'Faq updated successfully' : 'Faq added successfully'));
+                toast.success(response?.data?.message || (id ? 'Faq updated successfully' : 'Faq added successfully'),{
+                        id: toastId,
+                        duration: 1000
+                });
             } else {
-                toast.error(id ? 'Failed to update Faq item' : 'Failed to add Faq item');
+                toast.error(id ? 'Failed to update Faq item' : 'Failed to add Faq item',{
+                        id: toastId,
+                        duration: 2000
+                });
             }
         }  catch (error) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
                     .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
+                        id: toastId,
+                        duration: 2000
+                }); // Preserve line breaks
             } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                        id: toastId,
+                        duration: 2000
+                });
             }
         }
     };
@@ -141,7 +154,7 @@ export default function NewFaqForm({ token }) {
                                         </div>
                                         <div className="col-lg-6">
                                             <div className="catalog__new__input">
-                                                <label htmlFor="question_ar">Faq Question in Arabic <span className="requiredStar"> *</span></label>
+                                                <label htmlFor="question_ar">Faq Question in Arabic <span className='optional'>(optional)</span></label>
                                                 <input
                                                     type="text"
                                                     name="question_ar"
@@ -168,7 +181,7 @@ export default function NewFaqForm({ token }) {
                                         </div>
                                         <div className="col-lg-8">
                                             <div className="catalog__new__input">
-                                                <label htmlFor="answer_ar">Answer in Arabic <span className="requiredStar"> *</span></label>
+                                                <label htmlFor="answer_ar">Answer in Arabic <span className='optional'>(optional)</span></label>
                                                 <textarea
                                                     name="answer_ar"
                                                     className="form-control"

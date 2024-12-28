@@ -1,12 +1,19 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useServiceStore } from '../../store/SingleService';
+import toast from 'react-hot-toast';
+import { baseURL } from '../../functions/baseUrl';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import ProductDetailsFilterationBar from '../../components/productDetailsFilterationBarSec/ProductDetailsFilterationBar';
 
 export default function MyServiceDetails({ token }) {
     const { servId } = useParams();
     const loginType = localStorage.getItem('loginType');
+    const navigate = useNavigate();
+    const [addedPreferences, setAddedPreferences] = useState([]);
 
     const { currentService, loading, fetchService } = useServiceStore();
 
@@ -14,6 +21,70 @@ export default function MyServiceDetails({ token }) {
         fetchService(servId, token);
     }, [servId, token, loginType, fetchService]);
 
+    const handleAddProduct = (product) => {
+        const preferences = Object.values(addedPreferences);
+        const addedProduct = {
+            type:  product?.type,
+            item_id: `${product?.id}`,
+            preferences
+
+        };
+        (async () => {
+            const toastId = toast.loading('Loading...');
+            await axios.post(`${baseURL}/user/add-item-to-quotation-cart?t=${new Date().getTime()}`,
+                addedProduct
+                , {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((response) => {
+                    toast.success(`${response?.data?.message || 'Added Successfully!'}`, {
+                        id: toastId,
+                        duration: 1000
+                    });
+                    fetchService(servId, token);
+                })
+                .catch((error) => {
+                    // Handle error response
+                    const errorMessage =
+                        error?.response?.data?.message || 'Something went wrong!';
+                    const errorDetails =
+                        error?.response?.data?.errors || {}; // Object containing validation errors
+                    
+                    // Show the primary error message
+                    toast.error(errorMessage, {
+                        id: toastId,
+                        duration: 3000,
+                    });
+        
+                    // Display specific validation errors (e.g., from preferences)
+                    if (errorDetails.preferences && Array.isArray(errorDetails.preferences)) {
+                        errorDetails.preferences.forEach((err) => {
+                            toast.error(err, {
+                                duration: 3000,
+                            });
+                        });
+                    }
+                });
+        })();
+    };
+
+     const [activeItem, setActiveItem] = useState('About');
+    
+             const items = [
+            { name: 'About', active: activeItem === 'About' },
+            { name: 'Options', active: activeItem === 'Options' },
+            ];
+    
+            const handleItemClick = (itemName) => {
+                setActiveItem(itemName);
+            };
+
+    console.log(currentService);
+    
     return (
         <>
             {loading ? (
@@ -44,9 +115,57 @@ export default function MyServiceDetails({ token }) {
                                     <p className='mt-3 mb-4 fs-5 text-capitalize'>
                                         {currentService?.description}
                                     </p>
-                                    <p className="productDetails__price">
-                                        {currentService?.price_after_tax || ''} {currentService?.currency}
-                                    </p>
+                                    {/* {
+                                        currentService?.price_after_tax !== 'N/A' &&
+                                        <p className="productDetails__price">
+                                            <span style={{color:'gray', fontWeight:'normal', fontSize:'18px', textTransform:'capitalize'}}>starting from</span> <br/>
+                                            {currentService?.price_after_tax || ''} {currentService?.currency}
+                                        </p>
+                                    } */}
+                                    <div className="companyQutation__btn my-4">
+                                    {
+                                    token ? (
+                                        <>
+                                            {localStorage.getItem('loginType') === 'user' && Cookies.get('verified') === 'false' ? (
+                                                // Unverified user
+                                                <button
+                                                    onClick={() => {
+                                                        toast.error('You need to verify your account first!');
+                                                        setTimeout(() => {
+                                                            navigate('/user-verification');
+                                                        }, 1000);
+                                                    }}
+                                                    className='btnColoredBlue'
+                                                >
+                                                    Add to Quotation
+                                                </button>
+                                            ) : currentService?.in_cart === false ? (
+                                                // Verified user or other login types
+                                                <button
+                                                    onClick={() => handleAddProduct(currentService)}
+                                                    className='btnColoredBlue'
+                                                >
+                                                    Add to Quotation
+                                                </button>
+                                            ) : (
+                                                <NavLink
+                                                    to={`/${currentService?.company_name}/request-quote`}
+                                                    className={'nav-link'}
+                                                >
+                                                    <p className='text-capitalize' style={{ color: 'rgb(63, 215, 86)' }}>
+                                                        view in Quotation cart <i className="bi bi-box-arrow-up-right"></i>
+                                                    </p>
+                                                </NavLink>
+                                            )}
+                                        </>
+                                    ) : (
+                                        // Unauthenticated user
+                                        <NavLink to={'/login'} className={'nav-link'}>
+                                            <button className='btnColoredBlue'>Add to Quotation</button>
+                                        </NavLink>
+                                    )
+                                    }
+                                    </div>
                                     <p className='productDetails__soldBy d-flex gap-2 align-items-center my-4 '>
                                         <span>
                                             Sold by <strong>{currentService?.company_name}</strong>
@@ -57,7 +176,13 @@ export default function MyServiceDetails({ token }) {
                         </Row>
                         <Row>
                             <Col lg={12}>
-                                <div className='productDetails__content mb-5 mt-4'>
+                                <div className='my-5'>
+                                    <ProductDetailsFilterationBar items={items} onItemClick={handleItemClick} />
+                                </div>
+                                {
+                                    activeItem === 'About' &&
+                                    <>
+                                    <div className='productDetails__content mb-5 mt-4'>
                                     <h4 className='productDetails__contentHead mt-4 fs-3 fw-bold text-capitalize'>
                                         Description
                                     </h4>
@@ -82,7 +207,53 @@ export default function MyServiceDetails({ token }) {
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                    </div>
+                                    </>
+                                }
+                                {
+                                    activeItem === 'Options' && 
+                                    <>
+                                    <div className='productDetails__content mb-5 mt-4'>
+                                     {
+                                        currentService?.options?.map((option)=>(
+                                            <div className='fw-medium text-capitalize fs-4'>
+                                                <h4 className='productDetails__contentHead my-4 fs-3 fw-bold text-capitalize'>{option?.attribute}</h4>
+                                                {
+                                                    option?.values.map((value, index)=>(
+                                                        <div style={{
+                                                            backgroundColor:'rgba(211, 212, 219, 0.5)', padding:'4px', borderRadius:'5px',
+                                                        }} key={index} className='mt-2 d-flex gap-2 align-items-center'>
+                                                        <input 
+                                                        className='form-check cursorPointer'
+                                                        type="radio" 
+                                                        id={`option-${value.id}
+                                                        `}
+                                                        name={`option-${option.attribute_id}`} 
+                                                        value={value.id}
+                                                        checked={addedPreferences[option.attribute_id] === String(value.id)} // Check based on attribute_id
+                                                        onChange={() => {
+                                                            // Update the state with the selected value for this attribute_id
+                                                            setAddedPreferences((prev) => ({
+                                                                ...prev,
+                                                                [option.attribute_id]: String(value.id), // Update or add the selected value for the group
+                                                            }));
+                                                        }}
+                                                        />
+                                                        <label className='text-capitalize' htmlFor={`option-${value.id}`}>{value.name}</label>
+                                                        <span className='ms-2'>
+                                                        {value?.price} 
+                                                        </span>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        ))
+                                     }
+                                     {/* <p className='mt-3 mb-4 fs-5'>     {currentCatalog?.options}
+                                     </p> */}
+                                     </div>
+                                    </>
+                                }
                             </Col>
                         </Row>
                     </Container>

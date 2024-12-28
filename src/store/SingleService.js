@@ -15,7 +15,7 @@ export const useServiceStore = create((set) => ({
                     Authorization: `Bearer ${token}`,
                 },
             });
-            set({ currentService: response?.data?.data?.catalog, loading: false });
+            set({ currentService: response?.data?.data?.service, loading: false });
         } catch (error) {
             toast.error(error?.response?.data?.message || 'Something Went Wrong!', { duration: 1000 });
             set({ loading: false });

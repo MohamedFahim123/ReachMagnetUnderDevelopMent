@@ -10,6 +10,7 @@ import MyLoader from '../../components/myLoaderSec/MyLoader'
 import PersonalSignUpFormMainSec from '../../components/personalSignUpFormMainSec/PersonalSignUpFormMainSec'
 import AllEmployeesSection from '../../components/allEmployeesSection/AllEmployeesSection'
 import { GetAllCountriesStore } from '../../store/AllCountries'
+import { GetAllCitizenshipsStore } from '../../store/AllCitizenships'
 
 export default function MyUsersManagement({ token }) {
     const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ export default function MyUsersManagement({ token }) {
     const handleItemClick = (itemName) => {
         setActiveItem(itemName);
     };
+    // const citizenships = GetAllCitizenshipsStore((state) => state.citizenships);
 
     useEffect(() => {
         setTimeout(() => {
@@ -64,7 +66,7 @@ export default function MyUsersManagement({ token }) {
                                     </div>
                                     <div className="col-12 user__management__main__info mt-3">
                                         {activeItem === 'Roles' && <MyAllRoles token={token} />}
-                                        {activeItem === 'Add Employee' && <PersonalSignUpFormMainSec countries={countries} isSignUp={false} token={token} />}
+                                        {activeItem === 'Add Employee' && <PersonalSignUpFormMainSec  countries={countries} isSignUp={false} token={token} />}
                                         {activeItem === 'All Employees' && <AllEmployeesSection token={token} />}
                                     </div>
                                 </div>

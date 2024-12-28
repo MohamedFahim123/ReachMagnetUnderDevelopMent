@@ -17,11 +17,23 @@ export default function CartProduct({
     quantity,
     companyIdWantedToHaveQuoteWith,
     setCart,
-    token
+    token,
+    options
 }) {
     const [counter,setCounter] = useState(quantity);
     const [note,setNote]= useState('');
     const [currNotes,setCurrNotes]= useState(notes === 'N/A' ? '' : notes);
+
+    const [selectedOptions, setSelectedOptions] = useState(() => {
+        const initialOptions = {};
+        options?.forEach((option) => {
+            const chosenValue = option.values.find((value) => value.chosen);
+            if (chosenValue) {
+                initialOptions[option.attribute_id] = chosenValue.id;
+            }
+        });
+        return initialOptions;
+    });
 
     const handleRemoveProduct = (id) => {
         if(companyIdWantedToHaveQuoteWith){
@@ -268,7 +280,41 @@ export default function CartProduct({
             })();
         }
     };
+    const handleAddOptionToCart = (cartId, attributeId, optionId) => {
+        const requestBody = {
+            quotation_cart_id: `${cartId}`,
+            prefrence_attribute_id: `${attributeId}`,
+            prefrence_option_id: `${optionId}`,
+            type: 'add'
+    };
+    
+        // Send the API request
+        (async () => {
+            const toastId = toast.loading('Adding option...');
+            try {
+                const response = await axios.post(`${baseURL}/user/control-preference-in-quotation-cart/${companyIdWantedToHaveQuoteWith}`, requestBody, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setCart(response?.data?.data?.cart); // Update the cart state
+                toast.success('Option added successfully!', {
+                    id: toastId,
+                    duration: 1000
+                });
+            } catch (error) {
+                toast.error(error?.response?.data?.message || 'Error adding option!', {
+                    id: toastId,
+                    duration: 1000
+                });
+            }
+        })();
+    };
+    
 
+console.log(options);
 
     return (
         <div className="selected__product__item" >
@@ -334,24 +380,68 @@ export default function CartProduct({
                     ) }
                     {
                         (currNotes) ?
-                        <div className='showNotes mt-2 d-flex justify-content-between'>
-                            {currNotes}
-                            <i onClick={() => handleDeleteNoteFromQuotation(cartId)} className="bi bi-trash-fill"></i>
+                        <div className='d-flex align-items-center gap-2'>
+                            <textarea className=' mt-2 form-control bg-transparent p-2 w-75' rows={3} value={currNotes} disabled></textarea>
+                            <i onClick={() => handleDeleteNoteFromQuotation(cartId)} className="bi bi-trash-fill cursorPointer "></i>
                         </div>
                         :
                         <>
                             <div className='addNotes mt-2'>
-                                <input
+                                <textarea
                                     placeholder='Add Note...'
+                                    name=""
                                     value={note}
-                                    type='text'
                                     id='companyQuotationNote'
-                                    className='form-control showNotesInput'
-                                    maxLength={20}
+                                    className='form-control w-75 mb-3'
                                     onChange={(e)=> setNote(e.target.value)}
-                                />
+                                    rows={3}
+                                >
+                                </textarea>
                             </div>
                             <span onClick={()=> handleAddNoteToQuotation(cartId)} className='pageMainBtnStyle'>Add Note</span>
+                        </>
+                    }
+                    {
+                        options?.length !== 0 &&
+                        <>
+                        <strong className='d-block mt-3 mb-2 text-capitalize'>
+                            options:
+                        </strong>
+                        {
+                            options?.map((option, index) => (
+                                <div key={index} className='mb-3'>
+                                    <p className=' text-capitalize'>
+                                        choose a {option?.attribute}
+                                    </p>
+                                    <div className='d-flex align-items-center gap-2'>
+                                        {
+                                        option?.values?.map((value, index) => (
+                                            <div style={{
+                                                backgroundColor:'rgba(211, 212, 219, 0.5)', padding:'4px', borderRadius:'5px',
+                                            }} key={index} className='mt-2 d-flex gap-2 align-items-center'>
+                                                <input 
+                                                className='form-check cursorPointer'
+                                                type="radio" 
+                                                id={`option-${value.id}`} 
+                                                name={`option-${option.attribute_id}`} 
+                                                value={value.id}
+                                                checked={selectedOptions[option.attribute_id] === value.id}
+                                                 onChange={() => {
+                                                setSelectedOptions((prev) => ({
+                                                    ...prev,
+                                                    [option.attribute_id]: value.id, 
+                                                }));
+                                                handleAddOptionToCart(cartId, option.attribute_id, value.id);
+                                            }}
+                                                />
+                                               <label className='text-capitalize' htmlFor={`option-${value.id}`}>{value.name}</label>
+                                            </div>
+                                        ))
+                                    }
+                                    </div>
+                                </div>
+                            ))
+                        }
                         </>
                     }
                 </div>

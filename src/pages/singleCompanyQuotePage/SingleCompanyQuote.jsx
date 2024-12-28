@@ -321,6 +321,7 @@ export default function SingleCompanyQuote({ token }) {
             setLoading(false);
         }, 500);
     }, [loading]);
+console.log(cart);
 
     return (
         <>
@@ -541,6 +542,7 @@ export default function SingleCompanyQuote({ token }) {
                                                             companyIdWantedToHaveQuoteWith={companyIdWantedToHaveQuoteWith}
                                                             token={token}
                                                             setCart={setCart}
+                                                            options={el?.item?.options}
                                                         />
                                                     })
                                                 )}

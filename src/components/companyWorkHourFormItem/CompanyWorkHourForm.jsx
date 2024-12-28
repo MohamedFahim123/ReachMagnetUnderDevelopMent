@@ -16,7 +16,7 @@ export default function CompanyWorkHourForm({ token ,setUnAuth }) {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setNewdata(response?.data?.data);
+            setNewdata(response?.data?.data?.workingHours);
         } catch (error) {
             if(error?.response?.data?.message === 'Unauthorized'){
                 setUnAuth(true);
@@ -35,7 +35,7 @@ export default function CompanyWorkHourForm({ token ,setUnAuth }) {
             </button>
             {!editMode ? (
                 <form>
-                    {newData?.workingHours?.map((el, index) => (
+                    {newData?.map((el, index) => (
                         <div key={index} className="w-100 WorkHourTables__box">
                             <div className="mt-2 profileFormInputItem">
                                 <label>Day of Week</label>
@@ -68,7 +68,7 @@ export default function CompanyWorkHourForm({ token ,setUnAuth }) {
                     ))}
                 </form>
             ) : (
-                <CompanyWorkHourFormTable setUnAuth={setUnAuth} token={token} workingHours={newData?.workingHours} editMode={editMode}/>
+                <CompanyWorkHourFormTable setUnAuth={setUnAuth} token={token} workingHours={newData} editMode={editMode} setEditMode={setEditMode} fetchShowCompany={fetchShowCompany}/>
             )}
             
         </div>

@@ -40,8 +40,15 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
             },
         }).then(response => {
             const token = response?.data?.data?.token;
+            const userData = response?.data?.data?.user;
+            console.log(userData);
+            
             if (token) {
                 Cookies.set('authToken', token, { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 });
+
+                if (loginType === 'user') {
+                    Cookies.set('verified', userData?.verified, { expires: 365 });
+                }
                 const slugCompletion = loginType === 'user' ? 'user/profile' : 'employee/show-profile';
                 const fetchData = async () => {
                     try {
@@ -56,6 +63,7 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
                             Cookies.set('currentLoginedData', JSON.stringify(response?.data?.data), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
                             :
                             Cookies.set('currentLoginedData', JSON.stringify(response?.data?.data?.user), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
+                            
                     } catch (error) {
                         toast.error(`${JSON.stringify(error?.response?.data?.message)}`);
                     };
@@ -66,11 +74,11 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
                 id: toastId,
                 duration: 1000
             });
-            if (loginType === 'user' && !response?.data?.data?.user?.verified) {
+            if ( loginType === 'user' && !userData?.verified) {
                 setTimeout(() => {
                     navigate('/user-verification');
                 }, 1000);
-            } else {
+            }else {
                 setTimeout(() => {
                     navigate('/');
                     window.location.reload();

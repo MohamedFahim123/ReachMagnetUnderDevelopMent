@@ -91,6 +91,7 @@ export default function MyMessage({token, fireMessage, setFireMessage }) {
         }, 10000);
         return () => clearInterval(interval);
     }, [getAllChats]);
+console.log(chats);
 
     return (
         <>

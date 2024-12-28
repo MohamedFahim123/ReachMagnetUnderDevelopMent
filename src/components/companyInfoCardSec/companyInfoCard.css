@@ -15,8 +15,10 @@
     height: 215px;
 }
 .company__profile__img img{
-    width: 164px;
-    height: 86.86px;
+    /* width: 164px;
+    height: 86.86px; */
+    width: 100%;
+    object-fit: cover;
 }
 
  .company__name{
@@ -39,6 +41,22 @@
     margin-bottom: 15px;
     height: 60px;
 }
+.read-more-btn {
+    background: none;
+    color: var(--main-turquoise);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    font-size: 12px;
+    margin-left: 3px;
+  }
+  .read-more-btn:hover {
+    text-decoration: none;
+  }
+  .isExpendedMarginB{
+    margin-bottom: 30px;
+  }
 .companyinfo__Tit{
     font-size: 16px;
     font-weight: 500;

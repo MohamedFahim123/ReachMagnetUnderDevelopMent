@@ -104,7 +104,7 @@
 .showNotes span {
     display: block;
 }
-.showNotes {
+/* .showNotes {
     padding: 3px 8px;
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 8px;
@@ -114,9 +114,9 @@
     -o-border-radius: 8px;
     font-size: 15px;
     width: 80%;
-}
-.showNotes i {
-    font-size: 15px;
+} */
+.selected__product__item i.bi-trash-fill {
+    font-size: 16px;
     cursor: pointer;
     margin-top: 2px;
     transition: all 0.3s ease-in-out;
@@ -125,7 +125,7 @@
     -ms-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
 }
-.showNotes i:hover {
+.selected__product__item i.bi-trash-fill:hover {
     color: #ff2020;
 }
 .prod__text .pageMainBtnStyle {

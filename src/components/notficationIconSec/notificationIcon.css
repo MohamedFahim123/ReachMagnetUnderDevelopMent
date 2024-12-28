@@ -49,12 +49,14 @@
     width:300px;
     /* box-shadow: 4px 10px 5px 5px rgba(37, 36, 36, 0.4); */
     box-shadow: 0 0 10px #0003;
+    z-index: 200;
+    pointer-events: auto;
 }
 .notficationBody__handler.show{
     visibility: visible;
     opacity: 1;
     transform: translateY(10px);
-    z-index: 200;
+    z-index: 400;
 }
 .notficationBody__handler.hide {
     transform: translateY(0);
@@ -67,6 +69,9 @@
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #eee;
+    cursor: pointer; /* Ensure it shows as clickable */
+    z-index: 2301; /* Ensure it’s above other elements */
+    pointer-events: auto; /* Enable click events */
 
 }
 .notItem:not(:last-child){

@@ -4,6 +4,7 @@ import PersonalSignUpFormMainSec from '../../components/personalSignUpFormMainSe
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import { GetAllCountriesStore } from '../../store/AllCountries';
 import { GetAllIndustriesStore } from '../../store/AllIndustries';
+import { GetAllCitizenshipsStore } from '../../store/AllCitizenships';
 
 export default function PersonalSignUp() {
   const [loading, setLoading] = useState(true);

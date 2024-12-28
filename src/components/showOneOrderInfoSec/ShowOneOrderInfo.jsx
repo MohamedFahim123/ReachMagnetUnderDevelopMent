@@ -252,6 +252,7 @@ const handleViewFiles = (files) => {
                 <th 
                 className='text-center'>Total Price</th>
                 <th className='text-center'>Notes</th>
+                {/* <th className='text-center'>Preferences</th> */}
                 <th className='text-center'>Files</th>
                 
             </tr>

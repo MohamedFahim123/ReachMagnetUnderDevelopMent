@@ -76,6 +76,8 @@ export default function NewPostForm({ token }) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const toastId = toast.loading('Loading...');
+
         const submissionData = new FormData();
 
         Object.keys(formData).forEach((key) => {
@@ -96,18 +98,30 @@ export default function NewPostForm({ token }) {
 
                 navigate('/profile/posts')
                 scrollToTop()
-                toast.success(response?.data?.message || (id ? 'Post updated successfully' : 'Post added successfully'));
+                toast.success(response?.data?.message || (id ? 'Post updated successfully' : 'Post added successfully'),{
+                        id: toastId,
+                        duration: 1000
+                });
             } else {
-                toast.error(id ? 'Failed to update the post' : 'Failed to add post');
+                toast.error(id ? 'Failed to update the post' : 'Failed to add post',{
+                        id: toastId,
+                        duration: 2000
+                });
             };
         }  catch (error) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
                     .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
+                    id: toastId,
+                    duration: 2000
+                }); // Preserve line breaks
             } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                    id: toastId,
+                    duration: 2000
+                });
             }
         }
     };

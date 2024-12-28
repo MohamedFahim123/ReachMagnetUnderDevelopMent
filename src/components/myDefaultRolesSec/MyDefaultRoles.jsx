@@ -36,6 +36,7 @@ export default function MyDefaultRoles({token,setUnAuth}) {
             gettingAllRoles();
         };
     },[allRoles]);
+console.log(allRoles);
 
     const gettingSingleRulePermissions = async (id) => {
         if(id && !permissions?.find(el => +el?.permissionId === +id)){

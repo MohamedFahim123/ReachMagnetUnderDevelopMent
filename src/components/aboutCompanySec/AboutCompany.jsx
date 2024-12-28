@@ -22,12 +22,12 @@ const LocationMarker = ({ setLocation, initialPosition }) => {
     const [position, setPosition] = useState(initialPosition);
     const map = useMap();
 
-    useMapEvents({
-        click(e) {
-            setPosition(e?.latlng);
-            setLocation(e?.latlng);
-        },
-    });
+    // useMapEvents({
+    //     click(e) {
+    //         setPosition(e?.latlng);
+    //         setLocation(e?.latlng);
+    //     },
+    // });
 
     useEffect(() => {
         if (initialPosition) {
@@ -76,7 +76,9 @@ export default function AboutCompany({ company, showCompaniesQuery }) {
                         ))} */}
                     </div>
                 </div>
-                <div className="aboutCompany__workHour">
+                {
+                    showCompaniesQuery?.workingHours?.length !== 0 ?
+                    <div className="aboutCompany__workHour">
                     <div className='aboutCompany__title'>
                         <img src={company.workHourImage} alt="hour" />
                         <h1>Working hours</h1>
@@ -95,15 +97,26 @@ export default function AboutCompany({ company, showCompaniesQuery }) {
                             </div>
                         ))}
                     </div>
-                </div>
+                    </div>
+                    :
+                    ''
+                }
                 <div className="aboutCompany__location">
-                    <MapContainer center={initialPosition} zoom={0} style={{ height: '400px', width: '100%', zIndex: '1' }}>
-                        <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        />
-                        <LocationMarker initialPosition={initialPosition} />
-                    </MapContainer>
+                    <div className='aboutCompany__title'>
+                        <img src={company.aboutMark} alt="mark" />
+                        <h1>company full address</h1>
+                    </div>
+                    <div className="aboutCompany__content__info my-3">
+                        <p className='fixed__desc my-3'>{showCompaniesQuery?.companyFullAddress}</p>
+                        <MapContainer center={initialPosition} zoom={0} style={{ height: '400px', width: '100%', zIndex: '1' }}>
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            />
+                            <LocationMarker initialPosition={initialPosition} />
+                        </MapContainer>
+                    </div>
+                   
                 </div>
             </div>
         </div>

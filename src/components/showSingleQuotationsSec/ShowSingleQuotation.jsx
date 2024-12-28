@@ -327,10 +327,20 @@ export default function ShowSingleQuotation({ token }) {
                     })
                 })
                 .catch(err => {
-                    toast.error(err?.response?.data?.message || 'Something Went Wrong!', {
-                        id: toastId,
-                        duration: 1000
-                    });
+                    if (err?.response?.status === 422 && err?.response?.data?.errors) {
+                        const validationErrors = Object.values(err.response.data.errors)
+                            .flat()
+                            .join(', ');
+                        toast.error(validationErrors, {
+                            id: toastId,
+                            duration: 3000
+                        });
+                    } else {
+                        toast.error(err?.response?.data?.message || 'Something Went Wrong!', {
+                            id: toastId,
+                            duration: 1000
+                        });
+                    }
                 });
                 fetchShowQuotations()
         } else {
@@ -361,6 +371,9 @@ export default function ShowSingleQuotation({ token }) {
                 });
         }
     };
+
+
+    
 
     const handleUpdateBuyQuotationCompanyStatus = async (type) => {
         const toastId = toast.loading('Loading...');
@@ -427,6 +440,15 @@ export default function ShowSingleQuotation({ token }) {
         setCurrFile(files); // Set files for the selected row
         setShowFiles(true); // Open the modal
     };
+
+    const [showOptions, setShowOptions] = useState(false);
+    const [currOptions, setCurrOptions] = useState([]);
+
+    const handleViewOptions = (options) => {
+        setCurrOptions(options);
+        setShowOptions(true); 
+    };
+
     // const handleCloseFiles = () => setShow(false);
     // const handleShowFiles = () => setShow(true);
 
@@ -509,6 +531,10 @@ export default function ShowSingleQuotation({ token }) {
                                                         <th className='text-center'> Notes</th>
                                                         <th className='text-center'> Files</th>
                                                         {
+                                                            !isOneClickQuotation &&
+                                                            <th className='text-center'>Preferences</th>
+                                                        }
+                                                        {
                                                             ((loginType === 'employee' && newData?.quotation_type === 'sell') || (isOneClickQuotation && fullData?.quotation_type === 'sell')) &&
                                                             <th className='text-center'>Action</th>
                                                         }
@@ -521,12 +547,14 @@ export default function ShowSingleQuotation({ token }) {
                         <tr key={`${row?.id}${row?.title}`}>
                             <td className='text-capitalize'>
                                 <span className='me-2 indexOfTheTable'>{idx + 1}</span>
-                                <span title={`${row?.title}`} className=' cursorPointer'>{
+                                <span title={`${row?.title}`} className=' cursorPointer'>
+                                    {
                                     `${row?.code ?
                                         `(${row?.code})` :
                                         ''
-                                    } ${row?.title.slice(0,5)}${row?.title.length > 5 ? '...' : ''} `
-                                }
+                                    } ${row?.title} `
+                                    }
+                                
                                 </span>
                             </td>
                             <td className='text-center text-capitalize'>
@@ -548,7 +576,7 @@ export default function ShowSingleQuotation({ token }) {
                                     !isOneClickQuotation ?
                                         <input
                                             type="number"
-                                            className={`form-control w-75 m-auto ${(!isOneClickQuotation &&
+                                            className={`form-control m-auto ${(!isOneClickQuotation &&
                                                 (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell'))}`}
                                             defaultValue={
                                                 (row?.offer_price !== 'N/A' ? (row?.offer_price ? +row?.offer_price : 0) : 0)
@@ -624,7 +652,6 @@ export default function ShowSingleQuotation({ token }) {
                                         :
                                         (fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false)) ? 'bg-white' : ''}`} />
                             </td>
-                            
                             <td>
                                 <div className={` tableBtnSingleQuote`}>
                                     <p className={`order__statue ${row?.status}`}>
@@ -663,6 +690,45 @@ export default function ShowSingleQuotation({ token }) {
                                 }
 
                             </td>
+                            { !isOneClickQuotation &&
+                                <td className='text-center'>
+                                {
+                                    row?.type !== 'customized' ?
+                                    <i onClick={() => handleViewOptions(row?.preferences)}
+                                     className="bi bi-sliders cursorPointer"></i>
+                                    :
+                                    'No Preferences'
+                                }
+                            </td>
+                            }
+                            <Modal show={showOptions} onHide={() => setShowOptions(false)}>
+                                <Modal.Header closeButton>
+                                <Modal.Title>Options</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body  
+                                >
+                                    <>
+                                    {
+                                    currOptions?.map((opp)=>(
+                                        <div className='d-flex gap-4 mb-3'>
+                                            <p className='text-capitalize'>
+                                            {opp?.attribute} : <span>{opp?.valiue}</span>
+                                            </p>
+                                            <p className='text-capitalize'>
+                                                price: <span>${opp?.price}</span>
+                                            </p>
+                                        </div>
+                                       
+                                    ))
+                                    } 
+                                    </> 
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={() => setShowOptions(false)}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                            </Modal>
                             <Modal show={showFiles} onHide={() => setShowFiles(false)}>
                                 <Modal.Header closeButton>
                                 <Modal.Title>Files</Modal.Title>
@@ -709,18 +775,18 @@ export default function ShowSingleQuotation({ token }) {
                                 </Button>
                                 </Modal.Footer>
                             </Modal>
-                                {(!isOneClickQuotation ? (loginType === 'employee' && newData?.quotation_type === 'sell') : (fullData?.quotation_type === 'sell')) &&
-                                <td className='text-center text-capitalize p-0'>
-                                    <div className="actions w-100 position-relative">
-                                        <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" onClick={() => toggleOptions(row?.id)}></i>
-                                        {visibleRowId === row?.id && newData?.company_status === 'Pending' && (
-                                            <div className="options-box" ref={optionsRef}>
-                                            <p className="option mb-1 text-danger" onClick={() => handleChangeStatusSingleQuoteRow('rejected', row?.id)}>Reject</p>
-                                            <p className=" option mb-0 text-success" onClick={() => handleChangeStatusSingleQuoteRow('accepted', row?.id)}>Accept</p>
-                                        </div>
-                                        )}
+                            {(!isOneClickQuotation ? (loginType === 'employee' && newData?.quotation_type === 'sell') : (fullData?.quotation_type === 'sell')) &&
+                            <td className='text-center text-capitalize p-0'>
+                                <div className="actions w-100 position-relative">
+                                    <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" onClick={() => toggleOptions(row?.id)}></i>
+                                    {visibleRowId === row?.id && newData?.company_status === 'Pending' && (
+                                        <div className="options-box" ref={optionsRef}>
+                                        <p className="option mb-1 text-danger" onClick={() => handleChangeStatusSingleQuoteRow('rejected', row?.id)}>Reject</p>
+                                        <p className=" option mb-0 text-success" onClick={() => handleChangeStatusSingleQuoteRow('accepted', row?.id)}>Accept</p>
                                     </div>
-                                </td>}
+                                    )}
+                                </div>
+                            </td>}
                         </tr>
                         
                         

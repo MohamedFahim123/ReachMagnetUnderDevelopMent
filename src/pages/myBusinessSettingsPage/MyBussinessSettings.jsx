@@ -16,6 +16,8 @@ import MyLoader from '../../components/myLoaderSec/MyLoader';
 import UnAuthSec from '../../components/unAuthSection/UnAuthSec';
 import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 import CompanyFollowIndustryFrom from '../../components/companyFollowIndustryFormSec/CompanyFollowIndustryFrom';
+import { NavLink } from 'react-router-dom';
+import CompanyTimezoneForm from '../../components/companyTimezoneFormItem/CompanyTimezoneForm';
 
 localStorage.setItem('updatingCompany', 'notUpdating');
 localStorage.setItem('updatingCompanyActivities', 'notUpdating');
@@ -101,6 +103,7 @@ export default function MyBussinessSettings({ token }) {
         { name: 'Company Settings', active: activeItem === 'Company Settings' },
         { name: 'Company Activities', active: activeItem === 'Company Activities' },
         { name: 'Company Industries', active: activeItem === 'Company Industries' },
+        { name: 'Company Timezone', active: activeItem === 'Company Timezone' },
         { name: 'Company Work Hours', active: activeItem === 'Company Work Hours' },
     ];
     const handleItemClick = (itemName) => {
@@ -203,9 +206,11 @@ export default function MyBussinessSettings({ token }) {
                                                     </h3>
                                                 </div>
                                                 <div className="view__profile__btn">
+                                                    <NavLink to={`/show-company/${company?.id}`} target='_blank' className={'nav-link'}>
                                                     <button>
                                                         View company's public profile
                                                     </button>
+                                                    </NavLink>
                                                 </div>
                                             </div>
                                             <div className="right__settings__content col-lg-7">
@@ -242,6 +247,13 @@ export default function MyBussinessSettings({ token }) {
                                                     {activeItem === 'Company Work Hours'
                                                         &&
                                                         <CompanyWorkHourForm
+                                                            setUnAuth={setUnAuth}
+                                                            token={token}
+                                                        />
+                                                    }
+                                                    {activeItem === 'Company Timezone'
+                                                        &&
+                                                        <CompanyTimezoneForm
                                                             setUnAuth={setUnAuth}
                                                             token={token}
                                                         />

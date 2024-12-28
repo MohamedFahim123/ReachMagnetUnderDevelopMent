@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import './myProfileSettings.css'
 import MyNewSidebarDash from '../../components/myNewSidebarDash/MyNewSidebarDash'
 import MainContentHeader from '../../components/mainContentHeaderSec/MainContentHeader'
-import cover from '../../assets/signUpImages/cover.png'
+import cover from '../../assets/heroSec/singleCompanyQuote.png'
 import camerIcon from '../../assets/signUpImages/camera-icon.png'
 import ProfileFilterBar from '../../components/profileFilterBarSec/ProfileFilterBar'
 import MyProfileForm from '../../components/myProfileFormSec/MyProfileForm'
@@ -11,6 +11,8 @@ import Cookies from 'js-cookie';
 import MyLoader from '../../components/myLoaderSec/MyLoader'
 import { GetAllCountriesStore } from '../../store/AllCountries'
 import CompanyFollowIndustryFrom from '../../components/companyFollowIndustryFormSec/CompanyFollowIndustryFrom'
+import CompanyTimezoneForm from '../../components/companyTimezoneFormItem/CompanyTimezoneForm'
+import EmployeeTimezoneForm from '../../components/employeeTimezoneFormItem/EmployeeTimezoneForm'
 
 localStorage.setItem('updatingProfile', 'notUpdating');
 
@@ -23,6 +25,7 @@ export default function MyProfileSettings({ token }) {
     const [currnetImageUpdateError, setCurrentImageUpdateError] = useState('');
     const [imgChanged, setImageChanged] = useState(false);
     const loginType = localStorage.getItem('loginType');
+    const [unAuth, setUnAuth] = useState(false);
     const countries = GetAllCountriesStore((state) => state.countries);
     useEffect(() => {
         const cookiesData = Cookies.get('currentLoginedData');
@@ -45,6 +48,14 @@ export default function MyProfileSettings({ token }) {
         items = [
             { name: 'Account Settings', active: activeItem === 'Account Settings' },
             { name: 'User Industries', active: activeItem === 'User Industries' },
+            { name: 'User Timezone', active: activeItem === 'User Timezone' },
+            { name: 'Password Settings', active: activeItem === 'Password Settings' },
+        ];
+    }
+    if (loginType === 'employee') {
+        items = [
+            { name: 'Account Settings', active: activeItem === 'Account Settings' },
+            { name: 'Employee Timezone', active: activeItem === 'Employee Timezone' },
             { name: 'Password Settings', active: activeItem === 'Password Settings' },
         ];
     }
@@ -86,8 +97,8 @@ export default function MyProfileSettings({ token }) {
                         <MyNewSidebarDash loginType={loginType} />
                         <div className='main__content container'>
                             <MainContentHeader currentUserLogin={currentUserLogin} />
-                            <div className="profileCoverImg">
-                                <img src={cover} alt="" />
+                            <div className="profileCoverImgUserAndOwner">
+                                {/* <img src={cover} alt="" /> */}
                             </div>
                             <div className='content__view__handler'>
                                 <div className="profile__settings__content row justify-content-center">
@@ -119,11 +130,11 @@ export default function MyProfileSettings({ token }) {
                                                 </p>
                                             }
                                         </div>
-                                        <div className="view__profile__btn">
+                                        {/* <div className="view__profile__btn">
                                             <button>
                                                 View public profile
                                             </button>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="right__settings__content col-lg-7">
                                         <div className="profile__filter__bar">
@@ -143,9 +154,19 @@ export default function MyProfileSettings({ token }) {
                                                     countries={countries}
                                                     token={token}
                                                 />}
-                                                {activeItem === 'User Industries' && <CompanyFollowIndustryFrom
+                                            {activeItem === 'User Industries' && <CompanyFollowIndustryFrom
                                                 token={token}
                                             />}
+                                            {activeItem === 'User Timezone' && <CompanyTimezoneForm
+                                                setUnAuth={setUnAuth}
+                                                token={token}
+                                            />
+                                            }
+                                            {activeItem === 'Employee Timezone' && <EmployeeTimezoneForm
+                                                setUnAuth={setUnAuth}
+                                                token={token}
+                                            />
+                                            }
                                             {activeItem === 'Password Settings' && <UpdatePassword
                                                 token={token}
                                             />}

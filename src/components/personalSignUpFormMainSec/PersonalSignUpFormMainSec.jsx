@@ -12,6 +12,7 @@ import { AddEmployeeSchema } from '../../validation/AddEmployee';
 import UnAuthSec from '../unAuthSection/UnAuthSec';
 import Cookies from 'js-cookie';
 import CustomDropdown from '../customeDropdownSelectSec/CustomeDropdownSelect';
+import { GetAllCitizenshipsStore } from '../../store/AllCitizenships';
 
 export default function PersonalSignUpFormMainSec({ token, countries, industries, isSignUp }) {
   const [unAuth, setUnAuth] = useState(false);
@@ -47,7 +48,8 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
       address_one: '',
       address_two: '',
 
-      citizenship: '',
+      citizenship_id: '',
+      // citizenship: '',
       full_address: '',
       title: '',
       official_id_or_passport: '',
@@ -57,6 +59,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
     resolver: zodResolver(isSignUp ? RegisterSchema : AddEmployeeSchema),
   });
   const [currentCitiesInsideCountry, setCurrentCitiesInsideCountry] = useState([]);
+  const citizenships = GetAllCitizenshipsStore((state) => state.citizenships);
 
   useEffect(() => {
     setCurrentCitiesInsideCountry([]);
@@ -114,6 +117,12 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
       })();
     };
   }, []);
+
+  // useEffect(()=>{
+  //   if(!isSignUp && loginType === 'employee'){
+  //     return citizenships;
+  //   }
+  // },[citizenships])
 
   //   const handleImageChange = (e) => {
   //     const file = e.target.files[0];
@@ -186,20 +195,24 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
       headers: currentHeaders,
     }).then(response => {
       const token = response?.data?.data?.token;
+      const userData = response?.data?.data?.user;
       if (token) {
         Cookies.set('authToken', token, { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 });
         Cookies.set('currentLoginedData', JSON.stringify(response?.data?.data?.user), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
+        if (isSignUp) {
+          Cookies.set('verified', userData?.verified, { expires: 365 });
+        }
         toast.success(`${response?.data?.message}` || 'Created Successfully!', {
           id: toastId,
           duration: 2000
         });
         isSignUp &&
-          (!response?.data?.data?.user?.verified) &&
+          (!userData?.verified) &&
           (setTimeout(() => {
             navigate('/user-verification');
           }, 1000));
         isSignUp &&
-          (response?.data?.data?.user?.verified) &&
+          (userData?.verified) &&
           (setTimeout(() => {
             navigate('/profile/profile-settings');
           }, 1000));
@@ -221,6 +234,10 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
         });
       });
   };
+
+
+
+  
 
   const [imagePreview, setImagePreview] = useState(null);
   const [passportPreview, setPassPortPreview] = useState(null);
@@ -276,6 +293,8 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
 
   console.log(watch('image'));
   console.log(watch('official_id_or_passport'));
+
+  console.log(citizenships);
 
   return (
     <>
@@ -360,8 +379,38 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                                 (<span className='errorMessage'>{errors.title.message}</span>)
                               }
                             </div>
+                            <div className="col-lg-6 mb-4">
+                          <label htmlFor="signUpMobileNumber">
+                            Mobile Number <span className="requiredStar">*</span>
+                          </label>
+                          <div className="row">
+                            <div className="col-4">
+                              <CustomDropdown
+                                countries={countries}
+                                setValue={setValue}
+                                errors={errors}
+                                inputName={'phone_code'}
+                              />
+                            </div>
+                            <div className="col-8">
+                              <input
+                                type='text'
+                                id='signUpMobileNumber'
+                                placeholder='Enter your phone number'
+                                {...register('phone')}
+                                className={`form-control signUpInput ${errors.phone ? 'inputError' : ''}`}
+                              />
+                              {
+                                errors.phone
+                                &&
+                                (<span className='errorMessage'>{errors.phone.message}</span>)
+                              }
+                            </div>
+                          </div>
+                        </div>
                           </>
                         }
+                       { isSignUp &&
                         <div className="col-lg-6 mb-4">
                           <label htmlFor="signUpMobileNumber">
                             Mobile Number <span className="requiredStar">*</span>
@@ -391,6 +440,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                             </div>
                           </div>
                         </div>
+                        }
                         <div className="col-lg-6 mb-4">
                           <label htmlFor="signUpCountry">
                             Country / Region <span className="requiredStar">*</span>
@@ -463,7 +513,7 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                                 (<span className='errorMessage'>{errors.role_id.message}</span>)
                               }
                             </div>
-                            <div className="col-lg-6 mb-4">
+                            {/* <div className="col-lg-6 mb-4">
                               <label htmlFor="addEmployeecitizenship">
                                 Citizenship <span className="requiredStar">*</span>
                               </label>
@@ -480,6 +530,32 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                                 errors.citizenship
                                 &&
                                 (<span className='errorMessage'>{errors.citizenship.message}</span>)
+                              }
+                            </div> */}
+                             <div className="col-lg-6 mb-4">
+                              <label htmlFor="addEmployeecitizenship">
+                                Citizenship <span className="requiredStar"> *</span>
+                                <i title="egyptian" className="bi bi-info-circle ms-1 cursorPointer"></i>
+                              </label>
+                              <select
+                                id='addEmployeecitizenship'
+                                defaultValue={''}
+                                {...register('citizenship_id')}
+                                className={`form-select signUpInput ${errors.citizenship_id ? 'inputError' : ''}`}
+                              >
+                                <option value='' disabled>Select Your Citizenship</option>
+                                {
+                                  citizenships?.map(el => (
+                                    <option key={el?.id} value={el?.id}>
+                                      {el?.name}
+                                    </option>
+                                  ))
+                                }
+                              </select>
+                              {
+                                errors.citizenship_id
+                                &&
+                                (<span className='errorMessage'>{errors.citizenship_id.message}</span>)
                               }
                             </div>
                             <div className="col-lg-6 mb-4">
@@ -637,21 +713,53 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                         }
                         {
                           !isSignUp &&
-                          <div className='col-lg-12 mb-4'>
-                            <label className='text-capitalize' htmlFor="addEmployeeofficial_id_or_passport" >
-                              Official ID Or Passport<span className="requiredStar"> *</span>
-                            </label>
-                            <input
-                              type='file'
-                              id='addEmployeeofficial_id_or_passport'
-                              {...register('official_id_or_passport')}
-                              className={`form-control newUploadBtn ${errors.official_id_or_passport ? 'inputError' : ''}`}
-                            />
-                            {
-                              errors.official_id_or_passport
-                              &&
-                              (<p className='errorMessage'>{errors.official_id_or_passport.message}</p>)
-                            }
+                          // <div className='col-lg-12 mb-4'>
+                          //   <label className='text-capitalize' htmlFor="addEmployeeofficial_id_or_passport" >
+                          //     Official ID Or Passport<span className="requiredStar"> *</span>
+                          //   </label>
+                          //   <input
+                          //     type='file'
+                          //     id='addEmployeeofficial_id_or_passport'
+                          //     {...register('official_id_or_passport')}
+                          //     className={`form-control newUploadBtn ${errors.official_id_or_passport ? 'inputError' : ''}`}
+                          //   />
+                          //   {
+                          //     errors.official_id_or_passport
+                          //     &&
+                          //     (<p className='errorMessage'>{errors.official_id_or_passport.message}</p>)
+                          //   }
+                          // </div>
+                          <div className='col-lg-8'>
+                          <label htmlFor="addEmployeeofficial_id_or_passport">
+                            Upload Official ID Or Passport
+                            <span className="requiredStar"> *</span>
+                          </label>
+                          <input
+                            type='file'
+                            id='addEmployeeofficial_id_or_passport'
+                            className={`newUploadBtn form-control ${errors.official_id_or_passport ? 'inputError' : ''}`}
+                            onChange={handlePassportChange}
+                          />
+                          {
+                            errors.official_id_or_passport
+                            &&
+                            (<p className='errorMessage'>{errors.official_id_or_passport.message}</p>)
+                          }
+                          {passportPreview ? (
+                            <div className='image-preview'>
+                              <img
+                                src={passportPreview}
+                                alt="Selected profile"
+                                style={{ maxWidth: '100px', height: '100px', marginTop: '10px', borderRadius: '12px' }}
+                              />
+                            </div>
+                          ) : (
+                            fileName && (
+                              <p className='file-name' style={{ marginTop: '10px', color: '#555' }}>
+                                {fileName}
+                              </p>
+                            )
+                          )}
                           </div>
                         }
                         <div className='col-lg-6'>
@@ -676,9 +784,11 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                             </div>
                           )}
                         </div>
-                        <div className='col-lg-6'>
+                        {
+                          isSignUp && 
+                          <div className='col-lg-6'>
                           <label htmlFor="signUpProfileofficial_id_or_passport">
-                            Upload Official Id Or Passport
+                            Upload Official ID Or Passport
                             <span className="requiredStar"> *</span>
                           </label>
                           <input
@@ -707,7 +817,9 @@ export default function PersonalSignUpFormMainSec({ token, countries, industries
                               </p>
                             )
                           )}
-                        </div>
+                          </div>
+                        }
+                        
                         {
                           isSignUp &&
                           <div className="col-lg-8 my-4">

@@ -17,6 +17,7 @@ export default function NewCatalogItemForm({ token }) {
     const [unAuth, setUnAuth] = useState(false);
     const [loading, setLoading] = useState(true);
     const loginType = localStorage.getItem('loginType');
+    const [previewImages, setPreviewImages] = useState([]);
     const navigate = useNavigate();
     const { id } = useParams();
     const [currCatalog, setCurrCatalog] = useState([]);
@@ -69,7 +70,34 @@ export default function NewCatalogItemForm({ token }) {
         tax: '',
         type: [],
         image: [],
+        options: []
     });
+    
+    const handleAddOption = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            options: [...prevState.options, { attribute: '', values: [{ name: '', price: '' }] }]
+        }));
+    };
+
+    const handleAddValue = (optionIndex) => {
+        const updatedOptions = [...formData.options];
+        updatedOptions[optionIndex].values.push({ name: '', price: '' });
+        setFormData({ ...formData, options: updatedOptions });
+    };
+
+    const handleOptionChange = (index, field, value) => {
+        const updatedOptions = [...formData.options];
+        updatedOptions[index][field] = value;
+        setFormData({ ...formData, options: updatedOptions });
+    };
+
+    const handleValueChange = (optionIndex, valueIndex, field, value) => {
+        const updatedOptions = [...formData.options];
+        updatedOptions[optionIndex].values[valueIndex][field] = value;
+        setFormData({ ...formData, options: updatedOptions });
+    };
+
 
     const fetchUnitsOfMeasure = async () => {
         try {
@@ -110,6 +138,8 @@ export default function NewCatalogItemForm({ token }) {
     }, [id]);
 
     const [currentSubCategoriesInsideMainCategory, setCurrentSubCategoriesInsideMainCategory] = useState([]);
+    
+    console.log(currCatalog);
 
     useEffect(() => {
         const fetchSubCategories = async () => {
@@ -157,6 +187,7 @@ export default function NewCatalogItemForm({ token }) {
                 tax: currCatalog?.tax || '',
                 type: currCatalog?.catalogTypes?.map(el => el?.type) || [],
                 image: currCatalog?.media?.map(el => el?.image) || [],
+                options: currCatalog?.options?.map(el => el) || []
             })
         };
     }, [currCatalog]);
@@ -195,56 +226,116 @@ export default function NewCatalogItemForm({ token }) {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
+
+        // Update previews
+        const newPreviews = files.map((file, index) => ({
+            id: `${file.name}-${index}-${Date.now()}`,
+            preview: URL.createObjectURL(file),
+        }));
+
+        // Update formData with raw file objects
         setFormData((prevState) => ({
             ...prevState,
-            image: files,
+            image: [...prevState.image, ...files],
+        }));
+
+        // Update previewImages state
+        setPreviewImages((prev) => [...prev, ...newPreviews]);
+    };
+
+    const handleImageDelete = (id) => {
+        const imageToRemove = previewImages.find((img) => img.id === id);
+        if (imageToRemove) {
+            URL.revokeObjectURL(imageToRemove.preview); // Revoke URL
+        }
+        setPreviewImages((prev) => prev.filter((img) => img.id !== id));
+        setFormData((prevState) => ({
+            ...prevState,
+            image: prevState.image.filter((_, index) =>
+                previewImages.findIndex((img) => img.id === id) !== index
+            ),
+        }));
+    };
+
+    const handleBookmarkClick = (id) => {
+        // Find the index of the clicked image
+        const clickedIndex = previewImages.findIndex((img) => img.id === id);
+
+        if (clickedIndex === 0) return; // If it's already the first image, do nothing
+
+        // Rearrange the previewImages array
+        const updatedPreviews = [
+            previewImages[clickedIndex], // Move clicked image to the front
+            ...previewImages.filter((_, index) => index !== clickedIndex), // Keep others
+        ];
+
+        // Rearrange the formData.image array
+        const updatedImages = [
+            formData.image[clickedIndex], // Move clicked image to the front
+            ...formData.image.filter((_, index) => index !== clickedIndex), // Keep others
+        ];
+
+        setPreviewImages(updatedPreviews);
+        setFormData((prevState) => ({
+            ...prevState,
+            image: updatedImages,
         }));
     };
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
-
         const submissionData = new FormData();
+
+        // Append normal fields
         Object.keys(formData).forEach((key) => {
-            if (key !== 'image' && !Array.isArray(formData[key])) {
+            if (key !== 'options' && key !== 'image') {
                 submissionData.append(key, formData[key]);
             }
         });
         formData.type.forEach((type, index) => {
-            submissionData.append(`type[${index}]`, type);
-        })
-        formData.image.forEach((image, index) => {
-            submissionData.append(`image[${index}]`, image);
-        })
-        try {
-            const slugCompletion = id ? `update-catalog/${id}` : 'add-catalog';
-            const response = await axios.post(`${baseURL}/${loginType}/${slugCompletion}`, submissionData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
+                    submissionData.append(`type[${index}]`, type);
+                })
+        // Append options
+        formData.options.forEach((option, optionIndex) => {
+            submissionData.append(`options[${optionIndex}][attribute]`, option.attribute);
+            option.values.forEach((value, valueIndex) => {
+                submissionData.append(`options[${optionIndex}][values][${valueIndex}][name]`, value.name);
+                submissionData.append(`options[${optionIndex}][values][${valueIndex}][price]`, value.price);
             });
-            if (response.status === 200) {
-                navigate('/profile/catalog');
-                scrollToTop()
-                toast.success(response?.data?.message || (id ? 'Catalog item updated successfully' : 'Catalog item added successfully'));
-            } else {
-                toast.error(id ? 'Failed to update catalog item' : 'Failed to add catalog item');
-            }
+        });
+
+        // Append images
+        formData.image.forEach((file, index) => {
+            submissionData.append(`image[${index}]`, file);
+        });
+
+        const toastId = toast.loading('Submitting...');
+        try {
+            const url = id
+                ? `${baseURL}/employee/update-catalog/${id}`
+                : `${baseURL}/employee/add-catalog`;
+            await axios.post(url, submissionData, {
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+            });
+
+            toast.success('Catalog saved successfully!', { id: toastId });
+            navigate('/profile/catalog');
+            scrollToTop();
         } catch (error) {
-            if (error?.response?.data?.errors) {
-                const validationErrors = Object.values(error.response.data.errors)
-                    .flat()
-                    .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>); // Preserve line breaks
-            } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!');
+            toast.error('Failed to save catalog.', { id: toastId });
+        
+            if (error.response && error.response.data) {
+              const errors = error.response.data.errors;
+        
+              if (errors) {
+                // Display all errors in a single toast message
+                const allErrors = Object.values(errors).flat().join(', '); 
+                toast.error(`Validation Errors: ${allErrors}`, { id: toastId }); 
+              }
             }
-        }
-        console.log(submissionData);
+          }
     };
+
 
     useEffect(() => {
         setTimeout(() => {
@@ -368,7 +459,7 @@ export default function NewCatalogItemForm({ token }) {
                                                 </div>
                                                 <div className="col-lg-6">
                                                     <div className="catalog__new__input">
-                                                        <label htmlFor="code">product code <span className="requiredStar"> *</span>
+                                                        <label htmlFor="code">product code <span className='optional'>(optional)</span>
                                                             <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                         </label>
                                                         <input
@@ -465,6 +556,34 @@ export default function NewCatalogItemForm({ token }) {
                                                     onChange={handleImageChange}
                                                     className="form-control mt-2"
                                                 />
+                                                <div className="image-preview mt-4">
+                                                    {previewImages.map((image, index) => (
+                                                        <div key={image.id} className="position-relative d-inline-block me-4">
+                                                            <img
+                                                                src={image.preview}
+                                                                alt="Selected"
+                                                                className="img-thumbnail"
+                                                                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                                                            />
+                                                            <i
+                                                                className={`bi bi-bookmark-star-fill ${index === 0 ? "text-warning" : "text-secondary"
+                                                                    } position-absolute bottom-0 start-0 cursor-pointer`}
+                                                                style={{ fontSize: "1.5rem", transform: "translate(-50%, 50%)" }}
+                                                                onClick={() => handleBookmarkClick(image.id)}
+                                                                title="Set as Main Image"
+                                                            ></i>
+                                                            <i
+                                                                className="bi bi-x-circle text-danger position-absolute top-0 end-0 cursor-pointer"
+                                                                style={{ fontSize: "1.5rem", transform: "translate(50%, -50%)" }}
+                                                                onClick={() => handleImageDelete(image.id)}
+                                                                title="Remove Image"
+                                                            ></i>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+
+
                                             </div>
                                             <div className="catalog__check__points">
                                                 {allTypes?.map((type) => (
@@ -485,6 +604,73 @@ export default function NewCatalogItemForm({ token }) {
                                                     </div>
                                                 ))}
                                             </div>
+    <div className="row">
+        <div className="col-lg-12">
+            <div style={{
+                marginTop: '30px',
+                borderTop: "1px solid #aaa"
+            }} className="catalog__new__input">
+                <label className="fw-bold my-3">Options and variations</label>
+                <button type="button" className="btn btn-link" onClick={handleAddOption}>Add Option</button>
+                {formData?.options?.map((option, index) => (
+                    <div key={index} className="option-group my-3">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <input
+                                style={{
+                                    background: 'rgb(142 149 235 / 40%)'
+                                }}
+                                    type="text"
+                                    placeholder="Attribute (e.g., Storage)"
+                                    value={option?.attribute}
+                                    onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                    className="form-control"
+
+                                />
+                            </div>
+                        </div>
+                        {option?.values?.map((value, valueIndex) => (
+                            <div key={valueIndex} className="row">
+                                <div className="col-lg-6">
+                                    <input
+                                        type="text"
+                                        placeholder="Option Name (e.g., 128 GB)"
+                                        value={value?.name}
+                                        onChange={(e) =>
+                                            handleValueChange(
+                                                index,
+                                                valueIndex,
+                                                'name',
+                                                e.target.value
+                                            )
+                                        }
+                                        className="form-control"
+                                    />
+                                </div>
+                                <div className="col-lg-6">
+                                    <input
+                                        type="text"
+                                        placeholder="Price Impact"
+                                        value={value?.price}
+                                        onChange={(e) =>
+                                            handleValueChange(
+                                                index,
+                                                valueIndex,
+                                                'price',
+                                                e.target.value
+                                            )
+                                        }
+                                        className="form-control"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                        <button type="button" onClick={() => handleAddValue(index)} className="btn btn-link">Add Value</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
                                             <div className="form__submit__button">
                                                 <button type="submit" className="btn btn-primary">
                                                     {id ? 'Update Catalog' : 'Add Catalog'}
