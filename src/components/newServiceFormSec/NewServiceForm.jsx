@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import MyNewSidebarDash from '../myNewSidebarDash/MyNewSidebarDash'
 import MainContentHeader from '../mainContentHeaderSec/MainContentHeader'
 import ContentViewHeader from '../contentViewHeaderSec/ContentViewHeader'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import { baseURL } from '../../functions/baseUrl'
@@ -119,7 +119,7 @@ export default function NewServiceForm({ token }) {
     }, [formData.category_id, mainCategories]);
 
     useEffect(() => {
-        if (currSevice?.id && +currSevice?.id === +id) {
+        if (currSevice?.slug_en && currSevice?.slug_en === id) {
             setFormData({
                 title_ar: currSevice?.title_ar || '',
                 title_en: currSevice?.title_en || '',
@@ -130,6 +130,7 @@ export default function NewServiceForm({ token }) {
                 status: 'active',
                 code: currSevice?.code || '',
                 image: currSevice?.image || '',
+                options: currSevice?.options?.map(el => el) || []
             })
         };
     }, [currSevice, id]);
@@ -157,7 +158,7 @@ export default function NewServiceForm({ token }) {
         Object.keys(formData).forEach((key) => {
             if (key !== 'options' && key === 'image' && formData[key] instanceof File) {
                 submissionData.append(key, formData[key]);
-            } 
+            }
             else {
                 submissionData.append(key, formData[key]);
             };
@@ -182,12 +183,12 @@ export default function NewServiceForm({ token }) {
             if (response.status === 200) {
                 navigate('/profile/service');
                 scrollToTop()
-                toast.success(response?.data?.message || (id ? 'Service item Updated Successfully!' : 'service item added successfully!'),{
+                toast.success(response?.data?.message || (id ? 'Service item Updated Successfully!' : 'service item added successfully!'), {
                     id: toastId,
                     duration: 1000
                 });
             } else {
-                toast.error(id ? 'Failed to update service item!' : 'Failed to add service item!',{
+                toast.error(id ? 'Failed to update service item!' : 'Failed to add service item!', {
                     id: toastId,
                     duration: 2000
                 });
@@ -196,18 +197,18 @@ export default function NewServiceForm({ token }) {
             if (error?.response?.data?.errors) {
                 const validationErrors = Object.values(error.response.data.errors)
                     .flat()
-                    .join('\n'); // Join with newline for separate lines
-                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>,{
-                    id: toastId,
-                    duration: 2000
-                }); // Preserve line breaks
-            } else {
-                toast.error(error?.response?.data?.message || 'Something Went Wrong!',{
+                    .join('\n');
+                toast.error(<div style={{ whiteSpace: 'pre-wrap' }}>{validationErrors}</div>, {
                     id: toastId,
                     duration: 2000
                 });
-            }
-        }
+            } else {
+                toast.error(error?.response?.data?.message || 'Something Went Wrong!', {
+                    id: toastId,
+                    duration: 2000
+                });
+            };
+        };
     };
 
     useEffect(() => {
@@ -360,66 +361,147 @@ export default function NewServiceForm({ token }) {
                                                     className="form-control"
                                                 />
                                             </div>
-                                            <div className="row">
-        <div className="col-lg-12">
-            <div className="catalog__new__input">
-                <label>Options</label>
-                <button type="button" className="btn btn-link" onClick={handleAddOption}>Add Option</button>
-                {formData?.options?.map((option, index) => (
-                    <div key={index} className="option-group">
-                        <div className="row">
-                            <div className="col-lg-6">
-                                <input
-                                    type="text"
-                                    placeholder="Attribute (e.g., Storage)"
-                                    value={option?.attribute}
-                                    onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
-                                    className="form-control"
-                                />
-                            </div>
-                        </div>
-                        {option?.values?.map((value, valueIndex) => (
-                            <div key={valueIndex} className="row">
-                                <div className="col-lg-6">
-                                    <input
-                                        type="text"
-                                        placeholder="Option Name (e.g., 128 GB)"
-                                        value={value?.name}
-                                        onChange={(e) =>
-                                            handleValueChange(
-                                                index,
-                                                valueIndex,
-                                                'name',
-                                                e.target.value
-                                            )
-                                        }
-                                        className="form-control"
-                                    />
-                                </div>
-                                <div className="col-lg-6">
-                                    <input
-                                        type="text"
-                                        placeholder="Price Impact"
-                                        value={value?.price}
-                                        onChange={(e) =>
-                                            handleValueChange(
-                                                index,
-                                                valueIndex,
-                                                'price',
-                                                e.target.value
-                                            )
-                                        }
-                                        className="form-control"
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                        <button type="button" onClick={() => handleAddValue(index)} className="btn btn-link">Add Value</button>
-                    </div>
-                ))}
-            </div>
-        </div>
-    </div>
+                                            {
+                                                id &&
+                                                <div className="row">
+                                                    <div className="col-lg-12">
+                                                        <div style={{
+                                                            marginTop: '30px',
+                                                            borderTop: "1px solid #aaa"
+                                                        }} className="catalog__new__input">
+                                                            <label className="fw-bold my-3">Options and variations</label>
+                                                            <div className='text-end'>
+                                                                <NavLink to={`/profile/service/edit-item/${id}/edit-option`}>
+                                                                    <button className='btn btn-outline-primary text-capitalize'>
+                                                                        edit options <i className="bi bi-pencil-square"></i>
+                                                                    </button>
+                                                                </NavLink>
+                                                            </div>
+                                                            {formData?.options?.map((option, index) => (
+                                                                <div key={index} className="option-group my-3">
+                                                                    <div className="row">
+                                                                        <div className="col-lg-6">
+                                                                            <input
+                                                                                style={{
+                                                                                    background: 'rgb(142 149 235 / 40%)'
+                                                                                }}
+                                                                                disabled
+                                                                                type="text"
+                                                                                placeholder="Attribute (e.g., Storage)"
+                                                                                value={option?.attribute}
+                                                                                onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                                                                className="form-control"
+
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    {option?.values?.map((value, valueIndex) => (
+                                                                        <div key={valueIndex} className="row">
+                                                                            <div className="col-lg-6">
+                                                                                <input
+                                                                                    disabled
+                                                                                    type="text"
+                                                                                    placeholder="Option Name (e.g., 128 GB)"
+                                                                                    value={value?.name}
+                                                                                    onChange={(e) =>
+                                                                                        handleValueChange(
+                                                                                            index,
+                                                                                            valueIndex,
+                                                                                            'name',
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
+                                                                                    className="form-control"
+                                                                                />
+                                                                            </div>
+                                                                            <div className="col-lg-6">
+                                                                                <input
+                                                                                    disabled
+                                                                                    type="text"
+                                                                                    placeholder="Price Impact"
+                                                                                    value={value?.price}
+                                                                                    onChange={(e) =>
+                                                                                        handleValueChange(
+                                                                                            index,
+                                                                                            valueIndex,
+                                                                                            'price',
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
+                                                                                    className="form-control"
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {/* <div className="row">
+                                                <div className="col-lg-12">
+                                                    <div className="catalog__new__input">
+                                                        <label>Options</label>
+                                                        <button type="button" className="btn btn-link" onClick={handleAddOption}>Add Option</button>
+                                                        {formData?.options?.map((option, index) => (
+                                                            <div key={index} className="option-group">
+                                                                <div className="row">
+                                                                    <div className="col-lg-6">
+                                                                        <input
+                                                                            type="text"
+                                                                            placeholder="Attribute (e.g., Storage)"
+                                                                            value={option?.attribute}
+                                                                            onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                                                            className="form-control"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                {
+                                                                    option?.values?.map((value, valueIndex) => (
+                                                                        <div key={valueIndex} className="row">
+                                                                            <div className="col-lg-6">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    placeholder="Option Name (e.g., 128 GB)"
+                                                                                    value={value?.name}
+                                                                                    onChange={(e) =>
+                                                                                        handleValueChange(
+                                                                                            index,
+                                                                                            valueIndex,
+                                                                                            'name',
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
+                                                                                    className="form-control"
+                                                                                />
+                                                                            </div>
+                                                                            <div className="col-lg-6">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    placeholder="Price Impact"
+                                                                                    value={value?.price}
+                                                                                    onChange={(e) =>
+                                                                                        handleValueChange(
+                                                                                            index,
+                                                                                            valueIndex,
+                                                                                            'price',
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
+                                                                                    className="form-control"
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                                <button type="button" onClick={() => handleAddValue(index)} className="btn btn-link">Add Value</button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div> */}
                                             <div className="form__submit__button">
                                                 <button type="submit" className="btn btn-primary">
                                                     {id ? 'Update Service' : 'Add Service'}

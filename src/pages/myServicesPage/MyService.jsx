@@ -72,7 +72,7 @@ export default function MyService({ token }) {
                                                         <div className="card__image">
                                                             <img src={el?.image} alt={el?.title} />
                                                         </div>
-                                                        <NavLink className="nav-link" to={`/profile/service/show-one/${el?.id}`}>
+                                                        <NavLink className="nav-link" to={`/profile/service/show-one/${el?.slug}`}>
                                                             <div className="card__name">
                                                                 <h3>
                                                                     {el?.title}
@@ -85,7 +85,7 @@ export default function MyService({ token }) {
                                                             <button onClick={() => handleDeleteThisService(el?.id)} className="btn__D">
                                                                 Delete
                                                             </button>
-                                                            <button className="btn__E" onClick={() => navigate(`/profile/service/edit-item/${el?.id}`)}>
+                                                            <button className="btn__E" onClick={() => navigate(`/profile/service/edit-item/${el?.slug}`)}>
                                                                 Edit
                                                             </button>
                                                         </div>

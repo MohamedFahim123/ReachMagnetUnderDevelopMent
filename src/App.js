@@ -229,6 +229,7 @@ function App() {
           token={token}
         />} />
         <Route path='/profile/catalog/edit-item/:id/edit-option' element={<CatalogOptionForm
+          currPage={'catalog'}
           token={token}
         />} />
         <Route path='/profile/catalogs/show-one/:itemId' element={<ShowOneProductInfoInDash
@@ -245,6 +246,10 @@ function App() {
           token={token}
         />} />
         <Route path='/profile/service/edit-item/:id' element={<NewServiceForm
+          token={token}
+        />} />
+        <Route path='/profile/service/edit-item/:id/edit-option' element={<CatalogOptionForm
+          currPage={'service'}
           token={token}
         />} />
         <Route path='/profile/service/show-one/:itemId' element={<ShowOneProductInfoInDash

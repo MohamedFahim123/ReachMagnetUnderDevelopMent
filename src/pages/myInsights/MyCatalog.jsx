@@ -60,7 +60,7 @@ export default function MyCatalog({ token }) {
               filteration={filterCatalog}
               setFilteration={setFilterCatalog}
               name="title"
-              currentUserLogin={currentUserLogin} 
+              currentUserLogin={currentUserLogin}
               placeholder="search catalog"
             />
             {unAuth ? (
@@ -78,7 +78,7 @@ export default function MyCatalog({ token }) {
                             <div className="card__image">
                               <img src={el?.media[0]?.image} alt={el?.title} />
                             </div>
-                            <NavLink className="nav-link" to={`/profile/catalogs/show-one/${el?.id}`}>
+                            <NavLink className="nav-link" to={`/profile/catalogs/show-one/${el?.slug}`}>
                               <div className="card__name">
                                 <h3>
                                   {el?.title} <i className="bi bi-box-arrow-in-up-right"></i>
@@ -90,7 +90,7 @@ export default function MyCatalog({ token }) {
                               <button onClick={() => handleDeleteThisCatalog(el?.id)} className="btn__D">
                                 Delete
                               </button>
-                              <button className="btn__E" onClick={() => navigate(`/profile/catalog/edit-item/${el?.id}`)}>
+                              <button className="btn__E" onClick={() => navigate(`/profile/catalog/edit-item/${el?.slug}`)}>
                                 Edit
                               </button>
                             </div>
