@@ -6,7 +6,7 @@ import MyNewSidebarDash from '../myNewSidebarDash/MyNewSidebarDash';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { baseURL } from '../../functions/baseUrl';
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { scrollToTop } from '../../functions/scrollToTop';
 import MyLoader from '../myLoaderSec/MyLoader';
 import Cookies from 'js-cookie'
@@ -604,6 +604,7 @@ export default function NewCatalogItemForm({ token }) {
                                                     </div>
                                                 ))}
                                             </div>
+   { !id &&
     <div className="row">
         <div className="col-lg-12">
             <div style={{
@@ -671,6 +672,86 @@ export default function NewCatalogItemForm({ token }) {
             </div>
         </div>
     </div>
+    } 
+    {
+        id &&
+        <div className="row">
+        <div className="col-lg-12">
+            <div style={{
+                marginTop: '30px',
+                borderTop: "1px solid #aaa"
+            }} className="catalog__new__input">
+                <label className="fw-bold my-3">Options and variations</label>
+                <div className='text-end'>
+                    <NavLink to={`/profile/catalog/edit-item/${id}/edit-option`}>
+                    <button className='btn btn-outline-primary text-capitalize'>
+                        edit options <i className="bi bi-pencil-square"></i>
+                    </button>
+                    </NavLink>
+                </div>
+                {formData?.options?.map((option, index) => (
+                    <div key={index} className="option-group my-3">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <input
+                                style={{
+                                    background: 'rgb(142 149 235 / 40%)'
+                                }}
+                                    disabled
+                                    type="text"
+                                    placeholder="Attribute (e.g., Storage)"
+                                    value={option?.attribute}
+                                    onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                    className="form-control"
+
+                                />
+                            </div>
+                        </div>
+                        {option?.values?.map((value, valueIndex) => (
+                            <div key={valueIndex} className="row">
+                                <div className="col-lg-6">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        placeholder="Option Name (e.g., 128 GB)"
+                                        value={value?.name}
+                                        onChange={(e) =>
+                                            handleValueChange(
+                                                index,
+                                                valueIndex,
+                                                'name',
+                                                e.target.value
+                                            )
+                                        }
+                                        className="form-control"
+                                    />
+                                </div>
+                                <div className="col-lg-6">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        placeholder="Price Impact"
+                                        value={value?.price}
+                                        onChange={(e) =>
+                                            handleValueChange(
+                                                index,
+                                                valueIndex,
+                                                'price',
+                                                e.target.value
+                                            )
+                                        }
+                                        className="form-control"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                       
+                    </div>
+                ))}
+            </div>
+        </div>
+        </div>
+    }
                                             <div className="form__submit__button">
                                                 <button type="submit" className="btn btn-primary">
                                                     {id ? 'Update Catalog' : 'Add Catalog'}

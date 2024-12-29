@@ -71,7 +71,7 @@ import MyNetwork from './pages/myNetwork/MyNetwork';
 import NewNetworkForm from './components/newNetworkFormSec/NewNetworkForm';
 import MyCatalogDetails from './pages/myCatalogDetailsPage/MyCatalogDetails';
 import MyServiceDetails from './pages/myServiceDetailsPage/MyServiceDetails';
-
+import CatalogOptionForm from './components/catalogOptionFormSec/CatalogOptionForm';
 
 function App() {
   const token = Cookies.get('authToken');
@@ -123,10 +123,10 @@ function App() {
       const restrictedPaths = ['/Login', '/business-signUp', '/personalsignUp', '/forget-password', '/reset-password'];
       if (restrictedPaths.includes(location.pathname)) {
         navigate('/');
-      }
+      };
     } else if (location.pathname.includes('profile')) {
       navigate('/login');
-    }
+    };
   }, [token, location.pathname]);
 
   const [loginnedUserId, setLoginnedUserId] = useState('');
@@ -226,6 +226,9 @@ function App() {
           token={token}
         />} />
         <Route path='/profile/catalog/edit-item/:id' element={<NewCatalogItemForm
+          token={token}
+        />} />
+        <Route path='/profile/catalog/edit-item/:id/edit-option' element={<CatalogOptionForm
           token={token}
         />} />
         <Route path='/profile/catalogs/show-one/:itemId' element={<ShowOneProductInfoInDash

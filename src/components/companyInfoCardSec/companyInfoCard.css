@@ -123,6 +123,10 @@
     color: var(--main-turquoise);
     background: var(--primary-white);
 }
+.hidebtn__companyActions{
+    display: none;
+}
+
 @media screen and (max-width: 600px){
     .companyFollow__btn{
         text-align: left;
@@ -140,4 +144,16 @@
         display: flex;
         justify-content: center;
     }
+}
+@media screen and (max-width: 992px) {
+    .Showbtn__companyActions{
+        display: none !important;
+    }
+    .hidebtn__companyActions{
+        display: block !important;
+    }
+    /* .hidebtn__companyActions .companyinfo__subTit{
+        color: #000 !important;
+
+    } */
 }

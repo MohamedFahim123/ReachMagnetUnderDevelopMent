@@ -148,6 +148,5 @@ export default function BookAppointMentFrom({ show, handleClose, companyId, comp
                 </form>
             </div>
         </Modal>
-
     );
 };
