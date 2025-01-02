@@ -14,6 +14,7 @@ export default function QuotationTableSec({ fetchAllQuotations, quotations, setC
             setCurrentPage(newPage);
         };
     };
+console.log(quotations);
 
     return (
         <div className="quotationTable__handler content__view__handler">
@@ -56,7 +57,7 @@ export default function QuotationTableSec({ fetchAllQuotations, quotations, setC
                         {quotations?.map((row, index) => (
                             <tr key={index}>
                                 <td>
-                                    <NavLink to={`/profile/quotations/${row?.id}`} className="nav-link fw-bold">
+                                    <NavLink to={`/profile/quotations/${row?.code}`} className="nav-link fw-bold">
                                         {row?.code === 'N/A' ? '' : row?.code}
                                     </NavLink>
                                 </td>

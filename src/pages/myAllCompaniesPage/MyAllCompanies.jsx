@@ -295,13 +295,13 @@ console.log(companies);
                                                 <div key={el?.id} className="col-12">
                                                     <div className="CompanyContentItem">
                                                         <div className="compImage">
-                                                            <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                                            <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                             <img src={el?.companyLogo} alt={el?.companyName} />
                                                             </NavLink>
                                                         </div>
                                                         <div className="compMainInfo">
                                                             <h5 className="mb-2">
-                                                                <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                                                <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                                 {el?.companyName}
                                                                 </NavLink>
                                                             </h5>
@@ -331,7 +331,7 @@ console.log(companies);
                                                             <NavLink
                                                                 onClick={() => scrollToTop()}
                                                                 className="nav-link"
-                                                                to={`/show-company/${el?.companyId}`}
+                                                                to={`/show-company/${el?.companySlug}`}
                                                             >
                                                                 <button className="pageMainBtnStyle">more info</button>
                                                             </NavLink>

@@ -65,10 +65,10 @@ export default function OneClickQuotationTable({
                 <td>
                   <NavLink
                     to={loginType === "user"
-                      ? `/profile/oneclick-quotations/${row?.id}`
+                      ? `/profile/oneclick-quotations/${row?.code}`
                       : row?.quotation_type === "buy"
-                        ? `/profile/oneclick-quotations/${row?.id}`
-                        : `/profile/companyoneclick-quotations/${row?.id}`}
+                        ? `/profile/oneclick-quotations/${row?.code}`
+                        : `/profile/companyoneclick-quotations/${row?.code}`}
                     className="nav-link fw-bold"
                   >
                     {row?.code === "N/A" ? "" : row?.code}

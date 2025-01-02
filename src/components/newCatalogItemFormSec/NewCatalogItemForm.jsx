@@ -20,7 +20,7 @@ export default function NewCatalogItemForm({ token }) {
     const [previewImages, setPreviewImages] = useState([]);
     const navigate = useNavigate();
     const { id } = useParams();
-    const [currCatalog, setCurrCatalog] = useState([]);
+    const [currCatalog, setCurrCatalog] = useState(null);
     const allTypes = [
         {
             id: 1,
@@ -70,13 +70,37 @@ export default function NewCatalogItemForm({ token }) {
         tax: '',
         type: [],
         image: [],
-        options: []
+        options: [],
+        details: [{ label: '', value: '' }],
     });
 
     const handleAddOption = () => {
         setFormData(prevState => ({
             ...prevState,
             options: [...prevState.options, { attribute: '', values: [{ name: '', price: '' }] }]
+        }));
+    };
+
+    const handleAddDetails = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            details: [...prevState.details, { label: '', value: '' }]
+        }));
+    };
+
+    const handleDeleteDetail = (idx) => {
+        setFormData(prevState => ({
+            ...prevState,
+            details: prevState?.details?.filter((el, i) => idx !== i && el)
+        }));
+    };
+
+    const handleChangeDetailsInputs = (e, idx) => {
+        setFormData(prevState => ({
+            ...prevState,
+            details: prevState.details.map((detail, i) =>
+                i === idx ? { ...detail, [e.target.name]: e.target.value } : detail
+            )
         }));
     };
 
@@ -184,7 +208,8 @@ export default function NewCatalogItemForm({ token }) {
                 tax: currCatalog?.tax || '',
                 type: currCatalog?.catalogTypes?.map(el => el?.type) || [],
                 image: currCatalog?.media?.map(el => el?.image) || [],
-                options: currCatalog?.options?.map(el => el) || []
+                options: currCatalog?.options?.map(el => el) || [],
+                details: currCatalog?.details?.map(el => el) || [],
             })
         };
     }, [currCatalog]);
@@ -265,7 +290,7 @@ export default function NewCatalogItemForm({ token }) {
         ];
 
         const updatedImages = [
-            formData.image[clickedIndex], 
+            formData.image[clickedIndex],
             ...formData.image.filter((_, index) => index !== clickedIndex),
         ];
 
@@ -294,6 +319,10 @@ export default function NewCatalogItemForm({ token }) {
                 submissionData.append(`options[${optionIndex}][values][${valueIndex}][name]`, value.name);
                 submissionData.append(`options[${optionIndex}][values][${valueIndex}][price]`, value.price);
             });
+        });
+        formData.details.forEach((detail, optionIndex) => {
+            submissionData.append(`details[${optionIndex}][label]`, detail.label);
+            submissionData.append(`details[${optionIndex}][value]`, detail.value);
         });
 
         formData.image.forEach((file, index) => {
@@ -570,8 +599,6 @@ export default function NewCatalogItemForm({ token }) {
                                                     ))}
                                                 </div>
 
-
-
                                             </div>
                                             <div className="catalog__check__points">
                                                 {allTypes?.map((type) => (
@@ -591,6 +618,97 @@ export default function NewCatalogItemForm({ token }) {
                                                         </div>
                                                     </div>
                                                 ))}
+                                            </div>
+                                            <div style={{
+                                                marginTop: '30px',
+                                                borderTop: "1px solid #aaa"
+                                            }} className="catalog__new__input">
+                                                <h4 className='my-3'>
+                                                    Product Details
+                                                    {
+                                                        currCatalog ?
+                                                            <>
+                                                            </>
+                                                            :
+                                                            <span className="ms-3 btn btn-link" onClick={handleAddDetails}>Add More Details</span>
+                                                    }</h4>
+                                                {
+                                                    currCatalog ?
+                                                        currCatalog?.details?.map((input, idx) => (
+                                                            <div key={idx} className="row">
+                                                                <div className='col-md-6'>
+                                                                    <label htmlFor="labelInput">Product Label</label>
+                                                                    <input
+                                                                        id='labelInput'
+                                                                        style={{
+                                                                            background: 'rgb(142 149 235 / 40%)'
+                                                                        }}
+                                                                        type="text"
+                                                                        placeholder="Product Label"
+                                                                        value={input?.label}
+                                                                        name='label'
+                                                                        disabled
+                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                                                        className="form-control"
+                                                                    />
+                                                                </div>
+                                                                <div className="col-md-6">
+                                                                    <label htmlFor="valueInput">Product Value</label>
+                                                                    <input
+                                                                        id='valueInput'
+                                                                        style={{
+                                                                            background: '#f9f9f9'
+                                                                        }}
+                                                                        disabled
+                                                                        type="text"
+                                                                        placeholder="Product Value"
+                                                                        value={input?.value}
+                                                                        name='value'
+                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                                                        className="form-control"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                        :
+                                                        formData?.details?.map((input, idx) => (
+                                                            <div key={idx} className="row">
+                                                                <div className='col-md-5'>
+                                                                    <label htmlFor="labelInput">Product Label</label>
+                                                                    <input
+                                                                        id='labelInput'
+                                                                        style={{
+                                                                            background: 'rgb(142 149 235 / 40%)'
+                                                                        }}
+                                                                        type="text"
+                                                                        placeholder="Product Label"
+                                                                        value={input?.label}
+                                                                        name='label'
+                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                                                        className="form-control"
+                                                                    />
+                                                                </div>
+                                                                <div className="col-md-5">
+                                                                    <label htmlFor="valueInput">Product Value</label>
+                                                                    <input
+                                                                        id='valueInput'
+                                                                        style={{
+                                                                            background: '#f9f9f9'
+                                                                        }}
+                                                                        type="text"
+                                                                        placeholder="Product Value"
+                                                                        value={input?.value}
+                                                                        name='value'
+                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                                                        className="form-control"
+                                                                    />
+                                                                </div>
+                                                                <div className="col-md-2 d-flex justify-content-center align-items-center">
+                                                                    <i className="bi bi-trash-fill fs-4 text-danger cursorPointer mt-3" onClick={() => handleDeleteDetail(idx)}></i>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                }
                                             </div>
                                             {!id &&
                                                 <div className="row">
@@ -614,7 +732,6 @@ export default function NewCatalogItemForm({ token }) {
                                                                                 value={option?.attribute}
                                                                                 onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
                                                                                 className="form-control"
-
                                                                             />
                                                                         </div>
                                                                     </div>

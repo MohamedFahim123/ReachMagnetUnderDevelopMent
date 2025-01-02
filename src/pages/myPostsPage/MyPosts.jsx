@@ -40,7 +40,8 @@ export default function MyPosts({ token }) {
     const handlePageChange = (newPage) => setCurrentPage(newPage);
 
     const handleDeletePost = (postId) => deletePost(token, loginType, postId);
-
+    console.log(posts);
+    
     return (
         <>
             {loading ? (

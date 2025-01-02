@@ -72,6 +72,9 @@ import NewNetworkForm from './components/newNetworkFormSec/NewNetworkForm';
 import MyCatalogDetails from './pages/myCatalogDetailsPage/MyCatalogDetails';
 import MyServiceDetails from './pages/myServiceDetailsPage/MyServiceDetails';
 import CatalogOptionForm from './components/catalogOptionFormSec/CatalogOptionForm';
+import PrevWork from './pages/prevWork/PrevWork';
+import AddNewPrevWork from './pages/addNewPrevWork/AddNewPrevWork';
+
 
 function App() {
   const token = Cookies.get('authToken');
@@ -123,10 +126,10 @@ function App() {
       const restrictedPaths = ['/Login', '/business-signUp', '/personalsignUp', '/forget-password', '/reset-password'];
       if (restrictedPaths.includes(location.pathname)) {
         navigate('/');
-      };
+      }
     } else if (location.pathname.includes('profile')) {
       navigate('/login');
-    };
+    }
   }, [token, location.pathname]);
 
   const [loginnedUserId, setLoginnedUserId] = useState('');
@@ -223,8 +226,8 @@ function App() {
 
         <Route path='/profile/catalog' element={<MyCatalog token={token} />} />
         <Route path='/profile/catalog/addNewItem' element={<NewCatalogItemForm
-          token={token}
-        />} />
+          token={token} />}
+        />
         <Route path='/profile/catalog/edit-item/:id' element={<NewCatalogItemForm
           token={token}
         />} />
@@ -232,6 +235,7 @@ function App() {
           currPage={'catalog'}
           token={token}
         />} />
+
         <Route path='/profile/catalogs/show-one/:itemId' element={<ShowOneProductInfoInDash
           token={token}
           show_slug={'show-catalog'}
@@ -241,6 +245,10 @@ function App() {
         <Route path='/profile/network/addNewItem' element={<NewNetworkForm token={token} />} />
         <Route path='/profile/network/edit-item/:id' element={<NewNetworkForm token={token} />} />
 
+        <Route path='/profile/previous-work' element={<PrevWork token={token} />} />
+        <Route path='/profile/previous-work/addNewItem' element={<AddNewPrevWork token={token} />} />
+        <Route path='/profile/previous-work/edit-item/:id' element={<AddNewPrevWork token={token} />} />
+
         <Route path='/profile/service' element={<MyService token={token} />} />
         <Route path='/profile/service/addNewItem' element={<NewServiceForm
           token={token}
@@ -248,13 +256,13 @@ function App() {
         <Route path='/profile/service/edit-item/:id' element={<NewServiceForm
           token={token}
         />} />
-        <Route path='/profile/service/edit-item/:id/edit-option' element={<CatalogOptionForm
-          currPage={'service'}
-          token={token}
-        />} />
         <Route path='/profile/service/show-one/:itemId' element={<ShowOneProductInfoInDash
           token={token}
           show_slug={'show-service'}
+        />} />
+        <Route path='/profile/service/edit-item/:id/edit-option' element={<CatalogOptionForm
+          currPage={'service'}
+          token={token}
         />} />
 
         <Route path='/profile/media' element={<MyMedia token={token} />} />

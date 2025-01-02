@@ -42,6 +42,8 @@ export default function SingleCompanyQuote({ token }) {
         file: []
     });
     const companyIdWantedToHaveQuoteWith = Cookies.get('currentCompanyRequestedQuote');
+    console.log(companyIdWantedToHaveQuoteWith);
+    
     const [distinationData, setDistinationData] = useState({
         include_shipping: false,
         include_insurance: false,

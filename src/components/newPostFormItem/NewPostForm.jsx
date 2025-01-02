@@ -132,6 +132,8 @@ export default function NewPostForm({ token }) {
         }, 500);
     }, [loading]);
 
+    console.log(currPost);
+    
     return (
         <>
             {

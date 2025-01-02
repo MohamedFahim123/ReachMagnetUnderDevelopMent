@@ -71,7 +71,7 @@ export default function OtherCategories() {
                                                                 <CategoryOctagonShape
                                                                     octagonIcon={el?.icon}
                                                                     iconName={el?.name}
-                                                                    iconLink={`/all-Industries/${el?.id}`}
+                                                                    iconLink={`/all-Industries/${el?.slug}`}
                                                                 />
                                                             </div>
                                                         )

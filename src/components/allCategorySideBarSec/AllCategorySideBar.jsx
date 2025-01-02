@@ -5,6 +5,8 @@ import styles from './allCategorySideBar.module.css';
 
 export default function AllCategorySideBar({ industries, show, handleClose }) {
     const { subIndustryID } = useParams();
+    console.log(subIndustryID);
+    
     return (
         <div className=' position-relative'>
             <Offcanvas show={show} onHide={handleClose} responsive="md" className={styles.sidebarOffcanvas}>
@@ -16,9 +18,9 @@ export default function AllCategorySideBar({ industries, show, handleClose }) {
                         {industries?.map((el) => (
                             <Link
                                 key={el?.id}
-                                to={`/all-Industries/${el?.id}`}
+                                to={`/all-Industries/${el?.slug}`}
                                 className={`${styles.sidebar__menu} nav-link
-                                ${subIndustryID === el?.id.toString() ? styles.sidebar__menu_active : ''}`}
+                                ${subIndustryID === el?.slug?.toString() ? styles.sidebar__menu_active : ''}`}
                             >
                                 <div className={`${styles.sidebar__menu__info}`}>
                                     <img src={el?.icon} alt="menu-img" />

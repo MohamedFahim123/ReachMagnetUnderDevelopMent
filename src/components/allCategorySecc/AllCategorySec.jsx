@@ -5,6 +5,8 @@ import other from '../../assets/categoryIcons/other.png'
 import CategoryOctagonShape from '../categoryOctagonShapeSec/CategoryOctagonShape'
 
 export default function AllCategorySec({selectedIndustries}) {
+    console.log(selectedIndustries);
+    
     return (
         <div className='allCategorySec__handler mb-5'>
             <div className="container">
@@ -21,7 +23,7 @@ export default function AllCategorySec({selectedIndustries}) {
                                 <CategoryOctagonShape 
                                 octagonIcon={el?.icon} 
                                 iconName={el?.name} 
-                                iconLink={`/all-Industries/${el?.id}`}
+                                iconLink={`/all-Industries/${el?.slug}`}
                                 />
                             </div>
                             )})

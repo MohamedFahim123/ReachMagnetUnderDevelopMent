@@ -43,7 +43,7 @@ export default function SideBar({ collapsed, setCollapsed, sidebarItems }) {
         <Menu>
           {
             sidebarItems?.map((item, index) => (
-              <>
+              <div key={index} >
                 {
                   item?.submenu ? (
                     <SubMenu
@@ -82,7 +82,7 @@ export default function SideBar({ collapsed, setCollapsed, sidebarItems }) {
                       </MenuItem >
                     )
                 }
-              </>
+              </div>
             ))
           }
         </Menu>

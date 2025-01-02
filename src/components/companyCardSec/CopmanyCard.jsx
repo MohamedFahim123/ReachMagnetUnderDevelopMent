@@ -7,7 +7,7 @@ import { baseURL } from '../../functions/baseUrl';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
-export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrentFollowedCompanies , coverImg, companyProfile, companyName, companyUser, productsCount, dealsCount, ownerCount, cardDesc, companyId }) {
+export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrentFollowedCompanies , coverImg, companyProfile, companyName, companyUser, productsCount, dealsCount, ownerCount, cardDesc, companyId, companySlug }) {
     const loginType = localStorage.getItem('loginType');
     const navigate = useNavigate();
     const [expandedDesc, setExpandedDesc] = useState(false);
@@ -45,6 +45,8 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
     const toggleDescription = () => {
         setExpandedDesc(!expandedDesc);
       };
+      console.log(companySlug);
+      
     return (
         <div className='companyCard__item'>
             <div className="card__cover">
@@ -60,7 +62,7 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
                             <NavLink
                                 onClick={() => {
                                     scrollToTop();
-                                }} to={`/show-company/${companyId}`} className={'nav-link'}>
+                                }} to={`/show-company/${companySlug}`} className={'nav-link'}>
                                 {companyName}
                             </NavLink>
                         </h2>

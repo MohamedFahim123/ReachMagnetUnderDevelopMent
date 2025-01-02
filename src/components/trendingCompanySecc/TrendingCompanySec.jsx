@@ -43,6 +43,7 @@ export default function TrendingCompanySec({ companies, token }) {
                                             companyName={el.companyName}
                                             companyUser={el.companyEmail}
                                             companyId={el.companyId}
+                                            companySlug={el.companySlug}
                                             // ************* static info
                                             // 356 × 58 px
                                             coverImg={el?.companyCover}

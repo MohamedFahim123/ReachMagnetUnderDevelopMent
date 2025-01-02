@@ -205,6 +205,32 @@ console.log(newData);
                             </div>
                         </div>
                         {
+                            newData?.details?.length !== 0 &&
+                            <div className="col-12 showOneProductDash__item mb-5">
+                                <h5>
+                                    {newData?.title} Details
+                                </h5>
+                                <div className="row">
+                                    {
+                                        newData?.details?.map((det,idx) => {
+                                            return (
+                                                <div key={idx} className="col-lg-6">
+                                                    <p>
+                                                    Label: <span>{det?.label}</span>
+                                                    </p>
+                                                    
+                                                    <p>
+                                                    Value: <span>{det?.value}</span>
+                                                    </p>
+                                                    
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        }
+                                                {
                             newData?.options?.length !== 0 &&
                             <div className="col-12 showOneProductDash__item mb-5">
                                 <h5>

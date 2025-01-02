@@ -6,6 +6,7 @@ import locationIcon from "../../assets/icons/Duotone.png";
 import userIcon from "../../assets/icons/Duotone3.png";
 import { Button } from 'react-bootstrap';
 export default function SubCategoryMainContent({ contentData, handleShow }) {
+console.log(contentData);
 
     return (
         <div className='subCategoryMainContent__handler mainContentAllCompanies__handler position-relative  mt-5'>
@@ -23,7 +24,7 @@ export default function SubCategoryMainContent({ contentData, handleShow }) {
                                 <div key={el?.id} className="mb-5">
                                     <div className="CompanyContentItem">
                                         <div className="compImage">
-                                        <NavLink  to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                        <NavLink  to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                             <img
                                                 src={el?.companyLogo}
                                                 alt={el?.companyName}
@@ -32,7 +33,7 @@ export default function SubCategoryMainContent({ contentData, handleShow }) {
                                         </div>
                                         <div className="compMainInfo">
                                             <h5 className="mb-2">
-                                                <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                                <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                 {el?.companyName}
                                                 </NavLink>
                                             </h5>
@@ -75,7 +76,7 @@ export default function SubCategoryMainContent({ contentData, handleShow }) {
                                                     scrollToTop();
                                                 }}
                                                 className={"nav-link"}
-                                                to={`/show-company/${el?.companyId}`}
+                                                to={`/show-company/${el?.companySlug}`}
                                             >
                                                 <button className="pageMainBtnStyle">
                                                     more info

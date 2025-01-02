@@ -75,6 +75,7 @@ export default function MyOrders({ token }) {
   //       toast.error(error?.response?.data?.message || 'Something Went Wrong!');
   //     })
   // };
+console.log(allOrders);
 
   return (
     <>
@@ -174,7 +175,7 @@ export default function MyOrders({ token }) {
                                       <td>
                                         {
                                           el?.order_status !== 'Rejected' &&
-                                          <NavLink className={'nav-link'} to={`/profile/quotation-orders/${el?.id}`}>
+                                          <NavLink className={'nav-link'} to={`/profile/quotation-orders/${el?.code}`}>
                                             <i className="bi bi-eye-fill showProd"></i>
                                           </NavLink>
                                         }

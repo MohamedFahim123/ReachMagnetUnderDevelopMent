@@ -98,9 +98,10 @@ const handleViewFiles = (files) => {
     setCurrFile(files); // Set files for the selected row
     setShowFiles(true); // Open the modal
 };
+// console.log(currFile);
 
 
-    console.log(newData);
+    // console.log(newData);
     
     return (
         <>

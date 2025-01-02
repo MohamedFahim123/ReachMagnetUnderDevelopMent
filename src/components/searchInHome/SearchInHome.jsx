@@ -215,7 +215,7 @@ export default function SearchInHome() {
                                     <div key={el?.companyId} className="col-12">
                                         <div className="CompanyContentItem">
                                             <div className="compImage">
-                                                <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                                <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                     <img
                                                         src={el?.companyLogo}
                                                         alt={el?.companyName}
@@ -224,7 +224,7 @@ export default function SearchInHome() {
                                             </div>
                                             <div className="compMainInfo">
                                                 <h5 className="mb-2">
-                                                    <NavLink to={`/show-company/${el?.companyId}`} target="_blank" className={'nav-link'}>
+                                                    <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                         {el?.companyName}
                                                     </NavLink>
                                                 </h5>
@@ -271,7 +271,7 @@ export default function SearchInHome() {
                                                         scrollToTop();
                                                     }}
                                                     className={"nav-link"}
-                                                    to={`/show-company/${el?.companyId}`}
+                                                    to={`/show-company/${el?.companySlug}`}
                                                 >
                                                     <button className="pageMainBtnStyle">
                                                         more info
@@ -304,7 +304,8 @@ export default function SearchInHome() {
                                     <LastMinuteCard
                                         productImage={cata?.media[0].image || 'N/A'}
                                         productName={cata?.title}
-                                        productLink={`/show-company/${cata?.company_id}/catalog-details/${cata?.id}`}
+                                        productLink={`/show-company/${cata?.company_slug}/catalog-details/${cata?.slug
+                                        }`}
                                         showCustomContent={true}
                                         borderColor={'rgba(0, 0, 0, 0.5)'}
                                         onAddClick={''}
@@ -334,7 +335,7 @@ export default function SearchInHome() {
                                     <LastMinuteCard
                                         productImage={serv?.image || 'N/A'}
                                         productName={serv?.title}
-                                        productLink={`/show-company/${serv?.company_id}/catalog-details/${serv?.id}`}
+                                        productLink={`/show-company/${serv?.company_slug}/service-details/${serv?.slug}`}
                                         showCustomContent={true}
                                         borderColor={'rgba(0, 0, 0, 0.5)'}
                                         onAddClick={''}

@@ -91,7 +91,7 @@ export default function SingleCompanyNewsSec({ token, companyId }) {
                                       onClick={() => {
                                         scrollToTop();
                                       }}
-                                      className={'nav-link'} to={`/show-company/${el?.companyId}`}>
+                                      className={'nav-link'} to={`/show-company/${el?.companySlug}`}>
                                       <img src={el?.companyLogo} alt="newImg" />
                                     </NavLink>
                                   </div>

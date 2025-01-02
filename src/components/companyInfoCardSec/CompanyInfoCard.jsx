@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './companyInfoCard.css'
 import verfuIcon from '../../assets/companyImages/Vector (3).png'
 import callIcon from '../../assets/companyImages/call.svg'
@@ -9,7 +9,6 @@ import { baseURL } from '../../functions/baseUrl'
 import toast from 'react-hot-toast'
 import { scrollToTop } from '../../functions/scrollToTop';
 import Cookies from 'js-cookie';
-import { Modal } from 'react-bootstrap'
 
 export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token }) {
     const [error, setError] = useState(null);
@@ -19,18 +18,6 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
         return cookieValue ? JSON.parse(cookieValue) : [];
     });
     const navigate = useNavigate();
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 500);
-    const [show, setShow] = useState(false);
-    const handleCloseModal = () => setShow(false);
-    const handleShowModal = () => setShow(true);
-
-    useEffect(() => {
-        if (window.innerWidth <= 500) {
-            setIsMobile(true);
-        } else {
-            setIsMobile(false);
-        };
-    }, []);
 
     const handleToggleFollowCompany = async (id) => {
         const currentCompanyWantedToFollow = {
@@ -63,6 +50,7 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
             });
     };
 
+
     const startNewChat = async (receiverId, receiverType) => {
         try {
             const res = await axios.post(`${baseURL}/${loginType}/start-chat`, {
@@ -76,14 +64,13 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
                     t: new Date().getTime()
                 },
             });
-            console.log(res?.data?.data);
             // navigate(`/your-messages/${res?.data?.data?.chat?.id}`)
             Cookies.set('newChatId', res?.data?.data?.chat?.id)
             navigate(`/your-messages`)
 
         } catch (error) {
             setError(error?.response?.data?.message || 'Failed to load messages');
-        };
+        }
     };
 
     // const handleNavigation = () => {
@@ -192,35 +179,21 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
                                         </p>
                                     </div>
                                     <div className="company__actions">
-                                        {
-                                            isMobile ?
-                                                (
-                                                    <>
-                                                        <button className='btn__companyActions Showbtn__companyActions'>
-                                                            <NavLink to={`tel:${showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}`}>
-                                                                <img src={callIcon} alt="call-icon" />
-                                                            </NavLink>
-                                                        </button>
-                                                        <button className='btn__companyActions hidebtn__companyActions'>
-                                                            <NavLink to={`tel:${showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}`}>
-                                                                <p className='companyinfo__subTit'>
-                                                                    {showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}
-                                                                </p>
-                                                            </NavLink>
-                                                        </button>
-                                                    </>
-                                                )
-                                                :
-                                                (
-                                                    <button className='btn__companyActions Showbtn__companyActions'>
-                                                        <p onClick={handleShowModal}>
-                                                            <img src={callIcon} alt="call-icon" />
-                                                        </p>
-                                                    </button>
-                                                )
-                                        }
+                                        <button className='btn__companyActions Showbtn__companyActions'>
+                                            <NavLink to={`tel:${showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}`}>
+                                                <img src={callIcon} alt="call-icon" />
+                                            </NavLink>
+                                        </button>
+                                        <button className='btn__companyActions hidebtn__companyActions'>
+                                            <NavLink to={`tel:${showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}`}>
+                                                <p className='companyinfo__subTit'>
+                                                    {showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}
+                                                </p>
+                                            </NavLink>
+                                        </button>
                                         <button onClick={handleNavigation} className='btn__companyActions online__btn'>
-                                            <NavLink className={'nav-link'}>
+                                            <NavLink className={'nav-link'}
+                                            >
                                                 <img src={messageIcon} alt="message-icon" />
                                             </NavLink>
                                         </button>
@@ -305,6 +278,7 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
                                         <div className="companyFollow__btn">
                                             {
                                                 token ? (
+                                                    // Check if loginType is 'user' and verified
                                                     localStorage.getItem('loginType') === 'user' && Cookies.get('verified') === 'false' ? (
                                                         <button
                                                             className='pageMainBtnStyle followCompanyBtn'
@@ -380,7 +354,7 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
                                         <NavLink
                                             onClick={() => {
                                                 scrollToTop();
-                                                Cookies.set('currentCompanyRequestedQuote', showCompaniesQuery?.companyId);
+                                                Cookies.set('currentCompanyRequestedQuote', showCompaniesQuery?.companySlug);
                                             }}
                                             className='nav-link'
                                             to={`/${showCompaniesQuery?.companyName}/request-quote`}
@@ -449,18 +423,6 @@ export default function CompanyInfoCard({ handleShow, showCompaniesQuery, token 
                 </div>
 
             </div>
-            <Modal show={show} onHide={handleCloseModal}>
-                <div className='container'>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{showCompaniesQuery?.companyName}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="col-md-12 mb-4">
-                            Phone Number: {showCompaniesQuery?.companyBranches[0]?.branchFullPhoneOne}
-                        </div>
-                    </Modal.Body>
-                </div>
-            </Modal>
         </div>
     )
 }

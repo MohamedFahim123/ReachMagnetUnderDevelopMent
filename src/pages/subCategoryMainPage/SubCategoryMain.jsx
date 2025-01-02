@@ -10,7 +10,8 @@ import { baseURL } from '../../functions/baseUrl'
 import toast from 'react-hot-toast'
 export default function SubCategoryMain() {
     const [loading, setLoading] = useState(true);
-    const {subIndustryID} = useParams()    
+    const {subIndustryID} = useParams()   
+     
     const [contentData, setContentData] = useState([]);
     const [industries, setIndustries] = useState([]);
     const fetchAllIndustries = async () => {
