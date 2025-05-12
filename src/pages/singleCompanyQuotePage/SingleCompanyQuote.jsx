@@ -61,7 +61,6 @@ export default function SingleCompanyQuote({ token }) {
         longitude: '',
         latitude: '', 
         currency: '', 
-
     });
 
     const handleCurrencyChange = (event) => {
@@ -218,7 +217,6 @@ export default function SingleCompanyQuote({ token }) {
                 })
         })();
     };
-console.log(cart);
 
     // const handleFormSubmit = (e) => {
     //     e.preventDefault();

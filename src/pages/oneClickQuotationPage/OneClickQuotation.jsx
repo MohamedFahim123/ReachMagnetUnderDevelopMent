@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './oneClickQuotation.css'
 import MyMainHeroSec from '../../components/myMainHeroSecc/MyMainHeroSec'
 import CartProduct from '../../components/cartProductSec/CartProduct'
@@ -8,18 +8,27 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import MyLoader from '../../components/myLoaderSec/MyLoader';
 import { GetAllCountriesStore } from '../../store/AllCountries';
-import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 import { GetAllRegionsStore } from '../../store/AllResions';
+import { GetQutationsAllIndustriesStore } from '../../store/QutationsAllIndustries';
 export default function OneClickQuotation({ token }) {
     const [loading, setLoading] = useState(true);
     const [requestIntries, setRequestIntries] = useState({
-        type: '',
-        category_id: '',
-        sub_category_id: '',
+        industry_id: '',
+        sub_industry_id: '',
         region_id: '',
         country_id: '',
         city_id: '',
     });
+    const { industriesQ, getAllIndustriesQ } = GetQutationsAllIndustriesStore();
+    const getAllIndustries = useCallback(() => {
+        if (industriesQ?.length === 0) {
+            getAllIndustriesQ();
+        };
+    }, [industriesQ.length, getAllIndustriesQ]);
+
+    useEffect(() => {
+        getAllIndustries();
+    }, [getAllIndustries]);
     const [cart, setCart] = useState([]);
     const [cartCompanies, setCartCompanies] = useState(0);
     const [loadingCart, setloadingCart] = useState(true);
@@ -27,7 +36,7 @@ export default function OneClickQuotation({ token }) {
     const [errorCart, setErrorCart] = useState(null);
     const [currentCountries, setCurrentCountries] = useState([]);
     const [currentCities, setCurrentCities] = useState([]);
-    const [currentSubCategories, setCurrentSubCategories] = useState([]);
+    const [currentSubIndustries, setCurrentSubIndustries] = useState([]);
     const typesOfQuotations = [
         { id: 1, name: 'catalog' }, { id: 2, name: 'service' }
     ];
@@ -36,7 +45,7 @@ export default function OneClickQuotation({ token }) {
         title: '',
         quantity: '',
         description: '',
-        image: '',
+        file: [],
     });
     const [distinationData, setDistinationData] = useState({
         include_shipping: false,
@@ -45,13 +54,17 @@ export default function OneClickQuotation({ token }) {
         destination_city_id: '',
         destination_area_id: '',
         address: '',
-        type: requestIntries?.type ? requestIntries?.type : '',
-        category_id: requestIntries?.category_id ? requestIntries?.category_id : '',
-        sub_category_id: requestIntries?.sub_category_id ? requestIntries?.sub_category_id : '',
-        user_notes: '',
+        industry_id: requestIntries?.industry_id ? requestIntries?.industry_id : '',
+        sub_industry_id: requestIntries?.sub_industry_id ? requestIntries?.sub_industry_id : '',
+        longitude: '',
+        latitude: '',
+        po_box: '',
+        currency: '',
+        target_budget: '',
+        target_delivery_time: "",
+        preferred_delivery_terms: "",
     });
     const countries = GetAllCountriesStore((state) => state.countries);
-    const mainCategories = GetAllMainCategoriesStore((state) => state.mainCategories);
     const regions = GetAllRegionsStore((state) => state.regions);
 
     useEffect(() => {
@@ -79,17 +92,43 @@ export default function OneClickQuotation({ token }) {
         };
     }, [loginType, token]);
 
+    const [currCurrencies, setCurrCurrencies] = useState([]);
+    const handleCurrencyChange = (event) => {
+        const selectedCurrency = event.target.value;
+        setDistinationData((prevData) => ({
+            ...prevData,
+            currency: selectedCurrency,
+        }));
+    };
+
     const handleResetCurrentQuotation = () => {
         (async () => {
             setloadingCart(true);
             setRequestIntries({
-                type: '',
-                category_id: '',
-                sub_category_id: '',
+                industry_id: '',
+                sub_industry_id: '',
                 region_id: '',
                 country_id: '',
                 city_id: ''
             });
+            setDistinationData({
+
+                include_shipping: false,
+                include_insurance: false,
+                destination_country_id: '',
+                destination_city_id: '',
+                destination_area_id: '',
+                address: '',
+                industry_id: requestIntries?.industry_id ? requestIntries?.industry_id : '',
+                sub_industry_id: requestIntries?.sub_industry_id ? requestIntries?.sub_industry_id : '',
+                longitude: '',
+                latitude: '',
+                po_box: '',
+                currency: '',
+                target_budget: '',
+                target_delivery_time: "",
+                preferred_delivery_terms: "",
+            })
             const toastId = toast.loading('Loading...');
             const res = await fetch(`${baseURL}/user/reset-one-click-quotation-cart`
                 , {
@@ -116,21 +155,21 @@ export default function OneClickQuotation({ token }) {
         })();
     };
 
-    const handleGettingCurrentSubCategories = (event) => {
-        const currentCategoryChosed = mainCategories?.find(cat => +cat?.mainCategoryId === +event?.target?.value);
+    const handleGettingCurrentSubIndustries = (event) => {
+        const currentCategoryChosed = industriesQ?.find(cat => +cat?.id === +event?.target?.value);
         if (currentCategoryChosed) {
-            setRequestIntries({ ...requestIntries, category_id: event?.target?.value, sub_category_id: '' });
-            setCurrentSubCategories([]);
-            const toastId = toast.loading('Loading Sub-Categories');
+            setRequestIntries({ ...requestIntries, industry_id: event?.target?.value, sub_industry_id: '' });
+            setCurrentSubIndustries([]);
+            const toastId = toast.loading('Loading Sub-Industries');
             (async () => {
-                await axios.get(`${baseURL}/main-categories/${currentCategoryChosed?.mainCategorySlug}`, {
+                await axios.get(`${baseURL}/show-industry-sub-industries/${currentCategoryChosed?.id}`, {
                     headers: {
                         Accept: 'application/json'
                     }
                 })
                     .then(response => {
-                        setCurrentSubCategories(response?.data?.data?.subCategories);
-                        toast.success(response?.data?.message || 'Sub-Category Loaded Successfully!', {
+                        setCurrentSubIndustries(response?.data?.data?.subIndustries);
+                        toast.success(response?.data?.message || 'Sub-Industries Loaded Successfully!', {
                             id: toastId,
                             duration: 1000
                         });
@@ -201,7 +240,7 @@ export default function OneClickQuotation({ token }) {
     };
 
     useEffect(() => {
-        if (token && loginType && requestIntries?.category_id && requestIntries?.sub_category_id) {
+        if (token && loginType && requestIntries?.industry_id && requestIntries?.sub_industry_id) {
             setloadingCart(true);
             (async () => {
                 const toastId = toast.loading('Loading...');
@@ -220,8 +259,7 @@ export default function OneClickQuotation({ token }) {
                     const result = await response.json();
                     if (result?.status === 200) {
                         setCartCompanies(result?.data?.company_count);
-                        console.log(result?.data);
-                        
+                        setCurrCurrencies(result?.data?.currencies);
                         setCart(result?.data?.cart);
                         toast.success(result?.message || 'Loaded Successfully', {
                             id: toastId,
@@ -240,11 +278,11 @@ export default function OneClickQuotation({ token }) {
             setloadingCart(false);
         }
         setCustomProduct({
-            ...customProduct, type: requestIntries?.type,
-            category_id: requestIntries?.category_id,
-            sub_category_id: requestIntries?.sub_category_id
+            ...customProduct,
+            industry_id: requestIntries?.industry_id,
+            sub_industry_id: requestIntries?.sub_industry_id
         });
-        setDistinationData({ ...distinationData, type: requestIntries?.type, category_id: requestIntries?.category_id, sub_category_id: requestIntries?.sub_category_id });
+        setDistinationData({ ...distinationData, industry_id: requestIntries?.industry_id, sub_industry_id: requestIntries?.sub_industry_id });
     }, [requestIntries]);
 
     const handleCheckboxChange = (e) => {
@@ -263,7 +301,7 @@ export default function OneClickQuotation({ token }) {
         const files = e.target.files;
         setCustomProduct((prevState) => ({
             ...prevState,
-            file: files,
+            file: [...files],
         }));
     };
 
@@ -273,10 +311,10 @@ export default function OneClickQuotation({ token }) {
             if (key !== 'file') {
                 formData.append(key, customProduct[key]);
             } else if (key === 'file' && !Array.isArray(customProduct[key])) {
-                formData.append('logo', customProduct.file[0]);
+                formData.append('file', customProduct.file[0]);
             } else if (Array.isArray(customProduct[key]) && key === 'file') {
                 customProduct[key].forEach((file, index) => {
-                    formData.append(`file[${index}]`, file[0]);
+                    formData.append(`file[${index}]`, file);
                 });
             }
         });
@@ -297,10 +335,9 @@ export default function OneClickQuotation({ token }) {
                         title: '',
                         quantity: '',
                         description: '',
-                        image: '',
-                        type: requestIntries?.type,
-                        category_id: requestIntries?.category_id,
-                        sub_category_id: requestIntries?.sub_category_id
+                        file: '',
+                        industry_id: requestIntries?.industry_id,
+                        sub_industry_id: requestIntries?.sub_industry_id
                     });
                     toast.success(`${response?.data?.message || 'Added Successfully!'}`, {
                         id: toastId,
@@ -309,8 +346,8 @@ export default function OneClickQuotation({ token }) {
                 })
                 .catch(error => {
                     toast.error(`${(error?.response?.data?.errors?.type && error?.response?.data?.errors?.type[0]) ||
-                        (error?.response?.data?.errors?.category_id && error?.response?.data?.errors?.category_id[0]) ||
-                        (error?.response?.data?.errors?.sub_category_id && error?.response?.data?.errors?.sub_category_id[0]) ||
+                        (error?.response?.data?.errors?.industry_id && error?.response?.data?.errors?.industry_id[0]) ||
+                        (error?.response?.data?.errors?.sub_industry_id && error?.response?.data?.errors?.sub_industry_id[0]) ||
                         error?.response?.data?.message ||
                         error?.message ||
                         'Error!'}`, {
@@ -341,9 +378,8 @@ export default function OneClickQuotation({ token }) {
             })
                 .then((response) => {
                     setRequestIntries({
-                        type: '',
-                        category_id: '',
-                        sub_category_id: '',
+                        industry_id: '',
+                        sub_industry_id: '',
                         region_id: '',
                         country_id: '',
                         city_id: ''
@@ -355,9 +391,15 @@ export default function OneClickQuotation({ token }) {
                         destination_city_id: '',
                         destination_area_id: '',
                         address: '',
-                        type: requestIntries?.type ? requestIntries?.type : '',
-                        category_id: requestIntries?.category_id ? requestIntries?.category_id : '',
-                        sub_category_id: requestIntries?.sub_category_id ? requestIntries?.sub_category_id : '',
+                        industry_id: requestIntries?.industry_id ? requestIntries?.industry_id : '',
+                        sub_industry_id: requestIntries?.sub_industry_id ? requestIntries?.sub_industry_id : '',
+                        longitude: '',
+                        latitude: '',
+                        po_box: '',
+                        currency: '',
+                        target_budget: '',
+                        target_delivery_time: "",
+                        preferred_delivery_terms: "",
                     });
                     setCart([]);
                     toast.success(`${response?.data?.message || 'Sent Successfully!'}`, {
@@ -370,6 +412,13 @@ export default function OneClickQuotation({ token }) {
                         error?.response?.data?.errors?.destination_city_id ||
                         error?.response?.data?.errors?.destination_area_id ||
                         error?.response?.data?.errors?.address ||
+                        error?.response?.data?.errors?.longitude ||
+                        error?.response?.data?.errors?.latitude ||
+                        error?.response?.data?.errors?.po_box ||
+                        error?.response?.data?.errors?.currency ||
+                        error?.response?.data?.errors?.target_budget ||
+                        error?.response?.data?.errors?.target_delivery_time ||
+                        error?.response?.data?.errors?.preferred_delivery_terms ||
                         error?.reponse?.data?.message || 'Error!'}`, {
                         id: toastId,
                         duration: 1000
@@ -384,7 +433,7 @@ export default function OneClickQuotation({ token }) {
             setLoading(false);
         }, 500);
     }, [loading]);
-console.log(cartCompanies);
+console.log(distinationData);
 
     return (
         <>
@@ -418,70 +467,46 @@ console.log(cartCompanies);
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="singleQuoteInput">
-                                                            <label htmlFor="oneclickqoutationSelectTheType">
-                                                                Request Type
+                                                            <label htmlFor="oneclickquotationSelectMainIndustry">
+                                                                Industry
                                                             </label>
                                                             <select
                                                                 className='form-select'
-                                                                id="oneclickqoutationSelectTheType"
-                                                                value={requestIntries?.type}
-                                                                onChange={(event) => {
-                                                                    setRequestIntries({ ...requestIntries, type: event?.target?.value })
-                                                                }}
+                                                                id="oneclickquotationSelectMainIndustry"
+                                                                value={requestIntries?.industry_id}
+                                                                onChange={handleGettingCurrentSubIndustries}
                                                             >
-                                                                <option value={''} disabled>Select Type</option>
-                                                                {
-                                                                    typesOfQuotations?.map(type => (
-                                                                        <option className='text-capitalize' value={type?.name} key={type?.id}>
-                                                                            {type?.name}
-                                                                        </option>
-                                                                    ))
-                                                                }
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="singleQuoteInput">
-                                                            <label htmlFor="oneclickquotationSelectMainCategory">
-                                                                Category
-                                                            </label>
-                                                            <select
-                                                                className='form-select'
-                                                                id="oneclickquotationSelectMainCategory"
-                                                                value={requestIntries?.category_id}
-                                                                onChange={handleGettingCurrentSubCategories}
-                                                            >
-                                                                <option value={''} disabled>Select Category</option>
-                                                                {mainCategories?.map(cat => (
+                                                                <option value={''} disabled>Select Industry</option>
+                                                                {industriesQ?.map(cat => (
                                                                     <option
-                                                                        value={cat?.mainCategoryId}
-                                                                        key={cat?.mainCategoryId}
-                                                                    >{cat?.mainCategoryName}</option>
+                                                                        value={cat?.id}
+                                                                        key={cat?.id}
+                                                                    >{cat?.name}</option>
                                                                 ))}
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
-                                                <div className="singleQuoteInput">
-                                                    <label htmlFor="oneclickqouteSelectSubCategory">
-                                                        Sub-category
-                                                    </label>
-                                                    <select
-                                                        value={requestIntries?.sub_category_id}
-                                                        className='form-select'
-                                                        id="oneclickqouteSelectSubCategory"
-                                                        onChange={(event) => {
-                                                            setRequestIntries({ ...requestIntries, sub_category_id: event?.target?.value })
-                                                        }}
-                                                    >
-                                                        <option value="" disabled>Select Sub-Category</option>
-                                                        {
-                                                            currentSubCategories?.map(subCat => (
-                                                                <option value={subCat?.subCategoryId} key={subCat?.subCategoryId}>{subCat?.subCategoryName}</option>
-                                                            ))
-                                                        }
-                                                    </select>
-                                                </div>
+                                                        <div className="singleQuoteInput">
+                                                            <label htmlFor="oneclickqouteSelectSubIndustry">
+                                                                Sub-Industry
+                                                            </label>
+                                                            <select
+                                                                value={requestIntries?.sub_industry_id}
+                                                                className='form-select'
+                                                                id="oneclickqouteSelectSubIndustry"
+                                                                onChange={(event) => {
+                                                                    setRequestIntries({ ...requestIntries, sub_industry_id: event?.target?.value })
+                                                                }}
+                                                            >
+                                                                <option value="" disabled>Select Sub-Industry</option>
+                                                                {
+                                                                    currentSubIndustries?.map(subCat => (
+                                                                        <option value={subCat?.id} key={subCat?.id}>{subCat?.name}</option>
+                                                                    ))
+                                                                }
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -500,7 +525,7 @@ console.log(cartCompanies);
                                                     >
                                                         <option value="" disabled>Select Sub-Category</option>
                                                         {
-                                                            currentSubCategories?.map(subCat => (
+                                                            currentSubIndustries?.map(subCat => (
                                                                 <option value={subCat?.subCategoryId} key={subCat?.subCategoryId}>{subCat?.subCategoryName}</option>
                                                             ))
                                                         }
@@ -545,57 +570,57 @@ console.log(cartCompanies);
                                                     </select>
                                                 </div>
                                             </div>
-                                <div className="col-lg-6">
-                                    <div className="singleQuoteInput">
-                                        <label htmlFor="oneclickQuotationCountrCitiesnSelect">
-                                            Choose your City
-                                        </label>
-                                        <select
-                                            className='form-select'
-                                            name="city_id"
-                                            id="oneclickQuotationCitiesSelect"
-                                            value={requestIntries?.city_id}
-                                            onChange={(event) => {
-                                                setRequestIntries({ ...requestIntries, city_id: event?.target?.value })
-                                            }}
-                                        >
-                                            <option value="" disabled>Choose Your City</option>
-                                            {currentCities?.map((city) => (
-                                                <option key={city?.cityId} value={city?.cityId}>{city?.cityName}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <div className="row">
-                                        <div className="col-lg-6">
-                                            <div className="selectedProducts__handler">
-                                                <h3>
-                                                    Selected Products
-                                                </h3>
-                                                <h4 className={'mt-3 fw-bold fs-5 mb-3'}>Number Of Companies: {cartCompanies || 0}</h4>
-                                                {(cart?.on_click_quotation_cart?.length === 0) ? (
-                                                    <p>No products selected</p>
-                                                ) : (
-                                                    cart?.on_click_quotation_cart?.map((el) => {
-                                                        return <CartProduct
-                                                            key={el?.one_click_quotation_cart_id}
-                                                            title={el?.item?.title}
-                                                            description={el?.item?.description}
-                                                            notes={el?.note}
-                                                            imageSrc={el?.item?.image ? el?.item?.image : el?.item?.medias[0]?.media}
-                                                            showImage={el?.item?.image ? !!el?.item?.image : !!el?.item?.medias[0]?.media}
-                                                            quantity={el?.quantity}
-                                                            cartId={el?.one_click_quotation_cart_id}
-                                                            token={token}
-                                                            setCart={setCart}
-                                                        />
-                                                    })
-                                                )}
+                                            <div className="col-lg-6">
+                                                <div className="singleQuoteInput">
+                                                    <label htmlFor="oneclickQuotationCountrCitiesnSelect">
+                                                        Choose your City
+                                                    </label>
+                                                    <select
+                                                        className='form-select'
+                                                        name="city_id"
+                                                        id="oneclickQuotationCitiesSelect"
+                                                        value={requestIntries?.city_id}
+                                                        onChange={(event) => {
+                                                            setRequestIntries({ ...requestIntries, city_id: event?.target?.value })
+                                                        }}
+                                                    >
+                                                        <option value="" disabled>Choose Your City</option>
+                                                        {currentCities?.map((city) => (
+                                                            <option key={city?.cityId} value={city?.cityId}>{city?.cityName}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="selectedProducts__handler">
+                                                            <h3>
+                                                                Selected Products
+                                                            </h3>
+                                                            <h4 className={'mt-3 fw-bold fs-5 mb-3'}>Number Of Companies: {cartCompanies || 0}</h4>
+                                                            {(cart?.one_click_quotation_cart?.length === 0) ? (
+                                                                <p>No products selected</p>
+                                                            ) : (
+                                                                cart?.one_click_quotation_cart?.map((el) => {
+                                                                    return <CartProduct
+                                                                        key={el?.one_click_quotation_cart_id}
+                                                                        title={el?.item?.title}
+                                                                        description={el?.item?.description}
+                                                                        notes={el?.note}
+                                                                        imageSrc={el?.item?.image ? el?.item?.image : el?.item?.medias[0]?.media}
+                                                                        showImage={el?.item?.image ? !!el?.item?.image : !!el?.item?.medias[0]?.media}
+                                                                        quantity={el?.quantity}
+                                                                        cartId={el?.one_click_quotation_cart_id}
+                                                                        token={token}
+                                                                        setCart={setCart}
+                                                                    />
+                                                                })
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-12">
                                                 <div className="customizationQuote__handler">
                                                     <div className="customization__form row">
@@ -702,7 +727,82 @@ console.log(cartCompanies);
 
                                                     </h3>
                                                     <div className="customization__form row">
+                                                        <div className="col-lg-6">
+                                                            <div className="singleQuoteInput">
+                                                                <label htmlFor="currency" className='position-relative'>
+                                                                    Prefered Currency
+                                                                    <i title='write a note for your full quote that very important to you' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                                </label>
+                                                                <select
+                                                                    defaultValue={''}
+                                                                    className='form-select w-100'
+                                                                    id="currency"
+                                                                    name={'currency'}
+                                                                    onChange={handleCurrencyChange}
+                                                                >
+                                                                    <option value='' disabled>Choose your currency</option>
+                                                                    {
+                                                                        currCurrencies?.map((curr) => (
+                                                                            <option key={curr} value={curr}>{curr}</option>
+                                                                        ))
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
                                                         <div className="col-lg-12">
+                                                            <div className="singleQuoteInput">
+                                                                <label htmlFor="oneClickQuotationTargetBudget">
+                                                                    Add Target Budget
+                                                                </label>
+                                                                <input
+                                                                    id="oneClickQuotationTargetBudget"
+                                                                    name="target_budget"
+                                                                    type='text'
+                                                                    className="form-control customizedInput"
+                                                                    defaultValue={distinationData.target_budget}
+                                                                    placeholder='5000'
+                                                                    onChange={(e) => {
+                                                                        setDistinationData({ ...distinationData, [e.target.name]: e.target.value });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-12">
+                                                            <div className="singleQuoteInput">
+                                                                <label htmlFor="oneClickQuotationTargetDeliveryTime">
+                                                                    Expected Delivery Time
+                                                                </label>
+                                                                <input
+                                                                    id="oneClickQuotationTargetDeliveryTime"
+                                                                    name="target_delivery_time"
+                                                                    type='date'
+                                                                    className="form-control customizedInput"
+                                                                    defaultValue={distinationData.target_delivery_time}
+                                                                    onChange={(e) => {
+                                                                        setDistinationData({ ...distinationData, [e.target.name]: e.target.value });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-12">
+                                                            <div className="singleQuoteInput">
+                                                                <label htmlFor="oneClickQuotationDeliveryTerms">
+                                                                    Preferred Delivery Terms
+                                                                </label>
+                                                                <textarea
+                                                                    id="oneClickQuotationDeliveryTerms"
+                                                                    name="preferred_delivery_terms"
+                                                                    className="form-control customizedInput"
+                                                                    rows="3"
+                                                                    defaultValue={distinationData.preferred_delivery_terms}
+                                                                    placeholder='Add Your Terms'
+                                                                    onChange={(e) => {
+                                                                        setDistinationData({ ...distinationData, [e.target.name]: e.target.value });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        {/* <div className="col-lg-12">
                                                             <div className="singleQuoteInput">
                                                                 <label htmlFor="oneClickQuotationNote">
                                                                     Add Note To One Click Quotation
@@ -714,12 +814,12 @@ console.log(cartCompanies);
                                                                     rows="3"
                                                                     defaultValue={distinationData.user_notes}
                                                                     placeholder='Ex: Add any notes or specific terms and conditions for your request in this section.'
-                                                                    onChange={(e)=>{
+                                                                    onChange={(e) => {
                                                                         setDistinationData({ ...distinationData, [e.target.name]: e.target.value });
                                                                     }}
                                                                 />
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
