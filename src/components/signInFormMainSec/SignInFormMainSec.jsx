@@ -52,7 +52,7 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
                 const slugCompletion = loginType === 'user' ? 'user/profile' : 'employee/show-profile';
                 const fetchData = async () => {
                     try {
-                        const response = await axios.get(`${baseURL}/${slugCompletion}?t=${new Date().getTime()}`, {
+                        const res = await axios.get(`${baseURL}/${slugCompletion}?t=${new Date().getTime()}`, {
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json',
@@ -60,31 +60,34 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
                             },
                         });
                         loginType === 'employee' ?
-                            Cookies.set('currentLoginedData', JSON.stringify(response?.data?.data), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
+                            Cookies.set('currentLoginedData', JSON.stringify(res?.data?.data), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
                             :
-                            Cookies.set('currentLoginedData', JSON.stringify(response?.data?.data?.user), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
-                            
+                            Cookies.set('currentLoginedData', JSON.stringify(res?.data?.data?.user), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 })
+                            toast.success(`${response?.data?.message}.`, {
+                                id: toastId,
+                                duration: 1000
+                            });
+                            if ( loginType === 'user' && !userData?.verified) {
+                                setTimeout(() => {
+                                    navigate('/user-verification');
+                                }, 1000);
+                            }else {
+                                setTimeout(() => {
+                                    navigate('/');
+                                    window.location.reload();
+                                }, 1000);
+                            };
+                           
                     } catch (error) {
                         toast.error(`${JSON.stringify(error?.response?.data?.message)}`);
                     };
                 };
                 fetchData();
+                
+               
+                reset();
             };
-            toast.success(`${response?.data?.message}.`, {
-                id: toastId,
-                duration: 1000
-            });
-            if ( loginType === 'user' && !userData?.verified) {
-                setTimeout(() => {
-                    navigate('/user-verification');
-                }, 1000);
-            }else {
-                setTimeout(() => {
-                    navigate('/');
-                    window.location.reload();
-                }, 1000);
-            };
-            reset();
+            
         })
             .catch(error => {
                 if (error?.response?.data?.errors) {
@@ -169,7 +172,7 @@ export default function SignInFormMainSec({ loginType, setLoginType }) {
                                             value={'Login'}
                                         />
                                         {
-                                            loginType === 'user' &&
+                                            // loginType === 'user' &&
                                             <div className="resetPasswordNavigatinoLink text-end">
                                                 <NavLink className='gotoLoginLink' to='/forget-password'>Forget Password ?</NavLink>
                                             </div>

@@ -1,6 +1,8 @@
 .myFooterSec__handler{
-    background: rgba(6, 127, 173, 0.15);
+    /* background: rgba(6, 127, 173, 0.15); */
+    background: var(--main-blue-color);
     padding: 60px 0;
+    color: var(--primary-white);
 }
 .myFooterSec__handler .footer__icons{
     display: flex;
@@ -31,14 +33,16 @@
 .footer__listBox h5{
     font-size: 16px;
     font-weight: 600;
-    color: rgba(7, 82, 154, 1);
+    /* color: rgba(7, 82, 154, 1); */
+    color: var(--primary-white);
     margin-bottom: 15px;
 }
 .footer__listBox__items{
     margin-bottom: 15px;
     font-size: 12px;
     font-weight: 400;
-    color: var(--primary-black);
+    /* color: var(--primary-black); */
+    color: var(--primary-white);
     text-transform: capitalize;
 }
 .footer__listBox__items:last-child{

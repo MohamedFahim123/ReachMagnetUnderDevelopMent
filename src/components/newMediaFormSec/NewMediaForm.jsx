@@ -190,12 +190,14 @@ export default function NewMediaForm({token}) {
                                                         <div className="upload__image__btn ">
                                                         <label htmlFor="image" style={{marginBottom: '8px', fontSize: '16px', fontWeight: '400'}}>{id ? 'Edit' : 'Add'} Image<span className="requiredStar"> *</span>
                                                         <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                                                        <br />
+                <span style={{color: 'gray', fontSize: '14px'}}>(Recommended size 1000 * 1000px)</span>
                                                         </label>
                                                         <input
                                                             type="file"
                                                             name="image"
                                                             onChange={handleImageChange}
-                                                            className="form-control"
+                                                            className="form-control mt-2"
                                                         />
                                                         </div>
                                                     </div>

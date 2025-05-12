@@ -10,6 +10,11 @@ import icon5 from '../../assets/sidebar-icons/status-up.svg';
 import icon3 from '../../assets/sidebar-icons/user-square 1.svg';
 import icon4 from '../../assets/sidebar-icons/wallet-money 2.svg';
 import SideBar from '../sideBar/SideBar';
+import { useActivePackageStore } from '../../store/ActivePackageStore';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { baseURL } from '../../functions/baseUrl';
+import { useSidebarStatus } from '../../store/SidebarStatusStore';
 
 export default function MyNewSidebarDash({ token }) {
     const location = useLocation();
@@ -19,6 +24,8 @@ export default function MyNewSidebarDash({ token }) {
     const [showSettingsSubmenu, setShowSettingsSubmenu] = useState(false);
     const activePath = location.pathname;
     const navigate = useNavigate();
+    const cookiesData = Cookies.get("currentLoginedData");
+    const currentUserLogin = cookiesData ? JSON.parse(cookiesData) : null;
 
     const handleNavigationToSingleProfilePage = (pageName) => {
         navigate(`${pageName}`)
@@ -45,30 +52,75 @@ export default function MyNewSidebarDash({ token }) {
 
     }
     const loginType = localStorage.getItem('loginType')
-
+    const {
+        loading,
+        features,
+        message,
+        fetchActivePackage,
+        unAuth,
+    } = useActivePackageStore();
+    const {
+        ShowStatus,
+        fetchSidebarStatus,
+    } = useSidebarStatus();
+    useEffect(() => {
+        fetchActivePackage( loginType);
+        fetchSidebarStatus(loginType);
+    }, [loginType, fetchActivePackage, fetchSidebarStatus]);
+    console.log(features);
+    
     let sidebarItems = [
         // { title: "Profile", link: "/profile", icon: icon1 },
+        ShowStatus === 'all' && 
         { title: "Followers", link: "/profile/followers", icon: icon11 },
+        ShowStatus === 'all' && 
         { title: "Product Catalog", link: "/profile/catalog", icon: icon2 },
+        ShowStatus === 'all' && 
         { title: "Services", link: "/profile/service", icon: icon2 },
+        ShowStatus === 'all' && 
+        features?.portfolios === 'yes' && 
         { title: "Media", link: "/profile/media", icon: icon2 },
+        ShowStatus === 'all' && 
         { title: "E-commerce Products", link: "/profile/products", icon: icon4 },
+        ShowStatus === 'all' && 
+        features?.networks === 'yes' && 
         { title: "Network", link: "/profile/network", icon: icon4 },
+        ShowStatus === 'all' && 
+        features?.pervious_work === 'yes' && 
         { title: "Previous Work", link: "/profile/previous-work", icon: icon4 },
+        ShowStatus === 'all' && 
         { title: "E-commerce Orders", link: "/profile/product-order", icon: icon4 },
-        { title: "Collections", link: "/profile/product-order", icon: icon4 },
+        // ShowStatus === 'all' && 
+        // { title: "Collections", link: "/profile/product-order", icon: icon4 },
+        ShowStatus === 'all' && 
         { title: "FAQS", link: "/profile/faqs", icon: icon5 },
+        ShowStatus === 'all' && 
+        features?.insights === 'yes' && 
         { title: "Posts", link: "/profile/posts", icon: icon5 },
         // { title: "Shipping Costs", link: "/profile/shipping-costs", icon: currencyIcon },
+        ShowStatus === 'all' && 
+        features?.quotations === 'yes' && 
         { title: "Quotations", link: "/profile/quotations", icon: icon3 },
+        ShowStatus === 'all' && 
+        features?.one_click_quotations === 'yes' && 
         { title: "One-Click Quotations", link: "/profile/oneclick-quotations", icon: icon3 },
+        ShowStatus === 'all' && 
+        (features?.one_click_quotations === 'yes' ||  features?.quotations) &&
         { title: "Quotation Orders", link: "/profile/quotation-orders", icon: icon4 },
+        ShowStatus === 'all' && 
+        features?.appointments === 'yes' && 
         { title: "Appointments", link: "/profile/appointments", icon: icon3 },
+        ShowStatus === 'all' && 
         { title: "Booked Appointments", link: "/profile/booked-Appointments", icon: icon3 },
+        ShowStatus === 'all' && 
         { title: "Contact Form", link: "/profile/contact-form", icon: icon3 },
-        // { title: "Insights", link: "/profile/insights", icon: icon5 },
+        ShowStatus === 'all' && 
+        features?.messaging === 'yes' && 
         { title: "Messages", link: "/your-messages", icon: icon6 },
+        ShowStatus === 'all' && 
         { title: "Notifications", link: "/profile/notifications", icon: icon7 },
+        (ShowStatus === 'all' || ShowStatus === 'package_settings_and_transactions') &&
+        { title: "Package Settings", link: "/profile/packages-settings", icon: icon6 },
         {
             title: "Settings",
             link: "/profile/profile-settings",
@@ -79,7 +131,7 @@ export default function MyNewSidebarDash({ token }) {
             //     { title: "Employees Management", link: "/profile/users-management" }
             // ]
         }
-    ];
+    ].filter(Boolean);
     if (loginType === 'user') {
         sidebarItems = [
             // { title: "Profile", link: "/profile", icon: icon1 },
@@ -119,9 +171,9 @@ export default function MyNewSidebarDash({ token }) {
     ] : [
         { title: "Profile Settings", link: "/profile/profile-settings" },
         { title: "Business Settings", link: "/profile/business-settings" },
-        { title: "Employees Management", link: "/profile/users-management" }
+        features?.employees === 'yes' && { title: "Employees Management", link: "/profile/users-management" }
     ];
-    const settingsIndex = sidebarItems.findIndex(item => item.title === "Settings");
+    const settingsIndex = sidebarItems.findIndex(item => item?.title === "Settings");
     if (settingsIndex !== -1) {
         sidebarItems[settingsIndex].submenu = userSubmenu;
     };

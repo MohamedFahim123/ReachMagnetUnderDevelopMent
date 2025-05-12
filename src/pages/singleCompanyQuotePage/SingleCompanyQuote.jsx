@@ -29,6 +29,8 @@ export default function SingleCompanyQuote({ token }) {
     const [cart, setCart] = useState([]);
     const [loadingCart, setloadingCart] = useState(true);
     const [loadingSubmit, setloadingSubmit] = useState(false);
+    const [currCurrency, setCurrCurrency] = useState('');
+    const [companyCurrency, setCompanyCurrency] = useState('')
     const fileInputRef = useRef(null);
     const typesOfQuotations = [
         { id: 1, name: 'catalog' }, { id: 2, name: 'service' }
@@ -42,7 +44,7 @@ export default function SingleCompanyQuote({ token }) {
         file: []
     });
     const companyIdWantedToHaveQuoteWith = Cookies.get('currentCompanyRequestedQuote');
-    console.log(companyIdWantedToHaveQuoteWith);
+
     
     const [distinationData, setDistinationData] = useState({
         include_shipping: false,
@@ -55,8 +57,22 @@ export default function SingleCompanyQuote({ token }) {
         po_box: '',
         postal_code: '',
         user_notes: '',
-        request_by_notes: ''
+        request_by_notes: '',
+        longitude: '',
+        latitude: '', 
+        currency: '', 
+
     });
+
+    const handleCurrencyChange = (event) => {
+        const selectedCurrency = event.target.value;
+        setCurrCurrency(selectedCurrency); // Update state
+        setDistinationData((prevData) => ({
+            ...prevData,
+            currency: selectedCurrency, // Update currency in the data object
+        }));
+    };
+
     const countries = GetAllCountriesStore((state) => state.countries);
 
     useEffect(() => {
@@ -107,6 +123,8 @@ export default function SingleCompanyQuote({ token }) {
                     setCart(res?.data?.data?.cart);
                     setCurrentProd(res?.data?.data?.data);
                     setCustomizationCondition(res?.data?.data?.company_customization);
+                    setCompanyCurrency(res?.data?.data?.local_currency);
+                    
                 }).catch(err => {
                     toast.error(err.message);
                 })
@@ -127,6 +145,7 @@ export default function SingleCompanyQuote({ token }) {
         (async () => {
             setloadingCart(true);
             setRequestIntries({ type: '', category_id: '', sub_category_id: '', title: '' });
+            
             const toastId = toast.loading('Loading...');
             const res = await fetch(`${baseURL}/user/reset-quotation-cart/${companyIdWantedToHaveQuoteWith}?t=${new Date().getTime()}`
                 , {
@@ -143,6 +162,21 @@ export default function SingleCompanyQuote({ token }) {
                     id: toastId,
                     duration: 1000
                 });
+                setDistinationData({
+                    include_shipping: false,
+                    include_insurance: false,
+                    country_id: '',
+                    city_id: '',
+                    area_id: '',
+                    type: requestIntries?.type ? requestIntries?.type : customProduct?.type,
+                    address: '',
+                    longitude: '',
+                    latitude: '',
+                    currency: '',
+                    request_by_notes:'' 
+                });
+                setCurrCurrency('')
+                console.log(distinationData);
             } else {
                 toast.error(`${response?.message || 'Error!'}`, {
                     id: toastId,
@@ -184,55 +218,176 @@ export default function SingleCompanyQuote({ token }) {
                 })
         })();
     };
+console.log(cart);
 
+    // const handleFormSubmit = (e) => {
+    //     e.preventDefault();
+    //     (async () => {
+    //         setloadingSubmit(true);
+    
+    //         const data = {
+    //             ...distinationData,
+    //             include_shipping: distinationData?.include_shipping ? 'yes' : 'no',
+    //             include_insurance: distinationData?.include_insurance ? 'yes' : 'no',
+    //         };
+    
+    //         const toastId = toast.loading('Loading...');
+    
+    //         await axios.post(
+    //             `${baseURL}/user/make-quotation/${companyIdWantedToHaveQuoteWith}?t=${new Date().getTime()}`,
+    //             data,
+    //             {
+    //                 headers: {
+    //                     'Content-type': 'application/json',
+    //                     'Accept': 'application/json',
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             }
+    //         )
+    //         .then((response) => {
+    //             setDistinationData({
+    //                 include_shipping: false,
+    //                 include_insurance: false,
+    //                 country_id: '',
+    //                 city_id: '',
+    //                 area_id: '',
+    //                 type: requestIntries?.type ? requestIntries?.type : customProduct?.type,
+    //                 address: '',
+    //                 longitude: '',
+    //                 latitude: '',
+    //                 currency: '',
+    //             });
+    
+    //             setCart([]);
+    //             setCurrCurrency('');
+    
+    //             toast.success(`${response?.data?.message || 'Sent Successfully!'}`, {
+    //                 id: toastId,
+    //                 duration: 1000
+    //             });
+    
+    //             console.log(distinationData);
+    //         })
+    //         .catch(error => {
+    //             const res = error?.response;
+    //             let message = 'Error!';
+    
+    //             if (res?.status === 422 && res?.data?.errors) {
+    //                 const errors = res.data.errors;
+    //                 message = Object.values(errors).flat().join('\n');
+    //             } else if (res?.data?.message) {
+    //                 message = res.data.message;
+    //             }
+    
+    //             toast.error(message, {
+    //                 id: toastId,
+    //                 duration: 4000
+    //             });
+    
+    //             console.log(distinationData);
+    //         });
+    
+    //         setloadingSubmit(false);
+    //     })();
+    // };
+    
     const handleFormSubmit = (e) => {
         e.preventDefault();
         (async () => {
             setloadingSubmit(true);
+    
             const data = {
-                ...distinationData
-                , include_shipping: distinationData?.include_shipping ? 'yes' : 'no'
-                , include_insurance: distinationData?.include_insurance ? 'yes' : 'no',
+                ...distinationData,
+                include_shipping: distinationData?.include_shipping ? 'yes' : 'no',
+                include_insurance: distinationData?.include_insurance ? 'yes' : 'no',
             };
+    
             const toastId = toast.loading('Loading...');
-            await axios.post(`${baseURL}/user/make-quotation/${companyIdWantedToHaveQuoteWith}?t=${new Date().getTime()}`,
-                data, {
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json',
-                    Authorization: `Bearer ${token}`
+    
+            await axios.post(
+                `${baseURL}/user/make-quotation/${companyIdWantedToHaveQuoteWith}?t=${new Date().getTime()}`,
+                data,
+                {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            })
-                .then((response) => {
-                    setDistinationData({
-                        include_shipping: false,
-                        include_insurance: false,
-                        country_id: '',
-                        city_id: '',
-                        area_id: '',
-                        type: requestIntries?.type ? requestIntries?.type : customProduct?.type,
-                        address: '',
-                    });
-                    setCart([]);
-                    toast.success(`${response?.data?.message || 'Sent Successfully!'}`, {
-                        id: toastId,
-                        duration: 1000
-                    });
-                })
-                .catch(error => {
-                    toast.error(`${error?.response?.data?.message || 'Error!'}`, {
-                        id: toastId,
-                        duration: 1000
-                    });
+            )
+            .then((response) => {
+                setDistinationData({
+                    include_shipping: false,
+                    include_insurance: false,
+                    country_id: '',
+                    city_id: '',
+                    area_id: '',
+                    type: requestIntries?.type ? requestIntries?.type : customProduct?.type,
+                    address: '',
+                    longitude: '',
+                    latitude: '',
+                    currency: '',
                 });
+    
+                setCart([]);
+                setCurrCurrency('');
+    
+                toast.success(`${response?.data?.message || 'Sent Successfully!'}`, {
+                    id: toastId,
+                    duration: 1000
+                });
+    
+                console.log(distinationData);
+            })
+            .catch(error => {
+                const res = error?.response;
+                let message = 'Error!';
+    
+                if (res?.status === 422 && res?.data?.errors) {
+                    const errors = res.data.errors;
+                    if (
+                        errors?.include_shipping &&
+                        errors.include_shipping.includes("Cannot Request Quotaiton Include Shipping")
+                    ) {
+                        message = "Request for quotation related to services (only) cannot include shipping";
+                    } else {
+                        message = Object.values(errors).flat().join('\n');
+                    }
+    
+                } else if (res?.data?.message) {
+                    message = res.data.message;
+                }
+    
+                toast.error(message, {
+                    id: toastId,
+                    duration: 7000
+                });
+    
+                console.log(distinationData);
+            });
+    
             setloadingSubmit(false);
         })();
     };
-
+    
     const handleCheckboxChange = (e) => {
         setDistinationData({ ...distinationData, [e.target.name]: e.target.checked });
     };
-
+// const handleDeleteQuoteation =()=>{
+//     handleResetCurrentQuotation()
+//     setDistinationData({
+//         include_shipping: false,
+//         include_insurance: false,
+//         country_id: '',
+//         city_id: '',
+//         area_id: '',
+//         type: requestIntries?.type ? requestIntries?.type : customProduct?.type,
+//         address: '',
+//         longitude: '',
+//         latitude: '',
+//         currency: '', 
+//     })
+// }
     const handleCustomProductChange = (e) => {
         const { name, value } = e.target;
         setCustomProduct(prevState => ({
@@ -318,12 +473,14 @@ export default function SingleCompanyQuote({ token }) {
         })();
     };
 
+
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
         }, 500);
     }, [loading]);
-console.log(cart);
+console.log(currentProd);
+// const hasNoCatalog = cart?.some(item => item.item.type === 'catalog');
 
     return (
         <>
@@ -499,8 +656,8 @@ console.log(cart);
                                                 : el.media[0]
                                     }
                                     productName={el?.title}
-                                    productLink={`/show-company/${companyIdWantedToHaveQuoteWith}/${el?.type === "catalog" ? "catalog-details" : "service-details"
-                                        }/${el?.id}`}
+                                    productLink={`/${companyIdWantedToHaveQuoteWith}/${el?.type === "catalog" ? "catalog-details" : "service-details"
+                                        }/${el?.slug}`}
                                     dealQuantity={el?.dealQuantity}
                                     showCustomContent={true}
                                     buttonLabel={isAdded ? "Added" : "Add"}
@@ -648,19 +805,22 @@ console.log(cart);
                                                 </div>
                                                 <div className="col-lg-6">
                                                     <div className="customizationQuote__actions singleQuoteInput">
-                                                        <label className=' position-relative'>UpLoad A Reference <span className='optional'>
+                                                        <label className=' position-relative'>Upload A Reference <span className='optional'>
                                                             (max 3 files)
                                                         </span>
                                                             <i title='upload images or files descripe what you want' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
                                                         </label>
-                                                        <p className='fw-light mb-2'>It’s recommended to upload a photo or file as a reference for better clarity on your request</p>
+                                                        <p style={{
+                                                            fontSize:'14px'
+                                                        }} className='fw-light mb-2 ps-2'>It’s recommended to upload a photo or file as a reference for better clarity on your request</p>
                                                         <input
+                                                            
                                                             type='file'
                                                             id='customProductImageBtn'
                                                             multiple
                                                             ref={fileInputRef}
                                                             onChange={handleCustomProductChangeImage}
-                                                            className={`form-control`}
+                                                            className={`form-control ps-2`}
                                                         />
                                                         {
                                                             customProduct.file.length > 0 &&
@@ -675,6 +835,7 @@ console.log(cart);
                                         </div>
                                     </div>
                                 }
+                               { 
                                 <div className="col-12">
                                     <div className="quotaionCheckInputs__handler mt-5">
                                         <div className="form-check">
@@ -710,18 +871,38 @@ console.log(cart);
                                         }
                                     </div>
                                 </div>
-                                {distinationData?.include_shipping && (
+}
+                                { distinationData?.include_shipping && (
                                     <div className="col-12">
                                         <DestinationForm isOneClickQuotation={false} countries={countries} distinationData={distinationData} setDistinationData={setDistinationData} />
                                     </div>
                                 )}
-
+                            
                                 <div className="col-12">
                                     <div className="customizationQuote__handler">
                                         <h3 className='text-capitalize customizationHead'>
 
                                         </h3>
                                         <div className="customization__form row">
+                                            <div className="col-lg-6">
+                                                <div className="singleQuoteInput">
+                                                    <label htmlFor="currency" className='position-relative'>
+                                                        Prefered Currency
+                                                        <i title='write a note for your full quote that very important to you' className="bi bi-info-circle ms-2 cursorPointer " style={{ fontSize: '16px', position: "absolute", top: '2px' }}></i>
+                                                    </label>
+                                                    <select
+                            defaultValue={''}
+                            className='form-select w-100'
+                            id="currency"
+                            name={ 'currency'}
+                            onChange={handleCurrencyChange}
+                        >
+                            <option value='' disabled>Choose your currency</option>
+                            <option value="default">USD</option>
+                            <option value="local">{companyCurrency} (Seller's local currency)</option>
+                        </select>
+                                                </div>
+                                            </div>
                                             <div className="col-lg-12">
                                                 <div className="singleQuoteInput">
                                                     <label htmlFor="quotationNote" className='position-relative'>

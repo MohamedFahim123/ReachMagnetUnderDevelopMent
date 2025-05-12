@@ -24,9 +24,10 @@ export default function BookAppointMentFrom({ show, handleClose, companyId, comp
         },
         resolver: zodResolver(BookAppointMentSchema),
     });
+console.log(company?.company?.companyId);
 
     const submitHandler = async (data) => {
-        data.company_id = companyId;
+        data.company_id = `${company?.company?.companyId}`;
         const toastId = toast.loading('Loading...');
         console.log(data);
         await axios.post(`${baseURL}/user/book-appointment`, data, {
@@ -49,6 +50,7 @@ export default function BookAppointMentFrom({ show, handleClose, companyId, comp
                         setError(key, { message: err.response.data.errors[key][0] });
                     });
                 };
+                console.log(data);
                 toast.error(err?.response.data?.message || 'Something Went Wrong!', {
                     id: toastId,
                     duration: 1000

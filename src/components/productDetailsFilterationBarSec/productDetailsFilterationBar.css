@@ -1,6 +1,6 @@
 .productDetailsFilterationBar-list {
     box-shadow: 0px 4px 4px 0 #0000001A;
-    background-color: #F5F8FA;
+    background-color: #fff;
     color: #067FAD;
     border-radius: 8px;
     -webkit-border-radius: 8px;
@@ -21,10 +21,10 @@
     color: var(--primary-black);
 }
 .productDetailsFilterationBar-list .active{
-    color: #067FAD;
+    color: var(--main-blue-color);
 }
 .productDetailsFilterationBar-list li:hover {
-    color: #067FAD;
+    color: var(--main-blue-color);
 }
 .productDetailsFilterationBar-list li::after {
     content: '';
@@ -40,7 +40,7 @@
     -o-transition: all 0.3s ease-in-out;
 }
 .productDetailsFilterationBar-list li:hover::after {
-    background-color: #067FAD;
+    background-color: var(--main-blue-color);
 }
 .productDetailsFilterationBar-list .active::after {
     content: '';
@@ -54,5 +54,5 @@
     -moz-transition: all 0.3s ease-in-out;
     -ms-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
-    background-color: #067FAD;
+    background-color: var(--main-blue-color);
 }

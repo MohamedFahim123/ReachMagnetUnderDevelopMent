@@ -1,75 +1,65 @@
-import React, { useEffect, useRef, useState } from "react";
-import './customeDropdownSelect.css'
-const CustomDropdown = ({ countries, errors, setValue, inputName}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const dropdownRef = useRef(null);
+import React from "react";
+import Select from "react-select";
 
-    const handleSelect = (country) => {
-        setSelectedOption(country);
-        setIsOpen(false);
-        setValue(inputName, country?.phoneCode);
-    };
+const CustomDropdown = ({
+    optionsData,
+    inputName,
+    placeholder,
+    isFlagDropdown = false,
+    setValue, // optional
+    errors, // optional
+    handleInputChange, // optional
+    value, // optional 
+}) => {
+    const options = optionsData.map((item) => ({
+        value: isFlagDropdown ? item.phoneCode : item,
+        label: isFlagDropdown ? `${item.name} (${item.phoneCode})` : item,
+        flag: isFlagDropdown ? item.flag : null,
+    }));
 
-    const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setIsOpen(false); // Close dropdown if click happens outside
+    const handleChange = (selectedOption) => {
+        if (setValue) {
+            setValue(inputName, selectedOption.value); 
+        } else if (handleInputChange) {
+            handleInputChange({
+                target: {
+                    name: inputName,
+                    value: selectedOption.value,
+                },
+            });
         }
     };
 
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    const customOption = (props) => {
+        const { data, innerRef, innerProps } = props;
+        return (
+            <div ref={innerRef} {...innerProps} className="d-flex align-items-center p-2">
+                {isFlagDropdown && data.flag && (
+                    <img src={data.flag} alt={data.label} className="dropdown-flag" style={{ width: 20, marginRight: 10 }} />
+                )}
+                {data.label}
+            </div>
+        );
+    };
 
     return (
-        <div className="custom-dropdown position-relative" ref={dropdownRef}>
-            {/* Selected Value */}
-            <div
-                className={`form-select d-flex align-items-center justify-content-between ${errors.phone_code ? "is-invalid" : ""}`}
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                {selectedOption ? (
-                    <div className="d-flex align-items-center">
-                        <img
-                            src={selectedOption?.flag}
-                            alt=""
-                            style={{ width: 20, height: 15, marginRight: 10 }}
-                        />
-                        {selectedOption?.phoneCode}
-                    </div>
-                ) : (
-                    "code"
-                )}
-                <i className="bi bi-chevron-down"></i>
-            </div>
-
-            {/* Dropdown Options */}
-            {isOpen && (
-                <ul className="dropdown-menu w-100 show">
-                    {countries?.map((country) => (
-                        <li
-                            key={country?.phoneCode}
-                            className="dropdown-item d-flex align-items-center"
-                            onClick={() => handleSelect(country)}
-                        >
-                            <img
-                                src={country?.flag}
-                                alt=""
-                                style={{ width: 20, height: 20, borderRadius: "50%", marginRight: 10 }}
-                            />
-                            {country?.phoneCode}
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            {/* Validation Error */}
-            {errors.phone_code && <span className="text-danger">{errors?.phone_code.message}</span>}
+        <div>
+            <Select
+                options={options}
+                onChange={handleChange}
+                placeholder={placeholder || "Select an option"}
+                value={options.find(opt => opt.value === value) || null}
+                className={errors?.[inputName] ? "is-invalid" : ""}
+                components={isFlagDropdown ? { Option: customOption } : {}}
+                filterOption={(option, inputValue) =>
+                    option.data.label.toLowerCase().includes(inputValue.toLowerCase())
+                }
+            />
+            {errors?.[inputName] && <span className="text-danger">{errors[inputName]?.message}</span>}
         </div>
     );
 };
 
 export default CustomDropdown;
+                
+

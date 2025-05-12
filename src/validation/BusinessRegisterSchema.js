@@ -40,6 +40,8 @@ export const BusinessRegisterSchema = z.object({
 
     is_benifical_owner: z.any(),
     comfirm_policies: z.any(),
+
+    prefered_package_id: z.any(),
 }).superRefine((data, ctx) => {
     if (data.employee_password !== data.employee_password_confirmation) {
     ctx.addIssue({

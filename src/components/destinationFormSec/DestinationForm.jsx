@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import toast from 'react-hot-toast';
 import { baseURL } from '../../functions/baseUrl';
 
@@ -8,6 +10,8 @@ export default function DestinationForm({ distinationData, setDistinationData, c
     const [defaultCityValue, setdefaultCityValue] = useState('');
     const [currentAreas, setCurrentAreas] = useState([]);
     const [defaultAreaValue, setdefaultAreaValue] = useState('');
+    const [userLocation, setUserLocation] = useState([25.276987, 55.296249]); // Default location (Dubai)
+    const [zoom, setZoom] = useState(10);
 
     const handleChangeInput = (e) => {
         setDistinationData({ ...distinationData, [e.target.name]: e.target.value })
@@ -46,6 +50,46 @@ export default function DestinationForm({ distinationData, setDistinationData, c
         } else if (e.target.name === 'area_id') {
             setdefaultAreaValue(e.target.value);
         };
+    };
+
+    const LocationMarker = () => {
+        useMapEvents({
+            click(e) {
+                const { lat, lng } = e.latlng;
+                setUserLocation([lat, lng]);
+                setDistinationData({
+                    ...distinationData,
+                    latitude: `${lat}`,
+                    longitude: `${lng}`,
+                });
+                toast.success(`Location updated: (${lat.toFixed(6)}, ${lng.toFixed(6)})`);
+            },
+        });
+
+        return userLocation ? <Marker position={userLocation} /> : null;
+    };
+
+    const getCurrentLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation([latitude, longitude]);
+                    setDistinationData({
+                        ...distinationData,
+                        latitude,
+                        longitude,
+                    });
+                    setZoom(15);
+                    toast.success('Current location set successfully!');
+                },
+                () => {
+                    toast.error('Unable to retrieve your location.');
+                }
+            );
+        } else {
+            toast.error('Geolocation is not supported by your browser.');
+        }
     };
 
     const handleChangeInputOneClickQuotation = (e) => {
@@ -200,6 +244,52 @@ export default function DestinationForm({ distinationData, setDistinationData, c
                             placeholder='Enter the address'
                         ></textarea>
                     </div>
+                </div>
+                <div className="col-lg-12">
+                    <div className="map-container singleQuoteInput" style={{ height: '400px', margin: '20px 0' }}>
+                        {/* <button
+                            type="button"
+                            className="btn btn-primary mb-2"
+                            onClick={getCurrentLocation}
+                        >
+                            Use My Current Location
+                        </button> */}
+                        <label htmlFor="distinationData" className='position-relative text-capitalize mb-3'>
+                            pick up your location
+                            <i title='write exact address that you located for order' className="bi bi-info-circle ms-2 cursorPointer " style={{fontSize:'16px',position:"absolute", top: '2px'}}></i>
+                        </label>
+                        <MapContainer
+                            center={userLocation}
+                            zoom={zoom}
+                            style={{ height: '350px', width: '100%' }}
+                        >
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution="&copy; OpenStreetMap contributors"
+                            />
+                            <LocationMarker />
+                        </MapContainer>
+                    </div>
+                </div>
+                <div className="col-lg-6">
+                    <input
+                        name="longitude"
+                        className="form-control"
+                        type="text"
+                        placeholder="Longitude"
+                        value={distinationData?.longitude}
+                        readOnly
+                    />
+                </div>
+                <div className="col-lg-6">
+                    <input
+                        name="latitude"
+                        className="form-control"
+                        type="text"
+                        placeholder="Latitude"
+                        value={distinationData?.latitude}
+                        readOnly
+                    />
                 </div>
             </form>
         </div>

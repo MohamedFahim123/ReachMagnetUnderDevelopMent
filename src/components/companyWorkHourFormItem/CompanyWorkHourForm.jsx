@@ -68,7 +68,13 @@ export default function CompanyWorkHourForm({ token ,setUnAuth }) {
                     ))}
                 </form>
             ) : (
-                <CompanyWorkHourFormTable setUnAuth={setUnAuth} token={token} workingHours={newData} editMode={editMode} setEditMode={setEditMode} fetchShowCompany={fetchShowCompany}/>
+                <CompanyWorkHourFormTable 
+                setUnAuth={setUnAuth} 
+                token={token} 
+                workingHours={newData} 
+                editMode={editMode} 
+                setEditMode={setEditMode} 
+                fetchShowCompany={fetchShowCompany}/>
             )}
             
         </div>

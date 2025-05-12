@@ -21,10 +21,10 @@ export default function EnterUrEmail() {
           :
           <>
             {
-              loginType === 'user'
-              &&
+              // loginType === 'user'
+              // &&
               <div className='signUp__page replace__margin__with__padding'>
-                <SignUpHead />
+                {/* <SignUpHead /> */}
                 <ForgetPasswordForm />
               </div>
             }

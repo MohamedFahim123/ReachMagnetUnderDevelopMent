@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import UnAuthSec from '../unAuthSection/UnAuthSec';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import ShowLocationOnMap from '../showLocationOnMapSec/ShowLocationOnMap';
 export default function ShowSingleQuotation({ token }) {
     const loginType = localStorage.getItem('loginType');
     const { quotationsId } = useParams();
@@ -619,7 +620,7 @@ export default function ShowSingleQuotation({ token }) {
                                 />
                             </td>
                             <td className='text-center text-capitalize'>
-                                ${!isOneClickQuotation ?
+                            {newData?.currency_symbol} {!isOneClickQuotation ?
                                     ((row?.quantity * updatedData?.find(el => el?.quotation_detail_id === row?.id)?.offer_price)
                                         +
                                         (
@@ -859,12 +860,12 @@ export default function ShowSingleQuotation({ token }) {
                     </div>
                     <div className="totals__prices">
                         <h5 className='mb-4 mt-2'>
-                            ${subTotalPrice}
+                        {newData?.currency_symbol} {subTotalPrice}
                         </h5>
                         {
                             newData?.tax !== 'N/A' &&
                             <h5 className='mb-4 mt-2'>
-                                $ {newData?.tax}
+                                {newData?.currency_symbol} {newData?.tax}
                             </h5>
                         }
                         {
@@ -909,7 +910,7 @@ export default function ShowSingleQuotation({ token }) {
                         </h5>
                         
                         <h5 className='mt-3'>
-                            ${(newData?.total_price !== 'N/A' && newData?.total_price) || totalPrice || 0}
+                            {newData?.currency_symbol} {(newData?.total_price !== 'N/A' && newData?.total_price) || totalPrice || 0}
                         </h5>
                     </div>
                 </div>
@@ -1043,6 +1044,11 @@ export default function ShowSingleQuotation({ token }) {
                                                                 <h5 className='mb-4'>
                                                                     Valid To:
                                                                 </h5>
+                                                                { !isOneClickQuotation &&
+                                                                    <h5 className='mb-4'>
+                                                                    Prefered Currency:
+                                                                </h5>
+                                                                }
                                                             </div>
                                                             <div className="mainInfo__texts mt-0">
                                                                 <h5 className='mb-4'>
@@ -1054,6 +1060,10 @@ export default function ShowSingleQuotation({ token }) {
                                                                 <h5 className='mb-4'>
                                                                     {newData?.valid_to || fullData?.valid_to}
                                                                 </h5>
+                                                               { !isOneClickQuotation &&
+                                                                <h5 className='mb-4'>
+                                                                    {newData?.currency}
+                                                                </h5>}
                                                             </div>
                                                         </div>
                                                         <div className="requesterDetails__subInfo">
@@ -1070,6 +1080,9 @@ export default function ShowSingleQuotation({ token }) {
                                                                 <h5>
                                                                     Country:
                                                                 </h5>
+                                                                <h5>
+                                                                    Location:
+                                                                </h5>
                                                             </div>
                                                             <div className="mainInfo__texts">
                                                                 <h5 className='mb-4'>
@@ -1083,6 +1096,9 @@ export default function ShowSingleQuotation({ token }) {
                                                                 </h5>
                                                                 <h5>
                                                                     {newData?.country || fullData?.destination_country}
+                                                                </h5>
+                                                                <h5>
+                                                                <ShowLocationOnMap latitude={newData?.latitude} longitude={newData?.longitude} />
                                                                 </h5>
                                                             </div>
                                                         </div>

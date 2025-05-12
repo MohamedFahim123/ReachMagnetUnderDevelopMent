@@ -46,6 +46,7 @@ export default function ForgetPasswordForm() {
             });
         });
     };
+console.log(loginType);
 
     return (
         <div className='signUpForm__mainSec py-5 mb-5'>

@@ -18,6 +18,9 @@ import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
 import CompanyFollowIndustryFrom from '../../components/companyFollowIndustryFormSec/CompanyFollowIndustryFrom';
 import { NavLink } from 'react-router-dom';
 import CompanyTimezoneForm from '../../components/companyTimezoneFormItem/CompanyTimezoneForm';
+import CompanySlugForm from '../../components/companySlugFormSec/CompanySlugForm';
+import CompanyDocumentForm from '../../components/comapnyDocumentsFormSec/CompanyDocumentForm';
+import CompanyAddNewIndustry from '../../components/companyAddNewIndustrySec/CompanyAddNewIndustry';
 
 localStorage.setItem('updatingCompany', 'notUpdating');
 localStorage.setItem('updatingCompanyActivities', 'notUpdating');
@@ -96,15 +99,17 @@ export default function MyBussinessSettings({ token }) {
                 })();
             };
         };
-    }, []);
+    }, [companyUpdated, loginType, token]);
 
     const [activeItem, setActiveItem] = useState('Company Settings');
     const items = [
         { name: 'Company Settings', active: activeItem === 'Company Settings' },
+        { name: 'Company Documents', active: activeItem === 'Company Documents' },
         { name: 'Company Activities', active: activeItem === 'Company Activities' },
         { name: 'Company Industries', active: activeItem === 'Company Industries' },
         { name: 'Company Timezone', active: activeItem === 'Company Timezone' },
         { name: 'Company Work Hours', active: activeItem === 'Company Work Hours' },
+        { name: 'Company Slug', active: activeItem === 'Company Slug' },
     ];
     const handleItemClick = (itemName) => {
         setActiveItem(itemName);
@@ -147,6 +152,7 @@ export default function MyBussinessSettings({ token }) {
             setLoading(false);
         }, 500);
     }, [loading]);
+console.log(company);
 
     return (
         <>
@@ -171,7 +177,10 @@ export default function MyBussinessSettings({ token }) {
                                                 profileUpdateStatus !== 'notUpdating' &&
                                                 <>
                                                     <input type="file" className='invisibleInput' ref={fileCoverRef} onChange={hangleChangeCover} />
-                                                    <span onClick={handleCoverClick}><i className="bi bi-pencil-square"></i></span>
+                                                    <span onClick={handleCoverClick}>
+                                                        
+                                                        Edit cover (Recomended Size 1920 × 720 px) <i className="bi bi-pencil-square"></i>
+                                                    </span>
                                                 </>
                                             }
                                         </div>
@@ -219,22 +228,21 @@ export default function MyBussinessSettings({ token }) {
                                                 </div>
                                                 <div className="profile__form__inputs mt-3">
                                                     {activeItem === 'Company Settings'
-
                                                         &&
-                                                        <CompanySettingsForm
-                                                            setUnAuth={setUnAuth}
-                                                            token={token}
-                                                            imgChanged={imgChanged}
-                                                            currnetImageUpdateFile={currnetImageUpdateFile}
-                                                            setCurrentImageUpdateError={setCurrentImageUpdateError}
-                                                            coverChanged={imgCoverChanged}
-                                                            currnetCoverUpdateFile={currnetCoverUpdateFile}
-                                                            setCurrentCoverUpdateError={setCurrentCoverUpdateError}
-                                                            setProfileUpdateStatus={setProfileUpdateStatus}
-                                                            company={company}
-                                                            profileUpdateStatus={profileUpdateStatus}
-                                                            mainCategories={mainCategories}
-                                                        />
+                                                <CompanySettingsForm
+                                                    setUnAuth={setUnAuth}
+                                                    token={token}
+                                                    imgChanged={imgChanged}
+                                                    currnetImageUpdateFile={currnetImageUpdateFile}
+                                                    setCurrentImageUpdateError={setCurrentImageUpdateError}
+                                                    coverChanged={imgCoverChanged}
+                                                    currnetCoverUpdateFile={currnetCoverUpdateFile}
+                                                    setCurrentCoverUpdateError={setCurrentCoverUpdateError}
+                                                    setProfileUpdateStatus={setProfileUpdateStatus}
+                                                    company={company}
+                                                    profileUpdateStatus={profileUpdateStatus}
+                                                    mainCategories={mainCategories}
+                                                />
 
                                                     }
                                                     {activeItem === 'Company Activities'
@@ -260,7 +268,21 @@ export default function MyBussinessSettings({ token }) {
                                                     }
                                                     {activeItem === 'Company Industries'
                                                         &&
-                                                        <CompanyFollowIndustryFrom
+                                                        <CompanyAddNewIndustry
+                                                            setUnAuth={setUnAuth}
+                                                            token={token}
+                                                        />
+                                                    }
+                                                    {activeItem === 'Company Slug'
+                                                        &&
+                                                        <CompanySlugForm
+                                                            setUnAuth={setUnAuth}
+                                                            token={token}
+                                                        />
+                                                    }
+                                                    {activeItem === 'Company Documents'
+                                                        &&
+                                                        <CompanyDocumentForm
                                                             setUnAuth={setUnAuth}
                                                             token={token}
                                                         />

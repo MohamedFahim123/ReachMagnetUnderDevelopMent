@@ -11,7 +11,7 @@ li {
 
 body {
     font-size: 16px;
-    font-family: "Poppins", sans-serif;
+    font-family: "Manrope", sans-serif;
     background-color: var(--body-color);
 }
 
@@ -49,9 +49,15 @@ li {
     --primary-black: rgba(0, 0, 0, 1);
     --primary-hover-blue: rgba(1, 186, 233, 1);
     --text-gray-color: rgba(145, 151, 179, 1);
-    --body-color: rgba(241, 244, 248, 1);
-    --main-blue-color: rgba(1, 31, 91, 1);
-    --main-turquoise: rgba(6, 127, 173, 1);
+    --body-color: rgb(242, 240, 244);
+    /* --body-color: #fff; */
+    /* --main-blue-color: rgba(1, 31, 91, 1); */
+    /* --main-blue-color: #4f2d7f; */
+    --main-blue-color: #412794;
+
+    /* --main-turquoise: rgba(6, 127, 173, 1); */
+    --main-turquoise: #412794;
+
     --sale-color: rgba(225, 8, 19, 1);
     --secondary-font: "Inter", sans-serif;
 }

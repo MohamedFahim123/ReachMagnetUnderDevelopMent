@@ -1,6 +1,6 @@
 .headerSec__handler h1{
     font-size: 32px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--primary-black);
 }
 @media screen and (max-width: 600px){

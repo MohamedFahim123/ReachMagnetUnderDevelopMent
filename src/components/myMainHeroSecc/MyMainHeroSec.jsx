@@ -37,7 +37,7 @@ console.log(countries);
     return (
         <div className={`myMainHero__handler `}>
             <div className="container">
-                <div className={`${heroSecContainerType} ${heroSecContainerType === 'heroSec__container' ? '' : 'overlay30'}`}>
+                <div className={`${heroSecContainerType} ${heroSecContainerType === 'heroSec__container' ? 'overlay30' : 'overlay30'}`}>
                     <div className="row justify-content-center position-relative">
                         <div className="col-lg-12">
                             <h1>

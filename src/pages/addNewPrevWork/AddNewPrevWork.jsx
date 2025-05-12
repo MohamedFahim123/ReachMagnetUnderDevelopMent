@@ -169,7 +169,7 @@ export default function AddNewPrevWork({ token }) {
                                                 <label htmlFor="type_en">Type of Work<span className="requiredStar"> *</span>
                                                     <i title='Type of Work' className="bi bi-info-circle ms-1 cursorPointer"></i>
                                                 </label>
-                                                <select
+                                                {/* <select
                                                     name="type_en"
                                                     id="type_en"
                                                     className="form-control custom-select"
@@ -179,7 +179,16 @@ export default function AddNewPrevWork({ token }) {
                                                     <option value="" disabled>Select Type of Work</option>
                                                     <option value="service">Service</option>
                                                     <option value="Catalog">Catalog</option>
-                                                </select>
+                                                </select> */}
+                                                <input
+                                                    type="text"
+                                                    name="type_en"
+                                                    id="type_en"
+                                                    className="form-control"
+                                                    placeholder="Work Title"
+                                                    value={formData?.type_en}
+                                                    onChange={handleInputChange}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -205,13 +214,15 @@ export default function AddNewPrevWork({ token }) {
                                     </div>
                                     <div className="upload__image__btn ">
                                         <label htmlFor="image" className='mb-2'>Work Cover Image<span className="requiredStar"> *</span>
+                                        <br />
+                                        <span style={{color: 'gray', fontSize: '14px'}}>(Recommended size 1000 * 1000px)</span>
                                         </label>
                                         <input
                                             type="file"
                                             name="image"
                                             id='image'
                                             onChange={handleImageChange}
-                                            className="form-control"
+                                            className="form-control mt-2"
                                         />
                                     </div>
                                     <div className="form__submit__button">

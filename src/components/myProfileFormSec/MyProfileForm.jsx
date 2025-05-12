@@ -37,9 +37,11 @@ export default function MyProfileForm({ token, imgChanged, currnetImageUpdateFil
             full_address: currentUserLogin?.fullAddress,
             address_one: '',
             address_two: '',
+            phone_code: currentUserLogin?.phone_code
         },
         resolver: zodResolver(UpdateEmployeeProfileSchema),
     });
+console.log(currentUserLogin);
 
     const citiesInsideCurrentCountry = async (chosenCountry) => {
         try {

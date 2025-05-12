@@ -1,6 +1,7 @@
 .signUp__page {
     margin: -155px 0 -50px;
-    background-image: url(../../assets/signUpImages/6f1a9a9259c3c1f78b4f222fb8ff0c92.jpeg);
+    /* background-image: url(../../assets/signUpImages/coverSignUp.png); */
+    background: var(--body-color);
     background-position: center;
     background-size: cover;
     background-repeat: repeat-y;

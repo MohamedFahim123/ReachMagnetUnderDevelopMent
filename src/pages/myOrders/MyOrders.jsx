@@ -222,7 +222,7 @@ console.log(allOrders);
                                             </div>
                                           </div>
                                           <div className="col-lg-4 col-md-4 col-sm-12 orderId_handler">
-                                            <NavLink className={'nav-link'} to={`/profile/quotation-orders/${el?.id}`}>
+                                            <NavLink className={'nav-link'} to={`/profile/quotation-orders/${el?.code}`}>
                                               <p>
                                                 order Id: <span> #{el?.code}</span> <i className="bi bi-arrow-up-right"></i>
                                               </p>

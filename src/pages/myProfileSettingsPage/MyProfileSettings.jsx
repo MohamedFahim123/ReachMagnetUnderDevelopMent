@@ -20,7 +20,7 @@ export default function MyProfileSettings({ token }) {
     const [loading, setLoading] = useState(true);
     const [profileUpdateStatus, setProfileUpdateStatus] = useState(localStorage.getItem('updatingProfile'));
     const [currentUserLogin, setCurrentUserLogin] = useState(null);
-    const [currentImage, setCurrentImage] = useState(JSON.parse(Cookies.get('currentLoginedData'))?.image);
+    const [currentImage, setCurrentImage] = useState(JSON.parse(Cookies.get('currentLoginedData'))?.image );
     const [currnetImageUpdateFile, setCurrentImageUpdateFile] = useState(undefined);
     const [currnetImageUpdateError, setCurrentImageUpdateError] = useState('');
     const [imgChanged, setImageChanged] = useState(false);

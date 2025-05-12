@@ -335,7 +335,11 @@ export default function NewCatalogItemForm({ token }) {
                 ? `${baseURL}/employee/update-catalog/${id}`
                 : `${baseURL}/employee/add-catalog`;
             await axios.post(url, submissionData, {
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+                headers: 
+                { 
+                    Authorization: `Bearer ${token}`, 
+                'Content-Type': 'multipart/form-data' 
+            },
             });
 
             toast.success('Catalog saved successfully!', { id: toastId });
@@ -377,492 +381,494 @@ export default function NewCatalogItemForm({ token }) {
                                     unAuth ?
                                         <UnAuthSec />
                                         :
-                                        <form className="catalog__form__items" onSubmit={handleFormSubmit}>
-                                            <div className="row">
-                                                <div className="col-lg-6">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="title_en">Product Name in English <span className="requiredStar"> *</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="title_en"
-                                                            className="form-control"
-                                                            placeholder="Enter your text"
-                                                            value={formData?.title_en}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="title_ar">Product Name in Arabic <span className='optional'>(optional)</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="title_ar"
-                                                            className="form-control"
-                                                            placeholder="Enter your text"
-                                                            value={formData?.title_ar}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-lg-6">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="category_id">Category <span className="requiredStar"> *</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <select
-                                                            name="category_id"
-                                                            className="form-control custom-select"
-                                                            value={formData?.category_id}
-                                                            onChange={handleInputChange}
-                                                        >
-                                                            <option value="" disabled>Select Category</option>
-                                                            {mainCategories?.map((cat) => (
-                                                                <option key={cat?.mainCategoryId} value={cat?.mainCategoryId}>
-                                                                    {cat?.mainCategoryName}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="sub_category_id">Sub Category <span className="requiredStar"> *</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <select
-                                                            name="sub_category_id"
-                                                            className="form-control custom-select"
-                                                            value={formData?.sub_category_id}
-                                                            onChange={handleInputChange}
-                                                        >
-                                                            <option value="" disabled>Select Sub Category</option>
-                                                            {currentSubCategoriesInsideMainCategory?.map((subCat) => (
-                                                                <option key={subCat?.subCategoryId} value={subCat?.subCategoryId}>
-                                                                    {subCat?.subCategoryName}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-lg-6">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="unit_of_measure_id">
-                                                            unit of measure <span className="requiredStar"> *</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <select
-                                                            name="unit_of_measure_id"
-                                                            className="form-control custom-select"
-                                                            value={formData?.unit_of_measure_id}
-                                                            onChange={handleInputChange}
-                                                        >
-                                                            <option value="" disabled>Select unit of measure</option>
-                                                            {allUnitsOfMeasure?.map((unit) => (
-                                                                <option key={unit?.id} value={unit?.id}>
-                                                                    {unit?.unit}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="code">product code <span className='optional'>(optional)</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="code"
-                                                            className="form-control"
-                                                            placeholder="Enter your text"
-                                                            value={formData?.code}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-lg-8">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="description_en">Description in English <span className="requiredStar"> *</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <textarea
-                                                            name="description_en"
-                                                            className="form-control"
-                                                            rows="5"
-                                                            value={formData?.description_en}
-                                                            onChange={handleInputChange}
-                                                        ></textarea>
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-8">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="description_ar">Description in Arabic <span className='optional'>(optional)</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <textarea
-                                                            name="description_ar"
-                                                            className="form-control"
-                                                            rows="5"
-                                                            value={formData?.description_ar}
-                                                            onChange={handleInputChange}
-                                                        ></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-lg-8">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="price">Price <span className='optional'>(optional)</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <div className="custom-input-container">
-                                                            <input
-                                                                type="text"
-                                                                id="price"
-                                                                name="price"
-                                                                className="form-control custom-input"
-                                                                placeholder="Enter your text"
-                                                                value={formData?.price}
-                                                                onChange={handleInputChange}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-8">
-                                                    <div className="catalog__new__input">
-                                                        <label htmlFor="tax">Tax % <span className='optional'>(optional)</span>
-                                                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                        </label>
-                                                        <div className="custom-input-container">
-                                                            <input
-                                                                type="number"
-                                                                id="cata-tax"
-                                                                name="tax"
-                                                                min={0}
-                                                                max={100}
-                                                                className="form-control custom-input"
-                                                                placeholder="tax between (0% -100%)"
-                                                                value={formData?.tax}
-                                                                onChange={handleInputChange}
-                                                            />
+    <form className="catalog__form__items" onSubmit={handleFormSubmit}>
+        <div className="row">
+            <div className="col-lg-6">
+                <div className="catalog__new__input">
+                    <label htmlFor="title_en">Product Name in English <span className="requiredStar"> *</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <input
+                        type="text"
+                        name="title_en"
+                        className="form-control"
+                        placeholder="Enter your text"
+                        value={formData?.title_en}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            </div>
+            <div className="col-lg-6">
+                <div className="catalog__new__input">
+                    <label htmlFor="title_ar">Product Name in Arabic <span className='optional'>(optional)</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <input
+                        type="text"
+                        name="title_ar"
+                        className="form-control"
+                        placeholder="Enter your text"
+                        value={formData?.title_ar}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-lg-6">
+                <div className="catalog__new__input">
+                    <label htmlFor="category_id">Category <span className="requiredStar"> *</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <select
+                        name="category_id"
+                        className="form-control custom-select"
+                        value={formData?.category_id}
+                        onChange={handleInputChange}
+                    >
+                        <option value="" disabled>Select Category</option>
+                        {mainCategories?.map((cat) => (
+                            <option key={cat?.mainCategoryId} value={cat?.mainCategoryId}>
+                                {cat?.mainCategoryName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <div className="col-lg-6">
+                <div className="catalog__new__input">
+                    <label htmlFor="sub_category_id">Sub Category <span className="requiredStar"> *</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <select
+                        name="sub_category_id"
+                        className="form-control custom-select"
+                        value={formData?.sub_category_id}
+                        onChange={handleInputChange}
+                    >
+                        <option value="" disabled>Select Sub Category</option>
+                        {currentSubCategoriesInsideMainCategory?.map((subCat) => (
+                            <option key={subCat?.subCategoryId} value={subCat?.subCategoryId}>
+                                {subCat?.subCategoryName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-lg-6">
+                <div className="catalog__new__input">
+                    <label htmlFor="unit_of_measure_id">
+                        unit of measure <span className="requiredStar"> *</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <select
+                        name="unit_of_measure_id"
+                        className="form-control custom-select"
+                        value={formData?.unit_of_measure_id}
+                        onChange={handleInputChange}
+                    >
+                        <option value="" disabled>Select unit of measure</option>
+                        {allUnitsOfMeasure?.map((unit) => (
+                            <option key={unit?.id} value={unit?.id}>
+                                {unit?.unit}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <div className="col-lg-6">
+                <div className="catalog__new__input">
+                    <label htmlFor="code">product code <span className='optional'>(optional)</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <input
+                        type="text"
+                        name="code"
+                        className="form-control"
+                        placeholder="Enter your text"
+                        value={formData?.code}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-lg-8">
+                <div className="catalog__new__input">
+                    <label htmlFor="description_en">Description in English <span className="requiredStar"> *</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <textarea
+                        name="description_en"
+                        className="form-control"
+                        rows="5"
+                        value={formData?.description_en}
+                        onChange={handleInputChange}
+                    ></textarea>
+                </div>
+            </div>
+            <div className="col-lg-8">
+                <div className="catalog__new__input">
+                    <label htmlFor="description_ar">Description in Arabic <span className='optional'>(optional)</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <textarea
+                        name="description_ar"
+                        className="form-control"
+                        rows="5"
+                        value={formData?.description_ar}
+                        onChange={handleInputChange}
+                    ></textarea>
+                </div>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-lg-8">
+                <div className="catalog__new__input">
+                    <label htmlFor="price">Price <span className='optional'>(optional)</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <div className="custom-input-container">
+                        <input
+                            type="text"
+                            id="price"
+                            name="price"
+                            className="form-control custom-input"
+                            placeholder="Enter your text"
+                            value={formData?.price}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="col-lg-8">
+                <div className="catalog__new__input">
+                    <label htmlFor="tax">Tax % <span className='optional'>(optional)</span>
+                        <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                    </label>
+                    <div className="custom-input-container">
+                        <input
+                            type="number"
+                            id="cata-tax"
+                            name="tax"
+                            min={0}
+                            max={100}
+                            className="form-control custom-input"
+                            placeholder="tax between (0% -100%)"
+                            value={formData?.tax}
+                            onChange={handleInputChange}
+                        />
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="upload__image__btn">
-                                                <label htmlFor="tax">
-                                                    Add Multiple Images
-                                                    <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    name="images"
-                                                    multiple
-                                                    onChange={handleImageChange}
-                                                    className="form-control mt-2"
-                                                />
-                                                <div className="image-preview mt-4">
-                                                    {previewImages.map((image, index) => (
-                                                        <div key={image.id} className="position-relative d-inline-block me-4">
-                                                            <img
-                                                                src={image.preview}
-                                                                alt="Selected"
-                                                                className="img-thumbnail"
-                                                                style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                                                            />
-                                                            <i
-                                                                className={`bi bi-bookmark-star-fill ${index === 0 ? "text-warning" : "text-secondary"
-                                                                    } position-absolute bottom-0 start-0 cursor-pointer`}
-                                                                style={{ fontSize: "1.5rem", transform: "translate(-50%, 50%)" }}
-                                                                onClick={() => handleBookmarkClick(image.id)}
-                                                                title="Set as Main Image"
-                                                            ></i>
-                                                            <i
-                                                                className="bi bi-x-circle text-danger position-absolute top-0 end-0 cursor-pointer"
-                                                                style={{ fontSize: "1.5rem", transform: "translate(50%, -50%)" }}
-                                                                onClick={() => handleImageDelete(image.id)}
-                                                                title="Remove Image"
-                                                            ></i>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="upload__image__btn">
+            <label htmlFor="tax">
+                Add Multiple Images
+                <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                <br />
+                <span style={{color: 'gray', fontSize: '14px'}}>(Recommended size 1000 * 1000px)</span>
+            </label>
+            <input
+                type="file"
+                name="images"
+                multiple
+                onChange={handleImageChange}
+                className="form-control mt-2"
+            />
+            <div className="image-preview mt-4">
+                {previewImages.map((image, index) => (
+                    <div key={image.id} className="position-relative d-inline-block me-4">
+                        <img
+                            src={image.preview}
+                            alt="Selected"
+                            className="img-thumbnail"
+                            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                        />
+                        <i
+                            className={`bi bi-bookmark-star-fill ${index === 0 ? "text-warning" : "text-secondary"
+                                } position-absolute bottom-0 start-0 cursor-pointer`}
+                            style={{ fontSize: "1.5rem", transform: "translate(-50%, 50%)" }}
+                            onClick={() => handleBookmarkClick(image.id)}
+                            title="Set as Main Image"
+                        ></i>
+                        <i
+                            className="bi bi-x-circle text-danger position-absolute top-0 end-0 cursor-pointer"
+                            style={{ fontSize: "1.5rem", transform: "translate(50%, -50%)" }}
+                            onClick={() => handleImageDelete(image.id)}
+                            title="Remove Image"
+                        ></i>
+                    </div>
+                ))}
+            </div>
 
-                                            </div>
-                                            <div className="catalog__check__points">
-                                                {allTypes?.map((type) => (
-                                                    <div key={type?.id} className="check__item">
-                                                        <div className="form-check">
-                                                            <input
-                                                                type="checkbox"
-                                                                id={`type-${type?.id}`}
-                                                                className="form-check-input"
-                                                                checked={formData?.type?.includes(type?.name)}
-                                                                onChange={() => handleCheckboxChange(type?.id, type?.name)}
-                                                            />
-                                                            <label htmlFor={`type-${type?.id}`} className="form-check-label">
-                                                                {type?.name}
-                                                                <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div style={{
-                                                marginTop: '30px',
-                                                borderTop: "1px solid #aaa"
-                                            }} className="catalog__new__input">
-                                                <h4 className='my-3'>
-                                                    Product Details
-                                                    {
-                                                        currCatalog ?
-                                                            <>
-                                                            </>
-                                                            :
-                                                            <span className="ms-3 btn btn-link" onClick={handleAddDetails}>Add More Details</span>
-                                                    }</h4>
-                                                {
-                                                    currCatalog ?
-                                                        currCatalog?.details?.map((input, idx) => (
-                                                            <div key={idx} className="row">
-                                                                <div className='col-md-6'>
-                                                                    <label htmlFor="labelInput">Product Label</label>
-                                                                    <input
-                                                                        id='labelInput'
-                                                                        style={{
-                                                                            background: 'rgb(142 149 235 / 40%)'
-                                                                        }}
-                                                                        type="text"
-                                                                        placeholder="Product Label"
-                                                                        value={input?.label}
-                                                                        name='label'
-                                                                        disabled
-                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
-                                                                        className="form-control"
-                                                                    />
-                                                                </div>
-                                                                <div className="col-md-6">
-                                                                    <label htmlFor="valueInput">Product Value</label>
-                                                                    <input
-                                                                        id='valueInput'
-                                                                        style={{
-                                                                            background: '#f9f9f9'
-                                                                        }}
-                                                                        disabled
-                                                                        type="text"
-                                                                        placeholder="Product Value"
-                                                                        value={input?.value}
-                                                                        name='value'
-                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
-                                                                        className="form-control"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                        :
-                                                        formData?.details?.map((input, idx) => (
-                                                            <div key={idx} className="row">
-                                                                <div className='col-md-5'>
-                                                                    <label htmlFor="labelInput">Product Label</label>
-                                                                    <input
-                                                                        id='labelInput'
-                                                                        style={{
-                                                                            background: 'rgb(142 149 235 / 40%)'
-                                                                        }}
-                                                                        type="text"
-                                                                        placeholder="Product Label"
-                                                                        value={input?.label}
-                                                                        name='label'
-                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
-                                                                        className="form-control"
-                                                                    />
-                                                                </div>
-                                                                <div className="col-md-5">
-                                                                    <label htmlFor="valueInput">Product Value</label>
-                                                                    <input
-                                                                        id='valueInput'
-                                                                        style={{
-                                                                            background: '#f9f9f9'
-                                                                        }}
-                                                                        type="text"
-                                                                        placeholder="Product Value"
-                                                                        value={input?.value}
-                                                                        name='value'
-                                                                        onChange={(e) => handleChangeDetailsInputs(e, idx)}
-                                                                        className="form-control"
-                                                                    />
-                                                                </div>
-                                                                <div className="col-md-2 d-flex justify-content-center align-items-center">
-                                                                    <i className="bi bi-trash-fill fs-4 text-danger cursorPointer mt-3" onClick={() => handleDeleteDetail(idx)}></i>
-                                                                </div>
-                                                            </div>
-                                                        ))
+        </div>
+        <div className="catalog__check__points">
+            {allTypes?.map((type) => (
+                <div key={type?.id} className="check__item">
+                    <div className="form-check">
+                        <input
+                            type="checkbox"
+                            id={`type-${type?.id}`}
+                            className="form-check-input"
+                            checked={formData?.type?.includes(type?.name)}
+                            onChange={() => handleCheckboxChange(type?.id, type?.name)}
+                        />
+                        <label htmlFor={`type-${type?.id}`} className="form-check-label">
+                            {type?.name}
+                            <i title='sss' className="bi bi-info-circle ms-1 cursorPointer"></i>
+                        </label>
+                    </div>
+                </div>
+            ))}
+        </div>
+        <div style={{
+            marginTop: '30px',
+            borderTop: "1px solid #aaa"
+        }} className="catalog__new__input">
+            <h4 className='my-3'>
+                Product Details
+                {
+                    currCatalog ?
+                        <>
+                        </>
+                        :
+                        <span className="ms-3 btn btn-link" onClick={handleAddDetails}>Add More Details</span>
+                }</h4>
+            {
+                currCatalog ?
+                    currCatalog?.details?.map((input, idx) => (
+                        <div key={idx} className="row">
+                            <div className='col-md-6'>
+                                <label htmlFor="labelInput">Product Label</label>
+                                <input
+                                    id='labelInput'
+                                    style={{
+                                        background: 'rgb(142 149 235 / 40%)'
+                                    }}
+                                    type="text"
+                                    placeholder="Product Label"
+                                    value={input?.label}
+                                    name='label'
+                                    disabled
+                                    onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="valueInput">Product Value</label>
+                                <input
+                                    id='valueInput'
+                                    style={{
+                                        background: '#f9f9f9'
+                                    }}
+                                    disabled
+                                    type="text"
+                                    placeholder="Product Value"
+                                    value={input?.value}
+                                    name='value'
+                                    onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                    className="form-control"
+                                />
+                            </div>
+                        </div>
+                    ))
+                    :
+                    formData?.details?.map((input, idx) => (
+                        <div key={idx} className="row">
+                            <div className='col-md-5'>
+                                <label htmlFor="labelInput">Product Label</label>
+                                <input
+                                    id='labelInput'
+                                    style={{
+                                        background: 'rgb(142 149 235 / 20%)'
+                                    }}
+                                    type="text"
+                                    placeholder="Product Label"
+                                    value={input?.label}
+                                    name='label'
+                                    onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="col-md-5">
+                                <label htmlFor="valueInput">Product Value</label>
+                                <input
+                                    id='valueInput'
+                                    style={{
+                                        background: '#f9f9f9'
+                                    }}
+                                    type="text"
+                                    placeholder="Product Value"
+                                    value={input?.value}
+                                    name='value'
+                                    onChange={(e) => handleChangeDetailsInputs(e, idx)}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="col-md-2 d-flex justify-content-center align-items-center">
+                                <i className="bi bi-trash-fill fs-4 text-danger cursorPointer mt-3" onClick={() => handleDeleteDetail(idx)}></i>
+                            </div>
+                        </div>
+                    ))
+            }
+        </div>
+        {!id &&
+            <div className="row">
+                <div className="col-lg-12">
+                    <div style={{
+                        marginTop: '30px',
+                        borderTop: "1px solid #aaa"
+                    }} className="catalog__new__input">
+                        <label className="fw-bold my-3">Options and variations</label>
+                        <button type="button" className="btn btn-link" onClick={handleAddOption}>Add Option</button>
+                        {formData?.options?.map((option, index) => (
+                            <div key={index} className="option-group my-3">
+                                <div className="row">
+                                    <div className="col-lg-6">
+                                        <input
+                                            style={{
+                                                background: 'rgb(142 149 235 / 30%)'
+                                            }}
+                                            type="text"
+                                            placeholder="Attribute (e.g., Storage)"
+                                            value={option?.attribute}
+                                            onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </div>
+                                {option?.values?.map((value, valueIndex) => (
+                                    <div key={valueIndex} className="row">
+                                        <div className="col-lg-6">
+                                            <input
+                                                type="text"
+                                                placeholder="Option Name (e.g., 128 GB)"
+                                                value={value?.name}
+                                                onChange={(e) =>
+                                                    handleValueChange(
+                                                        index,
+                                                        valueIndex,
+                                                        'name',
+                                                        e.target.value
+                                                    )
                                                 }
-                                            </div>
-                                            {!id &&
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div style={{
-                                                            marginTop: '30px',
-                                                            borderTop: "1px solid #aaa"
-                                                        }} className="catalog__new__input">
-                                                            <label className="fw-bold my-3">Options and variations</label>
-                                                            <button type="button" className="btn btn-link" onClick={handleAddOption}>Add Option</button>
-                                                            {formData?.options?.map((option, index) => (
-                                                                <div key={index} className="option-group my-3">
-                                                                    <div className="row">
-                                                                        <div className="col-lg-6">
-                                                                            <input
-                                                                                style={{
-                                                                                    background: 'rgb(142 149 235 / 40%)'
-                                                                                }}
-                                                                                type="text"
-                                                                                placeholder="Attribute (e.g., Storage)"
-                                                                                value={option?.attribute}
-                                                                                onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
-                                                                                className="form-control"
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    {option?.values?.map((value, valueIndex) => (
-                                                                        <div key={valueIndex} className="row">
-                                                                            <div className="col-lg-6">
-                                                                                <input
-                                                                                    type="text"
-                                                                                    placeholder="Option Name (e.g., 128 GB)"
-                                                                                    value={value?.name}
-                                                                                    onChange={(e) =>
-                                                                                        handleValueChange(
-                                                                                            index,
-                                                                                            valueIndex,
-                                                                                            'name',
-                                                                                            e.target.value
-                                                                                        )
-                                                                                    }
-                                                                                    className="form-control"
-                                                                                />
-                                                                            </div>
-                                                                            <div className="col-lg-6">
-                                                                                <input
-                                                                                    type="text"
-                                                                                    placeholder="Price Impact"
-                                                                                    value={value?.price}
-                                                                                    onChange={(e) =>
-                                                                                        handleValueChange(
-                                                                                            index,
-                                                                                            valueIndex,
-                                                                                            'price',
-                                                                                            e.target.value
-                                                                                        )
-                                                                                    }
-                                                                                    className="form-control"
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    ))}
-                                                                    <button type="button" onClick={() => handleAddValue(index)} className="btn btn-link">Add Value</button>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {
-                                                id &&
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div style={{
-                                                            marginTop: '30px',
-                                                            borderTop: "1px solid #aaa"
-                                                        }} className="catalog__new__input">
-                                                            <label className="fw-bold my-3">Options and variations</label>
-                                                            <div className='text-end'>
-                                                                <NavLink to={`/profile/catalog/edit-item/${id}/edit-option`}>
-                                                                    <button className='btn btn-outline-primary text-capitalize'>
-                                                                        edit options <i className="bi bi-pencil-square"></i>
-                                                                    </button>
-                                                                </NavLink>
-                                                            </div>
-                                                            {formData?.options?.map((option, index) => (
-                                                                <div key={index} className="option-group my-3">
-                                                                    <div className="row">
-                                                                        <div className="col-lg-6">
-                                                                            <input
-                                                                                style={{
-                                                                                    background: 'rgb(142 149 235 / 40%)'
-                                                                                }}
-                                                                                disabled
-                                                                                type="text"
-                                                                                placeholder="Attribute (e.g., Storage)"
-                                                                                value={option?.attribute}
-                                                                                onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
-                                                                                className="form-control"
+                                                className="form-control"
+                                            />
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <input
+                                                type="text"
+                                                placeholder="Additional Price"
+                                                value={value?.price}
+                                                onChange={(e) =>
+                                                    handleValueChange(
+                                                        index,
+                                                        valueIndex,
+                                                        'price',
+                                                        e.target.value
+                                                    )
+                                                }
+                                                className="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                                <button type="button" onClick={() => handleAddValue(index)} className="btn btn-link">Add Value</button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        }
+        {
+            id &&
+            <div className="row">
+                <div className="col-lg-12">
+                    <div style={{
+                        marginTop: '30px',
+                        borderTop: "1px solid #aaa"
+                    }} className="catalog__new__input">
+                        <label className="fw-bold my-3">Options and variations</label>
+                        <div className='text-end'>
+                            <NavLink to={`/profile/catalog/edit-item/${id}/edit-option`}>
+                                <button className='btn btn-outline-primary text-capitalize'>
+                                    edit options <i className="bi bi-pencil-square"></i>
+                                </button>
+                            </NavLink>
+                        </div>
+                        {formData?.options?.map((option, index) => (
+                            <div key={index} className="option-group my-3">
+                                <div className="row">
+                                    <div className="col-lg-6">
+                                        <input
+                                            style={{
+                                                background: 'rgb(142 149 235 / 40%)'
+                                            }}
+                                            disabled
+                                            type="text"
+                                            placeholder="Attribute (e.g., Storage)"
+                                            value={option?.attribute}
+                                            onChange={(e) => handleOptionChange(index, 'attribute', e.target.value)}
+                                            className="form-control"
 
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    {option?.values?.map((value, valueIndex) => (
-                                                                        <div key={valueIndex} className="row">
-                                                                            <div className="col-lg-6">
-                                                                                <input
-                                                                                    disabled
-                                                                                    type="text"
-                                                                                    placeholder="Option Name (e.g., 128 GB)"
-                                                                                    value={value?.name}
-                                                                                    onChange={(e) =>
-                                                                                        handleValueChange(
-                                                                                            index,
-                                                                                            valueIndex,
-                                                                                            'name',
-                                                                                            e.target.value
-                                                                                        )
-                                                                                    }
-                                                                                    className="form-control"
-                                                                                />
-                                                                            </div>
-                                                                            <div className="col-lg-6">
-                                                                                <input
-                                                                                    disabled
-                                                                                    type="text"
-                                                                                    placeholder="Price Impact"
-                                                                                    value={value?.price}
-                                                                                    onChange={(e) =>
-                                                                                        handleValueChange(
-                                                                                            index,
-                                                                                            valueIndex,
-                                                                                            'price',
-                                                                                            e.target.value
-                                                                                        )
-                                                                                    }
-                                                                                    className="form-control"
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    ))}
+                                        />
+                                    </div>
+                                </div>
+                                {option?.values?.map((value, valueIndex) => (
+                                    <div key={valueIndex} className="row">
+                                        <div className="col-lg-6">
+                                            <input
+                                                disabled
+                                                type="text"
+                                                placeholder="Option Name (e.g., 128 GB)"
+                                                value={value?.name}
+                                                onChange={(e) =>
+                                                    handleValueChange(
+                                                        index,
+                                                        valueIndex,
+                                                        'name',
+                                                        e.target.value
+                                                    )
+                                                }
+                                                className="form-control"
+                                            />
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <input
+                                                disabled
+                                                type="text"
+                                                placeholder="Price Impact"
+                                                value={value?.price}
+                                                onChange={(e) =>
+                                                    handleValueChange(
+                                                        index,
+                                                        valueIndex,
+                                                        'price',
+                                                        e.target.value
+                                                    )
+                                                }
+                                                className="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
 
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            <div className="form__submit__button">
-                                                <button type="submit" className="btn btn-primary">
-                                                    {id ? 'Update Catalog' : 'Add Catalog'}
-                                                </button>
-                                            </div>
-                                        </form>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        }
+        <div className="form__submit__button">
+            <button type="submit" className="btn btn-primary">
+                {id ? 'Update Catalog' : 'Add Catalog'}
+            </button>
+        </div>
+    </form>
                                 }
                             </div>
                         </div>

@@ -215,7 +215,7 @@ export default function SearchInHome() {
                                     <div key={el?.companyId} className="col-12">
                                         <div className="CompanyContentItem">
                                             <div className="compImage">
-                                                <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
+                                                <NavLink to={`/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                     <img
                                                         src={el?.companyLogo}
                                                         alt={el?.companyName}
@@ -224,14 +224,21 @@ export default function SearchInHome() {
                                             </div>
                                             <div className="compMainInfo">
                                                 <h5 className="mb-2">
-                                                    <NavLink to={`/show-company/${el?.companySlug}`} target="_blank" className={'nav-link'}>
+                                                    <NavLink to={`/${el?.companySlug}`} target="_blank" className={'nav-link'}>
                                                         {el?.companyName}
                                                     </NavLink>
                                                 </h5>
                                                 <div className="companySubInfo mb-2">
                                                     <div className="subInfoItem">
                                                         <img src={userIcon} alt="locateion-icon" />
-                                                        <span>{el?.companyIndustries[0]?.industryName || 'N/A'}</span>
+                                                        {/* <span>{el?.companyIndustries[0]?.industryName || 'N/A'}</span> */}
+                                                        {
+                                                        el?.companyIndustries?.length > 0 ? (
+                                                            <span>{el.companyIndustries.map(i => i?.industryName).join(', ')}</span>
+                                                        ) : (
+                                                            <span>{el?.companyCategory || 'Not specified'}</span>
+                                                        )
+                                                        }
                                                     </div>
                                                     <div className="subInfoItem">
                                                         <img
@@ -271,7 +278,7 @@ export default function SearchInHome() {
                                                         scrollToTop();
                                                     }}
                                                     className={"nav-link"}
-                                                    to={`/show-company/${el?.companySlug}`}
+                                                    to={`/${el?.companySlug}`}
                                                 >
                                                     <button className="pageMainBtnStyle">
                                                         more info
@@ -304,11 +311,15 @@ export default function SearchInHome() {
                                     <LastMinuteCard
                                         productImage={cata?.media[0].image || 'N/A'}
                                         productName={cata?.title}
-                                        productLink={`/show-company/${cata?.company_slug}/catalog-details/${cata?.slug
+                                        productLink={`/${cata?.company_slug}/catalog-details/${cata?.slug
                                         }`}
                                         showCustomContent={true}
                                         borderColor={'rgba(0, 0, 0, 0.5)'}
                                         onAddClick={''}
+                                        showMoreDetails={true}
+                                        productCatgeory={cata?.category}
+                                        productCompany={cata?.company_name}
+                                        productCompanySlug={cata?.company_slug}
                                     />
                                 </div>
                             ))
@@ -335,10 +346,14 @@ export default function SearchInHome() {
                                     <LastMinuteCard
                                         productImage={serv?.image || 'N/A'}
                                         productName={serv?.title}
-                                        productLink={`/show-company/${serv?.company_slug}/service-details/${serv?.slug}`}
+                                        productLink={`/${serv?.company_slug}/service-details/${serv?.slug}`}
                                         showCustomContent={true}
                                         borderColor={'rgba(0, 0, 0, 0.5)'}
                                         onAddClick={''}
+                                        showMoreDetails={true}
+                                        productCatgeory={serv?.category}
+                                        productCompany={serv?.company_name}
+                                        productCompanySlug={serv?.company_slug}
                                     />
                                 </div>
                             ))

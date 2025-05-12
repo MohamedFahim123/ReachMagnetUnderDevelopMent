@@ -49,6 +49,7 @@ export const useDashBoardFaqsStore = create((set, get) => ({
                     'Accept': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
+            
             });
             toast.success(response?.data?.message);
             set((state) => ({

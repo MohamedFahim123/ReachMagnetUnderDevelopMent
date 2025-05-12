@@ -220,6 +220,8 @@ export default function OneClickQuotation({ token }) {
                     const result = await response.json();
                     if (result?.status === 200) {
                         setCartCompanies(result?.data?.company_count);
+                        console.log(result?.data);
+                        
                         setCart(result?.data?.cart);
                         toast.success(result?.message || 'Loaded Successfully', {
                             id: toastId,
@@ -382,6 +384,7 @@ export default function OneClickQuotation({ token }) {
             setLoading(false);
         }, 500);
     }, [loading]);
+console.log(cartCompanies);
 
     return (
         <>
@@ -413,7 +416,7 @@ export default function OneClickQuotation({ token }) {
                                             </div>
                                             <div className="col-12">
                                                 <div className="row">
-                                                    {/* <div className="col-lg-6">
+                                                    <div className="col-lg-6">
                                                         <div className="singleQuoteInput">
                                                             <label htmlFor="oneclickqoutationSelectTheType">
                                                                 Request Type
@@ -436,7 +439,7 @@ export default function OneClickQuotation({ token }) {
                                                                 }
                                                             </select>
                                                         </div>
-                                                    </div> */}
+                                                    </div>
                                                     <div className="col-lg-6">
                                                         <div className="singleQuoteInput">
                                                             <label htmlFor="oneclickquotationSelectMainCategory">
@@ -542,57 +545,57 @@ export default function OneClickQuotation({ token }) {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div className="col-lg-6">
-                                                <div className="singleQuoteInput">
-                                                    <label htmlFor="oneclickQuotationCountrCitiesnSelect">
-                                                        Choose your City
-                                                    </label>
-                                                    <select
-                                                        className='form-select'
-                                                        name="city_id"
-                                                        id="oneclickQuotationCitiesSelect"
-                                                        value={requestIntries?.city_id}
-                                                        onChange={(event) => {
-                                                            setRequestIntries({ ...requestIntries, city_id: event?.target?.value })
-                                                        }}
-                                                    >
-                                                        <option value="" disabled>Choose Your City</option>
-                                                        {currentCities?.map((city) => (
-                                                            <option key={city?.cityId} value={city?.cityId}>{city?.cityName}</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
+                                <div className="col-lg-6">
+                                    <div className="singleQuoteInput">
+                                        <label htmlFor="oneclickQuotationCountrCitiesnSelect">
+                                            Choose your City
+                                        </label>
+                                        <select
+                                            className='form-select'
+                                            name="city_id"
+                                            id="oneclickQuotationCitiesSelect"
+                                            value={requestIntries?.city_id}
+                                            onChange={(event) => {
+                                                setRequestIntries({ ...requestIntries, city_id: event?.target?.value })
+                                            }}
+                                        >
+                                            <option value="" disabled>Choose Your City</option>
+                                            {currentCities?.map((city) => (
+                                                <option key={city?.cityId} value={city?.cityId}>{city?.cityName}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <div className="selectedProducts__handler">
+                                                <h3>
+                                                    Selected Products
+                                                </h3>
+                                                <h4 className={'mt-3 fw-bold fs-5 mb-3'}>Number Of Companies: {cartCompanies || 0}</h4>
+                                                {(cart?.on_click_quotation_cart?.length === 0) ? (
+                                                    <p>No products selected</p>
+                                                ) : (
+                                                    cart?.on_click_quotation_cart?.map((el) => {
+                                                        return <CartProduct
+                                                            key={el?.one_click_quotation_cart_id}
+                                                            title={el?.item?.title}
+                                                            description={el?.item?.description}
+                                                            notes={el?.note}
+                                                            imageSrc={el?.item?.image ? el?.item?.image : el?.item?.medias[0]?.media}
+                                                            showImage={el?.item?.image ? !!el?.item?.image : !!el?.item?.medias[0]?.media}
+                                                            quantity={el?.quantity}
+                                                            cartId={el?.one_click_quotation_cart_id}
+                                                            token={token}
+                                                            setCart={setCart}
+                                                        />
+                                                    })
+                                                )}
                                             </div>
-                                            <div className="col-12">
-                                                <div className="row">
-                                                    <div className="col-lg-6">
-                                                        <div className="selectedProducts__handler">
-                                                            <h3>
-                                                                Selected Products
-                                                            </h3>
-                                                            <h4 className={'mt-3 fw-bold fs-5 mb-3'}>Number Of Companies: {cartCompanies || 0}</h4>
-                                                            {(cart?.on_click_quotation_cart?.length === 0) ? (
-                                                                <p>No products selected</p>
-                                                            ) : (
-                                                                cart?.on_click_quotation_cart?.map((el) => {
-                                                                    return <CartProduct
-                                                                        key={el?.one_click_quotation_cart_id}
-                                                                        title={el?.item?.title}
-                                                                        description={el?.item?.description}
-                                                                        notes={el?.note}
-                                                                        imageSrc={el?.item?.image ? el?.item?.image : el?.item?.medias[0]?.media}
-                                                                        showImage={el?.item?.image ? !!el?.item?.image : !!el?.item?.medias[0]?.media}
-                                                                        quantity={el?.quantity}
-                                                                        cartId={el?.one_click_quotation_cart_id}
-                                                                        token={token}
-                                                                        setCart={setCart}
-                                                                    />
-                                                                })
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                             <div className="col-12">
                                                 <div className="customizationQuote__handler">
                                                     <div className="customization__form row">

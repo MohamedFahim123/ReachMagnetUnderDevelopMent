@@ -184,12 +184,14 @@ export default function NewNetworkForm({token}) {
                             </div>
                             <div className="upload__image__btn ">
                                 <label htmlFor="label" className='mb-2'>Add Company logo<span className="requiredStar"> *</span>
+                                <br />
+                                <span style={{color: 'gray', fontSize: '14px'}}>(Recommended size 1000 * 1000px)</span>
                                 </label>
                                 <input
                                     type="file"
                                     name="logo"
                                     onChange={handleImageChange}
-                                    className="form-control"
+                                    className="form-control mt-2"
                                 />
                             </div>
                             <div className="form__submit__button">

@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { GetAllChatsStore } from '../../store/AllChats';
 import { GetAllCountriesStore } from '../../store/AllCountries';
 import { GetAllMainCategoriesStore } from '../../store/AllMainCategories';
+import { useActivePackageStore } from '../../store/ActivePackageStore';
 
 
 export default function MainContentHeader({ isSidebarExpanded, search, placeholder, currentUserLogin, filteration, setFilteration, name, inputType }) {
@@ -20,6 +21,17 @@ export default function MainContentHeader({ isSidebarExpanded, search, placehold
         getAllMainCategories();
     }, [getAllChats, getAllCountries,getAllMainCategories]);
 
+    const loginType = localStorage.getItem('loginType')
+    const {
+        loading,
+        features,
+        message,
+        fetchActivePackage,
+        unAuth,
+    } = useActivePackageStore();
+    useEffect(() => {
+        fetchActivePackage( loginType);
+    }, [loginType, fetchActivePackage]);
     return (
         <div className={`mainContentHeader__handler  ${isSidebarExpanded ? 'expanded' : ''}`}>
             <div className="content__header d-flex justify-content-between  align-items-center flex-wrap">
@@ -32,7 +44,8 @@ export default function MainContentHeader({ isSidebarExpanded, search, placehold
                         search &&
                         <MySearchSec name={name} placeholder={placeholder} filteration={filteration} setFilteration={setFilteration} inputType={inputType} />
                     }
-                    <button onClick={() => navigate(`/your-messages`)} className='btn__companyActions online__btn'>
+                    { loginType === 'user' &&
+                        <button onClick={() => navigate(`/your-messages`)} className='btn__companyActions online__btn'>
                         <NavLink className={'nav-link'}
                         >
                             <img src={messageIcon} alt="message-icon" />
@@ -42,6 +55,19 @@ export default function MainContentHeader({ isSidebarExpanded, search, placehold
                             }
                         </NavLink>
                     </button>
+                    }
+                    { loginType === 'employee'  && features?.messaging === 'yes' &&
+                        <button onClick={() => navigate(`/your-messages`)} className='btn__companyActions online__btn'>
+                        <NavLink className={'nav-link'}
+                        >
+                            <img src={messageIcon} alt="message-icon" />
+                            {
+                                allRead === false &&
+                                <span className="red__dot"></span>
+                            }
+                        </NavLink>
+                    </button>
+                    }
                     <NavLink className='btn btn-outline-success p-2 ms-2' to='/'>
                         <i className="bi bi-box-arrow-left "></i>
                         <span className='ms-2'>Back To Home</span>

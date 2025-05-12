@@ -29,7 +29,7 @@ export const useCompaniesStore = create((set) => {
             });
 
             const companiesData = response?.data?.data?.companies || [];
-            const totalPagesData = response?.data?.data?.total_pages || 1;
+            const paginationMeta = response?.data?.data?.meta || {};
 
             const companyAllowedNames = companiesData.map((item) => item.companyName);
             const companyAllowedTypes = companiesData.flatMap((item) =>
@@ -46,7 +46,12 @@ export const useCompaniesStore = create((set) => {
 
             set({
                 companies: companiesData,
-                totalPages: totalPagesData,
+                meta: {
+                    total: paginationMeta.total || 0,
+                    perPage: paginationMeta.per_page || 15,
+                    currentPage: paginationMeta.current_page || 1,
+                    lastPage: paginationMeta.last_page || 1,
+                },
                 uniqueAllowedCompNames: [...new Set(companyAllowedNames)],
                 uniqueAllowedCompTypes: [...new Set(companyAllowedTypes)],
                 categories: [
@@ -70,7 +75,12 @@ export const useCompaniesStore = create((set) => {
 
     return {
         companies: [],
-        totalPages: 1,
+        meta: {
+            total: 0,
+            perPage: 15,
+            currentPage: 1,
+            lastPage: 1,
+        },
         uniqueAllowedCompNames: [],
         uniqueAllowedCompTypes: [],
         categories: [],

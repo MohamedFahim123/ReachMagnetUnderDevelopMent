@@ -27,10 +27,13 @@ export default function ShowOneClickQuotation({ token }) {
   let negotiationId = undefined;
   const location = useLocation();
   (() => {
-    const regex = /oneclick-quotations\/(\d+)/;
+    // const regex = /oneclick-quotations\/(\d+)/;
+    const regex = /oneclick-quotations\/([^\/]+)\/(\d+)/;
     const str = location.pathname;
-    const result = str.match(regex)[1];
-    negotiationId = result;
+    const result = str.match(regex);
+    negotiationId = result[1];
+    console.log(negotiationId);
+    
   })();
   const [currentUserLogin, setCurrentUserLogin] = useState(null);
   const [unAuth, setUnAuth] = useState(false);

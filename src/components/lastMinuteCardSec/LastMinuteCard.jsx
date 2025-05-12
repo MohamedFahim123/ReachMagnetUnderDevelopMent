@@ -14,7 +14,11 @@ export default function LastMinuteCard({
     buttonLabel = 'Know more',
     onKnowMoreClick,
     onAddClick,
-    borderColor = 'rgba(148, 21, 21, 1)'
+    borderColor = 'rgba(148, 21, 21, 1)',
+    showMoreDetails= false,
+    productCatgeory,
+    productCompany,
+    productCompanySlug
 }) {
     const handleButtonClick = () => {
         if (buttonLabel === 'Know more' && onKnowMoreClick) {
@@ -32,6 +36,7 @@ export default function LastMinuteCard({
         border: `2px solid ${borderColor}`
     };
     const buttonClass = buttonLabel === 'Added' ? 'addedButtonStyle' : 'addButtonStyle';
+console.log(productCompanySlug);
 
     return (
         <>
@@ -61,6 +66,13 @@ export default function LastMinuteCard({
                                 </div>
                             </div>
                         )}
+                        { showMoreDetails === true && 
+                            <h4 style={{fontSize:'18px', color:'#412794', textTransform:'capitalize'}}>
+                                 <NavLink target='_blank' className='nav-link'  to={`/${productCompanySlug}`}>
+                                            {productCompany}
+                                        </NavLink>
+                            </h4>
+                        }
                     </div>
                     <div className="sub__info">
                         {/* <p>{dealQuantity}</p> */}

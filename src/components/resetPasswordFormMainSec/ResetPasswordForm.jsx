@@ -22,10 +22,10 @@ export default function ResetPasswordForm() {
         defaultValues: {
             email: '',
             otp: '',
-            new_password: '',
-            new_password_confirmation: '',
+            [loginType === 'employee' ? 'password' : 'new_password']: '',
+            [loginType === 'employee' ? 'password_confirmation' : 'new_password_confirmation']: '',
         },
-        resolver: zodResolver(ResetPasswordStep2Schema),
+        resolver: zodResolver(ResetPasswordStep2Schema(loginType)),
     });
 
     const onSubmit = async (data) => {
@@ -107,7 +107,7 @@ export default function ResetPasswordForm() {
                                                 type={`${showPassword ? 'text' : 'password'}`}
                                                 id='resetPasswordNewPassword'
                                                 placeholder='Enter 8-digit password'
-                                                {...register('new_password')}
+                                                {...register(loginType === 'employee' ? 'password' : 'new_password')}
                                                 className={`form-control signUpInput ${errors?.new_password && 'inputError'}`}
                                             />
                                             <div className="leftShowPasssord" onClick={()=>setShowPassword(!showPassword)}>
@@ -134,7 +134,7 @@ export default function ResetPasswordForm() {
                                                 type={`${showConfirmPassword ? 'text' : 'password'}`}
                                                 id='signInPassword'
                                                 placeholder='Enter 8-digit password'
-                                                {...register('new_password_confirmation')}
+                                                {...register(loginType === 'employee' ? 'password_confirmation' : 'new_password_confirmation')}
                                                 className={`form-control signUpInput ${errors?.new_password_confirmation && 'inputError'}`}
                                             />
                                             <div className="leftShowPasssord" onClick={()=>setShowConfirmPassword(!showConfirmPassword)}>

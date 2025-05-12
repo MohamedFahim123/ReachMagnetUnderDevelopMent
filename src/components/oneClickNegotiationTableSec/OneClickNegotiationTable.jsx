@@ -48,6 +48,7 @@ export default function OneClickNegotiationTable({ token, setUnAuth }) {
       setCurrentPage(newPage);
     };
   };
+console.log(newData);
 
   return (
     <div className="quotationTable__handler content__view__handler">

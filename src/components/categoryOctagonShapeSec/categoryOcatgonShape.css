@@ -40,7 +40,8 @@
     margin-top: 15px;
     font-size: 14px;
     font-weight: 500;
-    color: rgba(37, 86, 117, 1);
+    /* color: rgba(37, 86, 117, 1); */
+    color: #000;
     text-transform: capitalize;
     transform: all .3s;
 }

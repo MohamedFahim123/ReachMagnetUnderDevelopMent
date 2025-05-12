@@ -27,7 +27,7 @@ export default function CompanyMediaCard({ type, mediaSrc, mainInfo, mainInfoNam
             {
                 mainInfo === true ?
                 <div className="card__main-info my-3 d-flex justify-content-between align-items-center">
-                    <NavLink to={mainInfoLink} className={'nav-link'}>
+                    <NavLink to={mainInfoLink} target='_blank' className={'nav-link'}>
                         <h5 className='text-capitalize fs-4'>{mainInfoName}</h5>
                     </NavLink>
                     <p style={{color:'rgba(1, 31, 91, 1)'}} className='text-capitalize'>

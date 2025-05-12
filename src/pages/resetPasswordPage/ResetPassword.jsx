@@ -19,7 +19,7 @@ export default function ResetPassword() {
                     <MyLoader />
                     :
                     <div className='signUp__page replace__margin__with__padding'>
-                        <SignUpHead />
+                        {/* <SignUpHead /> */}
                         <ResetPasswordForm />
                     </div>
             }

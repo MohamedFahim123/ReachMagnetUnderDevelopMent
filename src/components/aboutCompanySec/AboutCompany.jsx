@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './aboutCompany.css'
 import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import aboutIcon from '../../assets/companyImages/enterprise.png'
+import mapIcon from '../../assets/companyImages/map.png'
+import timeIcon from '../../assets/companyImages/working-time.png'
 const customIcon = new L.Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
@@ -55,7 +58,7 @@ export default function AboutCompany({ company, showCompaniesQuery }) {
             <div className="container">
                 <div className="aboutCompany__content">
                     <div className='aboutCompany__title'>
-                        <img src={company.aboutMark} alt="mark" />
+                        <img src={aboutIcon} alt="mark" />
                         <h1>About Us</h1>
                     </div>
                     <div className="aboutCompany__content__info my-3">
@@ -80,7 +83,7 @@ export default function AboutCompany({ company, showCompaniesQuery }) {
                     showCompaniesQuery?.workingHours?.length !== 0 ?
                     <div className="aboutCompany__workHour">
                     <div className='aboutCompany__title'>
-                        <img src={company.workHourImage} alt="hour" />
+                        <img src={timeIcon} alt="hour" />
                         <h1>Working hours</h1>
                     </div>
                     <div className="working__hour__table">
@@ -103,7 +106,7 @@ export default function AboutCompany({ company, showCompaniesQuery }) {
                 }
                 <div className="aboutCompany__location">
                     <div className='aboutCompany__title'>
-                        <img src={company.aboutMark} alt="mark" />
+                        <img src={mapIcon} alt="mark" />
                         <h1>company full address</h1>
                     </div>
                     <div className="aboutCompany__content__info my-3">

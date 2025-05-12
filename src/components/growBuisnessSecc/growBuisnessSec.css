@@ -35,9 +35,9 @@
     margin-top: 10px;
 }
 .growBuisness__header h1 span{
-    background: linear-gradient(to right, #376EF3 0%, #01DCFF 100%);
+    /* background: linear-gradient(to right, #376EF3 0%, #01DCFF 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent; */
 }
 .gowBuisness__action {
     position: absolute;
@@ -46,7 +46,8 @@
     transform: translateX(-50%);
 }
 .linear__btn{
-     background: linear-gradient(-72deg, #08AAE8 0%,  #067FAD 50%,  #06264D 100%);
+     /* background: linear-gradient(-72deg, #08AAE8 0%,  #067FAD 50%,  #06264D 100%); */
+     background: var(--main-turquoise);
     border: 1px solid var(--main-turquoise);
     /* border-image: linear-gradient(to right, #376EF3, #01DCFF); */
     border-radius: 12px;
@@ -57,9 +58,10 @@
 }
 .linear__btn:hover{
     background-color: var(--primary-white);
-    background: linear-gradient(to right, #376EF3 0%, #01DCFF 100%);
+    /* background: linear-gradient(to right, #376EF3 0%, #01DCFF 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent; */
+    color: var(--main-turquoise);
 }
 
 @media screen and (max-width: 600px) {

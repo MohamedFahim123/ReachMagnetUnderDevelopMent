@@ -12,4 +12,5 @@ export const UpdateEmployeeProfileSchema = z.object({
     full_address: z.any(),
     address_one: z.any(),
     address_two: z.any(),
+    phone_code: z.any(),
 });

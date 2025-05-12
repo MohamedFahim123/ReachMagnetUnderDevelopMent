@@ -41,6 +41,7 @@ export default function CompanyFollowers({ loginType, token }) {
     const filteredFollowers = loginType === "user"
         ? followers.filter((el, index, self) => index === self.findIndex((t) => t.companyId === el.companyId))
         : followers.filter((el, index, self) => index === self.findIndex((t) => t.userId === el.userId));
+console.log(filteredFollowers);
 
     return (
         <>
@@ -80,12 +81,12 @@ export default function CompanyFollowers({ loginType, token }) {
                                             followed.map((el) => (
                                                 <div key={el?.id} className="followerInfo__Item col-md-6">
                                                     <div className="followerImage">
-                                                        <NavLink target="_blank" className={'nav-link'} to={`/show-company/${el?.companyId}`}>
+                                                        <NavLink target="_blank" className={'nav-link'} to={`/${el?.companySlug}`}>
                                                         <img src={el?.companyLogo} alt={`${el?.companyName} avatar`} />
                                                         </NavLink>
                                                     </div>
                                                     <div className="followerContactInfo">
-                                                        <NavLink target="_blank" className={'nav-link'} to={`/show-company/${el?.companyId}`}>
+                                                        <NavLink target="_blank" className={'nav-link'} to={`/${el?.companySlug}`}>
                                                         <h1>{el?.companyName}</h1>
                                                         </NavLink>
                                                         <div className="follower__status">
@@ -106,13 +107,13 @@ export default function CompanyFollowers({ loginType, token }) {
                                                             el?.followableType === 'User' ?
                                                             <h1>{el?.followableName}</h1>
                                                             :
-                                                            <NavLink target="_blank" className={'nav-link'} to={`/show-company/${el?.company_id}`}>
+                                                            <NavLink target="_blank" className={'nav-link'} to={`/${el?.company_slug}`}>
                                                             <h1>{el?.followableName}</h1>
                                                             </NavLink>
                                                         }
                                                         
                                                         <div className="follower__status">
-                                                            <p>{el?.followableEmail || ""}</p>
+                                                            {/* <p>{el?.followableEmail || ""}</p> */}
                                                             <p className="isUsersfollowed text-light">follows you</p>
                                                         </div>
                                                     </div>
@@ -126,7 +127,7 @@ export default function CompanyFollowers({ loginType, token }) {
                                                         <img src={el?.followableImage || el?.companyLogo} alt={`${el?.userName || el?.companyName} avatar`} />
                                                     </div>
                                                     <div className="followerContactInfo">
-                                                    <NavLink target="_blank" className={'nav-link'} to={`/show-company/${el?.companyId}`}>
+                                                    <NavLink target="_blank" className={'nav-link'} to={`/${el?.companySlug}`}>
                                                         <h1>{el?.followableName || el?.companyName}</h1>
                                                         </NavLink>
                                                         

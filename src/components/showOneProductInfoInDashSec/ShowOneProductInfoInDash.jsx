@@ -204,7 +204,7 @@ console.log(newData);
                                 </div>
                             </div>
                         </div>
-                        {
+                        {  show_slug === 'show-catalog' &&
                             newData?.details?.length !== 0 &&
                             <div className="col-12 showOneProductDash__item mb-5">
                                 <h5>

@@ -22,6 +22,8 @@ import CompanyMediaCard from '../../components/companyMediaCardSec/CompanyMediaC
 import BookAppointMentFrom from '../../components/bookAppointMentFrom/BookAppointMentFrom'
 import PrevWorkCard from '../../components/prevWorkCard/PrevWorkCard'
 import { usePrevWorkStore } from '../../store/AllPrevWorkStore'
+import axios from 'axios'
+import { baseURL } from '../../functions/baseUrl'
 
 export default function SingleCompany({ token }) {
     const [loading, setLoading] = useState(true);
@@ -78,17 +80,20 @@ export default function SingleCompany({ token }) {
         retry: false,
         refetchOnWindowFocus: false,
     });
-
+    const companyPrevWorks = useQuery({
+        queryKey: ['company-prevWork'],
+        queryFn: () => getDataFromAPI(`company-pervious-works/${companyId}?t=${new Date().getTime()}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }),
+        cacheTime: 1000 * 60 * 15,
+        retry: false,
+        refetchOnWindowFocus: false,
+    });
+    const prevWorksArr = companyPrevWorks?.data?.pervious_works?.pervious_works
+    
     const [activeItem, setActiveItem] = useState('Overview');
-    const {
-        prevWork,
-        currentPage,
-        fetchPrevWork
-    } = usePrevWorkStore();
-
-    useEffect(() => {
-        fetchPrevWork(token, loginType, currentPage);
-    }, [token, loginType, currentPage, fetchPrevWork]);
 
     // const items = [
     //     { name: 'Overview', active: activeItem === 'Overview' },
@@ -99,6 +104,27 @@ export default function SingleCompany({ token }) {
     //     { name: 'Partners', active: activeItem === 'Partners' },
     // ];
 
+    const [newData, setNewdata] = useState([])
+    const fetchCompanyPosts = async () => {
+      try {
+        if (companyId) {
+            const response = await axios.get(`${baseURL}/company-posts/${companyId}?t=${new Date().getTime()}`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+            setNewdata(response?.data?.data?.posts);
+        }
+        
+      } catch (error) {
+        // toast.error(error?.response?.data?.message);
+      };
+    };
+  
+    useEffect(() => {
+      fetchCompanyPosts();
+    }, []);
+    
     const items = [
         {
             name: 'Overview',
@@ -132,8 +158,14 @@ export default function SingleCompany({ token }) {
         {
             name: 'Previous Work',
             active: activeItem === 'Previous Work',
-            render: prevWork?.length > 0
+            render: companyPrevWorks?.data?.pervious_works?.pervious_works?.length > 0
         },
+        {
+            name: 'Insights',
+            active: activeItem === 'Insights',
+            render: newData?.length > 0
+        },
+        
     ].filter(item => item.render !== false);
 
     const handleItemClick = (itemName) => {
@@ -145,6 +177,8 @@ export default function SingleCompany({ token }) {
             setLoading(false);
         }, 500);
     }, [loading]);
+    console.log(showCompaniesQuery?.data?.company);
+
     return (
         <>
             {
@@ -166,114 +200,129 @@ export default function SingleCompany({ token }) {
                                 {
                                     activeItem === 'Services' &&
                                     <>
-                                        {
-                                            showCompaniesQuery?.data?.company?.companyServices?.length !== 0 ?
-                                                <Swiper
-                                                    className='mySwiper'
-                                                    modules={[Autoplay]}
-                                                    autoplay={{
-                                                        delay: 2500,
-                                                        pauseOnMouseEnter: true,
-                                                        disableOnInteraction: false
-                                                    }}
-                                                    breakpoints={{
-                                                        300: {
-                                                            slidesPerView: 1.1,
-                                                            spaceBetween: 10
-                                                        },
-                                                        426: {
-                                                            slidesPerView: 1.2,
-                                                            spaceBetween: 20
-                                                        },
-                                                        600: {
-                                                            slidesPerView: 2.2,
-                                                            spaceBetween: 15
-                                                        },
-                                                        768: {
-                                                            slidesPerView: 2.2,
-                                                            spaceBetween: 15
-                                                        },
-                                                        995: {
-                                                            slidesPerView: 3.2,
-                                                            spaceBetween: 20
-                                                        },
-                                                    }}
-                                                >
-                                                    {showCompaniesQuery?.data?.company?.companyServices?.map((el) => {
-                                                        return (
-                                                            <SwiperSlide className=' my-3' key={el?.serviceId}>
-                                                                <LastMinuteCard
-                                                                    productImage={el?.serviceImage}
-                                                                    productName={el?.serviceTitle}
-                                                                    showCustomContent={true}
-                                                                    productLink={`/show-company/${companyId}/service-details/${el?.serviceSlug}`}
-                                                                    borderColor={'rgba(0, 0, 0, 0.5)'}
-                                                                    onAddClick={''}
-                                                                />
-                                                            </SwiperSlide>
-                                                        )
-                                                    })}
-                                                </Swiper>
-                                                :
-                                                <h5 className='text-center text-danger text-capitalize mb-4'>
-                                                    No Services for this company
-                                                </h5>
-                                        }
+                                    {
+                                    showCompaniesQuery?.data?.company?.companyServices?.length !== 0 ?
+                                    showCompaniesQuery?.data?.company?.companyServices?.map((el)=>(
+                                    <>
+                                    <h3 className='my-3'>
+                                        {el?.categoryName}
+                                    </h3>
+                                    <Swiper
+                                        className='mySwiper'
+                                        modules={[Autoplay]}
+                                        autoplay={{
+                                            delay: 2500,
+                                            pauseOnMouseEnter: true,
+                                            disableOnInteraction: false
+                                        }}
+                                        breakpoints={{
+                                            300: {
+                                                slidesPerView: 1.1,
+                                                spaceBetween: 10
+                                            },
+                                            426: {
+                                                slidesPerView: 1.2,
+                                                spaceBetween: 20
+                                            },
+                                            600: {
+                                                slidesPerView: 2.2,
+                                                spaceBetween: 15
+                                            },
+                                            768: {
+                                                slidesPerView: 2.2,
+                                                spaceBetween: 15
+                                            },
+                                            995: {
+                                                slidesPerView: 3.2,
+                                                spaceBetween: 20
+                                            },
+                                        }}
+                                    >
+                                        {el?.services?.map((item) => {
+                                            return (
+                                                <SwiperSlide className=' my-3' key={item?.serviceId}>
+                                                    <LastMinuteCard
+                                                        productImage={item?.serviceImage}
+                                                        productName={item?.serviceTitle}
+                                                        showCustomContent={true}
+                                                        productLink={`/${companyId}/service-details/${item?.serviceSlug}`}
+                                                        borderColor={'rgba(0, 0, 0, 0.5)'}
+                                                        onAddClick={''}
+                                                        productCatgeory={item?.serviceCategory}
+                                                    />
+                                                </SwiperSlide>
+                                            )
+                                        })}
+                                    </Swiper>
+                                    </>
+                                    ))
+                                    :
+                                    <h5 className='text-center text-danger text-capitalize mb-4'>
+                                        No Services for this company
+                                    </h5>
+                                    }
 
                                     </>
                                 }
                                 {
                                     activeItem === 'Product Catalog' &&
                                     <>
-                                        {
-                                            <Swiper
-                                                className='mySwiper'
-                                                modules={[Autoplay]}
-                                                autoplay={{
-                                                    delay: 2500,
-                                                    pauseOnMouseEnter: true,
-                                                    disableOnInteraction: false
-                                                }}
-                                                breakpoints={{
-                                                    300: {
-                                                        slidesPerView: 1.1,
-                                                        spaceBetween: 10
-                                                    },
-                                                    426: {
-                                                        slidesPerView: 1.2,
-                                                        spaceBetween: 20
-                                                    },
-                                                    600: {
-                                                        slidesPerView: 2.2,
-                                                        spaceBetween: 15
-                                                    },
-                                                    768: {
-                                                        slidesPerView: 2.2,
-                                                        spaceBetween: 15
-                                                    },
-                                                    995: {
-                                                        slidesPerView: 3.2,
-                                                        spaceBetween: 20
-                                                    },
-                                                }}
-                                            >
-                                                {showCompaniesQuery?.data?.company?.companyCatalogs?.map((el) => {
-                                                    return (
-                                                        <SwiperSlide className=' my-3' key={el?.catalogId}>
+                                    {
+                                        showCompaniesQuery?.data?.company?.companyCatalogs?.map((el)=>(
+                                            <>
+                                            <h3 className='my-3'>
+                                                {el?.categoryName}
+                                            </h3>
+                                        <Swiper
+                                            className='mySwiper'
+                                            modules={[Autoplay]}
+                                            autoplay={{
+                                                delay: 2500,
+                                                pauseOnMouseEnter: true,
+                                                disableOnInteraction: false
+                                            }}
+                                            breakpoints={{
+                                                300: {
+                                                    slidesPerView: 1.1,
+                                                    spaceBetween: 10
+                                                },
+                                                426: {
+                                                    slidesPerView: 1.2,
+                                                    spaceBetween: 20
+                                                },
+                                                600: {
+                                                    slidesPerView: 2.2,
+                                                    spaceBetween: 15
+                                                },
+                                                768: {
+                                                    slidesPerView: 2.2,
+                                                    spaceBetween: 15
+                                                },
+                                                995: {
+                                                    slidesPerView: 3.2,
+                                                    spaceBetween: 20
+                                                },
+                                            }}
+                                        >
+                                            {el?.catalogs?.map((item) => {
+                                                return (
+                                                    <SwiperSlide className=' my-3' key={item?.catalogId}>
                                                             <LastMinuteCard
-                                                                productImage={el?.catalogImages[0].media}
-                                                                productName={el?.catalogTitle}
-                                                                productLink={`/show-company/${companyId}/catalog-details/${el?.catalogSlug}`}
-                                                                showCustomContent={true}
-                                                                borderColor={'rgba(0, 0, 0, 0.5)'}
-                                                                onAddClick={''}
+                                                            productImage={item?.catalogImages[0].media}
+                                                            productName={item?.catalogTitle}
+                                                            productLink={`/${companyId}/catalog-details/${item?.catalogSlug}`}
+                                                            showCustomContent={true}
+                                                            borderColor={'rgba(0, 0, 0, 0.5)'}
+                                                            onAddClick={''}
                                                             />
-                                                        </SwiperSlide>
-                                                    )
-                                                })}
-                                            </Swiper>
-                                        }
-
+                                                    </SwiperSlide>
+                                                )
+                                            })}
+                                        </Swiper>
+                                            </>
+                                        ))
+                                    }
+                                        
                                     </>
                                 }
                                 {
@@ -375,144 +424,144 @@ export default function SingleCompany({ token }) {
 
                                     </>
                                 }
-                                {
-                                    activeItem === 'Clients' &&
-                                    <>
-                                        {
-                                            companyNetworks?.data?.networks?.networks ?
-                                                (() => {
-                                                    const clientNetwork = companyNetworks.data.networks.networks.find(
-                                                        (el) => el.label === 'Client'
-                                                    );
-                                                    return clientNetwork ? (
-                                                        <Swiper
-                                                            className="mySwiper"
-                                                            modules={[Autoplay]}
-                                                            autoplay={{
-                                                                delay: 2500,
-                                                                pauseOnMouseEnter: true,
-                                                                disableOnInteraction: false,
-                                                            }}
-                                                            breakpoints={{
-                                                                300: {
-                                                                    slidesPerView: 1.1,
-                                                                    spaceBetween: 10,
-                                                                },
-                                                                426: {
-                                                                    slidesPerView: 1.2,
-                                                                    spaceBetween: 20,
-                                                                },
-                                                                600: {
-                                                                    slidesPerView: 2.2,
-                                                                    spaceBetween: 15,
-                                                                },
-                                                                768: {
-                                                                    slidesPerView: 2.2,
-                                                                    spaceBetween: 15,
-                                                                },
-                                                                995: {
-                                                                    slidesPerView: 3.2,
-                                                                    spaceBetween: 20,
-                                                                },
-                                                            }}
-                                                        >
-                                                            {companyNetworks.data.networks.networks
-                                                                .filter((el) => el.label === 'Client')
-                                                                .map((el) => (
-                                                                    <SwiperSlide className="my-3" key={el?.id}>
-                                                                        <CompanyMediaCard
-                                                                            type={"image"}
-                                                                            mediaSrc={el?.logo}
-                                                                            mainInfo={true}
-                                                                            mainInfoName={el?.name}
-                                                                            mainInfoType={el?.label}
-                                                                            mainInfoLink={""}
-                                                                        />
-                                                                    </SwiperSlide>
-                                                                ))}
-                                                        </Swiper>
-                                                    ) : (
-                                                        <h5 className="text-center text-danger text-capitalize mb-4">
-                                                            No added client type for this company
-                                                        </h5>
-                                                    );
-                                                })()
-                                                :
-                                                <h5 className="text-center text-danger text-capitalize mb-4">
-                                                    No added network for this company
-                                                </h5>
-                                        }
-                                    </>
-                                }
-                                {
-                                    activeItem === 'Partners' &&
-                                    <>
-                                        {
-                                            companyNetworks?.data?.networks?.networks ?
-                                                (() => {
-                                                    const clientNetwork = companyNetworks.data.networks.networks.find(
-                                                        (el) => el.label === 'Partener'
-                                                    );
-                                                    return clientNetwork ? (
-                                                        <Swiper
-                                                            className="mySwiper"
-                                                            modules={[Autoplay]}
-                                                            autoplay={{
-                                                                delay: 2500,
-                                                                pauseOnMouseEnter: true,
-                                                                disableOnInteraction: false,
-                                                            }}
-                                                            breakpoints={{
-                                                                300: {
-                                                                    slidesPerView: 1.1,
-                                                                    spaceBetween: 10,
-                                                                },
-                                                                426: {
-                                                                    slidesPerView: 1.2,
-                                                                    spaceBetween: 20,
-                                                                },
-                                                                600: {
-                                                                    slidesPerView: 2.2,
-                                                                    spaceBetween: 15,
-                                                                },
-                                                                768: {
-                                                                    slidesPerView: 2.2,
-                                                                    spaceBetween: 15,
-                                                                },
-                                                                995: {
-                                                                    slidesPerView: 3.2,
-                                                                    spaceBetween: 20,
-                                                                },
-                                                            }}
-                                                        >
-                                                            {companyNetworks.data.networks.networks
-                                                                .filter((el) => el.label === "Partener")
-                                                                .map((el) => (
-                                                                    <SwiperSlide className="my-3" key={el?.id}>
-                                                                        <CompanyMediaCard
-                                                                            type={"image"}
-                                                                            mediaSrc={el?.logo}
-                                                                            mainInfo={true}
-                                                                            mainInfoName={el?.name}
-                                                                            mainInfoType={el?.label}
-                                                                            mainInfoLink={""}
-                                                                        />
-                                                                    </SwiperSlide>
-                                                                ))}
-                                                        </Swiper>
-                                                    ) : (
-                                                        <h5 className="text-center text-danger text-capitalize mb-4">
-                                                            No added client type for this company
-                                                        </h5>
-                                                    );
-                                                })()
-                                                :
-                                                <h5 className="text-center text-danger text-capitalize mb-4">
-                                                    No added network for this company
-                                                </h5>
-                                        }
-                                    </>
-                                }
+            {
+                activeItem === 'Clients' &&
+                <>
+                    {
+                        companyNetworks?.data?.networks?.networks ?
+                            (() => {
+                                const clientNetwork = companyNetworks.data.networks.networks.find(
+                                    (el) => el.label === 'Client'
+                                );
+                                return clientNetwork ? (
+                                    <Swiper
+                                        className="mySwiper"
+                                        modules={[Autoplay]}
+                                        autoplay={{
+                                            delay: 2500,
+                                            pauseOnMouseEnter: true,
+                                            disableOnInteraction: false,
+                                        }}
+                                        breakpoints={{
+                                            300: {
+                                                slidesPerView: 1.1,
+                                                spaceBetween: 10,
+                                            },
+                                            426: {
+                                                slidesPerView: 1.2,
+                                                spaceBetween: 20,
+                                            },
+                                            600: {
+                                                slidesPerView: 2.2,
+                                                spaceBetween: 15,
+                                            },
+                                            768: {
+                                                slidesPerView: 2.2,
+                                                spaceBetween: 15,
+                                            },
+                                            995: {
+                                                slidesPerView: 3.2,
+                                                spaceBetween: 20,
+                                            },
+                                        }}
+                                    >
+                                        {companyNetworks.data.networks.networks
+                                            .filter((el) => el.label === 'Client')
+                                            .map((el) => (
+                                                <SwiperSlide className="my-3" key={el?.id}>
+                                                    <CompanyMediaCard
+                                                        type={"image"}
+                                                        mediaSrc={el?.logo}
+                                                        mainInfo={true}
+                                                        mainInfoName={el?.name}
+                                                        mainInfoType={el?.label}
+                                                        mainInfoLink={el?.network_slug !== null ? `/${el.network_slug}` : ''}
+                                                    />
+                                                </SwiperSlide>
+                                            ))}
+                                    </Swiper>
+                                ) : (
+                                    <h5 className="text-center text-danger text-capitalize mb-4">
+                                        No added client type for this company
+                                    </h5>
+                                );
+                            })()
+                            :
+                            <h5 className="text-center text-danger text-capitalize mb-4">
+                                No added network for this company
+                            </h5>
+                    }
+                </>
+            }
+    {
+        activeItem === 'Partners' &&
+        <>
+            {
+                companyNetworks?.data?.networks?.networks ?
+                    (() => {
+                        const clientNetwork = companyNetworks.data.networks.networks.find(
+                            (el) => el.label === 'Partener'
+                        );
+                        return clientNetwork ? (
+                            <Swiper
+                                className="mySwiper"
+                                modules={[Autoplay]}
+                                autoplay={{
+                                    delay: 2500,
+                                    pauseOnMouseEnter: true,
+                                    disableOnInteraction: false,
+                                }}
+                                breakpoints={{
+                                    300: {
+                                        slidesPerView: 1.1,
+                                        spaceBetween: 10,
+                                    },
+                                    426: {
+                                        slidesPerView: 1.2,
+                                        spaceBetween: 20,
+                                    },
+                                    600: {
+                                        slidesPerView: 2.2,
+                                        spaceBetween: 15,
+                                    },
+                                    768: {
+                                        slidesPerView: 2.2,
+                                        spaceBetween: 15,
+                                    },
+                                    995: {
+                                        slidesPerView: 3.2,
+                                        spaceBetween: 20,
+                                    },
+                                }}
+                            >
+                                {companyNetworks.data.networks.networks
+                                    .filter((el) => el.label === "Partener")
+                                    .map((el) => (
+                                        <SwiperSlide className="my-3" key={el?.id}>
+                                            <CompanyMediaCard
+                                                type={"image"}
+                                                mediaSrc={el?.logo}
+                                                mainInfo={true}
+                                                mainInfoName={el?.name}
+                                                mainInfoType={el?.label}
+                                                mainInfoLink={el?.network_slug !== null ? `/${el.network_slug}` : ''}
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                            </Swiper>
+                        ) : (
+                            <h5 className="text-center text-danger text-capitalize mb-4">
+                                No added client type for this company
+                            </h5>
+                        );
+                    })()
+                    :
+                    <h5 className="text-center text-danger text-capitalize mb-4">
+                        No added network for this company
+                    </h5>
+            }
+        </>
+    }
                                 {
                                     activeItem === 'Previous Work' &&
                                     <>
@@ -549,7 +598,7 @@ export default function SingleCompany({ token }) {
                                                 }}
                                             >
                                                 {
-                                                    prevWork?.map((row) => (
+                                                    prevWorksArr?.map((row) => (
                                                         <SwiperSlide className="my-3" key={row?.id}>
                                                             <PrevWorkCard page={'singleCompany'} id={row?.id} title={row?.title} description={row?.description} img={row?.image} type={row?.type} />
                                                         </SwiperSlide>
@@ -569,12 +618,10 @@ export default function SingleCompany({ token }) {
                                 :
                                 ''
                         }
-
-
                         {/* <ReadyToBuySec fetchCartItems={fetchCartItems} wishlistItems={wishlistItems} token={token} showCompaniesQuery={showCompaniesQuery} companies={showCompaniesQuery?.data?.company} secMAinTitle={`Ready-To-Buy From ${showCompaniesQuery?.data?.company?.companyName}`} /> */}
 
 
-                        <SingleCompanyNewsSec companyId={companyId} token={token} />
+                        <SingleCompanyNewsSec newData={newData} companyId={companyId} token={token} />
                         {/* <SingleCompanyAffiliate /> */}
                         {
                             token &&

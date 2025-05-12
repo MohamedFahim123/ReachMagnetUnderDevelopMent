@@ -13,32 +13,33 @@ import { scrollToTop } from '../../functions/scrollToTop';
 import toast from 'react-hot-toast';
 import HeaderOfSec from '../myHeaderOfSec/HeaderOfSec';
 
-export default function SingleCompanyNewsSec({ token, companyId }) {
-  const [newData, setNewdata] = useState([])
-  const fetchCompanyPosts = async () => {
-    try {
-      if (companyId) {
-          const response = await axios.get(`${baseURL}/company-posts/${companyId}?t=${new Date().getTime()}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          setNewdata(response?.data?.data?.posts);
-      }
+export default function SingleCompanyNewsSec({ token, companyId, newData }) {
+  // const [newData, setNewdata] = useState([])
+  // const fetchCompanyPosts = async () => {
+  //   try {
+  //     if (companyId) {
+  //         const response = await axios.get(`${baseURL}/company-posts/${companyId}?t=${new Date().getTime()}`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`
+  //           }
+  //         });
+  //         setNewdata(response?.data?.data?.posts);
+  //     }
       
-    } catch (error) {
-      // toast.error(error?.response?.data?.message);
-    };
-  };
+  //   } catch (error) {
+  //     // toast.error(error?.response?.data?.message);
+  //   };
+  // };
 
-  useEffect(() => {
-    fetchCompanyPosts();
-  }, []);
+  // useEffect(() => {
+  //   fetchCompanyPosts();
+  // }, []);
+console.log(newData);
 
   return (
     <>
       {
-        newData.length > 0 && (
+        newData?.length > 0 && (
           <>
             <HeaderOfSec
               secHead='Companies Insights'

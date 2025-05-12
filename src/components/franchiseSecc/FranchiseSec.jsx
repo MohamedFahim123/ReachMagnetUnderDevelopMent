@@ -10,7 +10,7 @@ export default function FranchiseSec({ pageName, headText, paraText, btnOneText,
     return (
         <div className={`franchiseSec__handler`}>
             <div className="container">
-                <div className={`${pageName === 'home' ? 'franchiseSec__content' : 'franchiseSec__content franchiseSec__content-two overlay20'} text-center`}>
+                <div className={`${pageName === 'home' ? 'franchiseSec__content' : 'franchiseSec__content franchiseSec__content-two overlay30'} text-center`}>
                     <h3>
                         {headText ? headText : ''}
                     </h3>

@@ -62,7 +62,7 @@ export default function CopmanyCard({ token ,currentFollowedCompanies,setCurrent
                             <NavLink
                                 onClick={() => {
                                     scrollToTop();
-                                }} to={`/show-company/${companySlug}`} className={'nav-link'}>
+                                }} to={`/${companySlug}`} className={'nav-link'}>
                                 {companyName}
                             </NavLink>
                         </h2>

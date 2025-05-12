@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './CompanyEditForm.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -35,7 +35,7 @@ const allTypes =  [
     name: 'Company Offers Customizations',
   },
 ];
-let allTypesRendered = allTypes;
+// let allTypesRendered = allTypes;
 
 export default function CompanySettingsForm(
   {
@@ -79,35 +79,61 @@ export default function CompanySettingsForm(
     },
     resolver: zodResolver(UpdateCompanyDataSchema),
   });
+// console.log(allTypesRendered);
 
-  const [currentBusinessTypes , setCurrentBusinessTypes] = useState([]);
-  const [selectValue,setSelectValue] = useState('');
+  const [currentBusinessTypes , setCurrentBusinessTypes] = useState(company?.companyTypes || []);
+  const filteredTypes = useMemo(
+    () => allTypes.filter((type) => !currentBusinessTypes.some((selected) => selected.id === type.id)),
+    [currentBusinessTypes]
+  );
+
+  // const [selectValue,setSelectValue] = useState('');
+  // const handleChangeBusinessType = (event) => {
+  //   const toastId = toast.loading('Loading , Please Wait !');
+  //   const chosenType = allTypesRendered.find(el => el.id === +event?.target?.value);
+  //   if(!currentBusinessTypes.find(el=> chosenType?.id === +el)){
+  //     setCurrentBusinessTypes([...currentBusinessTypes,chosenType]);
+  //     allTypesRendered = allTypesRendered.filter(el=>el.id !== +chosenType.id);
+  //     toast.success(`( ${ chosenType.name } ) Added Successfully.`,{
+  //       id: toastId,
+  //       duration: 2000
+  //     });
+  //     setSelectValue('');
+  //   }else {
+  //     toast.success(`( ${ chosenType.name } ) Added Before.`,{
+  //       id: toastId,
+  //       duration: 2000
+  //     });
+  //   }
+  // };
+
   const handleChangeBusinessType = (event) => {
-    const toastId = toast.loading('Loading , Please Wait !');
-    const chosenType = allTypesRendered.find(el => el.id === +event?.target?.value);
-    if(!currentBusinessTypes.find(el=> chosenType?.id === +el)){
-      setCurrentBusinessTypes([...currentBusinessTypes,chosenType]);
-      allTypesRendered = allTypesRendered.filter(el=>el.id !== +chosenType.id);
-      toast.success(`( ${ chosenType.name } ) Added Successfully.`,{
-        id: toastId,
-        duration: 2000
-      });
-      setSelectValue('');
-    }else {
-      toast.success(`( ${ chosenType.name } ) Added Before.`,{
-        id: toastId,
-        duration: 2000
-      });
+    const chosenType = allTypes.find((el) => el.id === +event.target.value);
+    if (chosenType && !currentBusinessTypes.some((el) => el.id === chosenType.id)) {
+      const updatedBusinessTypes = [...currentBusinessTypes, chosenType];
+      setCurrentBusinessTypes(updatedBusinessTypes);
+      setValue('main_type', updatedBusinessTypes.map((type) => type.name));
+      toast.success(`( ${chosenType.name} ) Added Successfully.`);
+    } else {
+      toast.error('This type is already selected.');
     }
   };
+
+  // const handleDeleteBusinessType = (type) => {
+  //   const toastId = toast.loading('Loading , Please Wait !');
+  //   allTypesRendered.push(type);
+  //   setCurrentBusinessTypes(currentBusinessTypes?.filter(el=> +el?.id !== +type?.id ));
+  //   toast.success(`( ${ type.name } ) Removed Successfully.`,{
+  //     id: toastId,
+  //     duration: 2000
+  //   });
+  // };
+
   const handleDeleteBusinessType = (type) => {
-    const toastId = toast.loading('Loading , Please Wait !');
-    allTypesRendered.push(type);
-    setCurrentBusinessTypes(currentBusinessTypes?.filter(el=> +el?.id !== +type?.id ));
-    toast.success(`( ${ type.name } ) Removed Successfully.`,{
-      id: toastId,
-      duration: 2000
-    });
+    const updatedBusinessTypes = currentBusinessTypes.filter((el) => el.id !== type.id);
+    setCurrentBusinessTypes(updatedBusinessTypes);
+    setValue('main_type', updatedBusinessTypes.map((type) => type.name)); // Update form state
+    toast.success(`( ${type.name} ) Removed Successfully.`);
   };
 
   useEffect( ()=>{
@@ -117,15 +143,22 @@ export default function CompanySettingsForm(
     setValue('website_link',company?.website_link);
     setValue('linkedin_link',linkedInLink);
     setValue('founded',company?.founded);
-    setValue('main_type',company?.companyTypes?.map(el => el?.type));
+    setValue('main_type',company?.companyTypes?.map((el) => el?.type));
     setValue('category_id', `${mainCategories?.find(cat => cat?.mainCategoryName === company?.category )?.mainCategoryId}`);
     setValue('sub_category_id',`${subCategories?.find(cat => cat?.subCategoryName === company?.sub_category )?.subCategoryId}`);
-    setCurrentBusinessTypes(allTypes.filter(type => watch('main_type')?.includes(type.name)));
-    allTypesRendered = allTypesRendered.filter(type => !watch('main_type')?.includes(type.name));
-  },[company,Cookies.get('currentUpdatedCompanyData')]);
+    // setCurrentBusinessTypes(allTypes.filter(type => watch('main_type')?.includes(type.name)));
+    setCurrentBusinessTypes(allTypes.filter((type) => watch('main_type')?.includes(type.name)));
+    // allTypesRendered = allTypesRendered.filter(type => watch('main_type')?.includes(type.name));
+  },[linkedInLink, mainCategories, setValue, subCategories, watch,company?.email]);
+
   useEffect(()=>{
     setValue('logo',currnetImageUpdateFile);
   },[currnetImageUpdateFile]);
+
+  useEffect(() => {
+    setValue('main_type', currentBusinessTypes.map((type) => type.name));
+  }, [currentBusinessTypes, setValue]);
+
   useEffect(()=>{
     setValue('cover',currnetCoverUpdateFile);
   },[currnetCoverUpdateFile]);
@@ -143,25 +176,39 @@ export default function CompanySettingsForm(
       })();
     }
   },[watch('category_id')]);
+console.log(watch('about_us'));
 
   const onSubmit = async (data) => {
   const toastId = toast.loading('Please Wait...');
   const formData = new FormData();
+  // Object.keys(data).forEach((key) => {
+  //   if (key !== 'logo' && key !== 'cover' && !Array.isArray(data[key])) {
+  //     formData.append(key, data[key]);
+  //   } else if (Array.isArray(data[key])) {
+  //     data[key].forEach((item, index) => {
+  //       formData.append(`${key}[${index}]`, item);
+  //     });
+  //   }
+  // });
   Object.keys(data).forEach((key) => {
-    if (key !== 'logo' && key !== 'cover' && !Array.isArray(data[key])) {
-      formData.append(key, data[key]);
-    } else if (Array.isArray(data[key])) {
-      data[key].forEach((item, index) => {
-        formData.append(`${key}[${index}]`, item);
-      });
+    if (key !== 'logo' && key !== 'cover' && key !== 'main_type') {
+      formData.append(key, data[key] || '');
     }
   });
+  // formData.append('main_type', currentBusinessTypes.map((type) => type.name));
+  if (data.about_us) {
+    formData.append('about_us', data.about_us);
+  }
   if(imgChanged && data.logo[0]){
     formData.append('logo', data.logo[0]);
   };
   if(coverChanged && data.cover[0]){
     formData.append('cover', data.cover[0]);
   };
+  const uniqueBusinessTypes = Array.from(new Set(currentBusinessTypes.map((type) => type.name)));
+    uniqueBusinessTypes.forEach((type) => {
+      formData.append('main_type[]', type);
+    });
   await axios.post(`${baseURL}/${loginType}/update-company-data?t=${new Date().getTime()}`, formData, {
     headers: {
       'Accept': 'application/json',
@@ -173,6 +220,8 @@ export default function CompanySettingsForm(
         id: toastId,
         duration: 1000,
       });
+      // console.log(formData);
+      
       Cookies.set('currentUpdatedCompanyData',JSON.stringify(response?.data?.data), { expires: 999999999999999 * 999999999999999 * 999999999999999 * 999999999999999 });
       localStorage.setItem('updatingCompany','notUpdating');
       window.location.reload();
@@ -268,7 +317,7 @@ export default function CompanySettingsForm(
         }
       </div>
       <div className="mt-2 ms-2 profileFormInputItem cityContainerProfileForm">
-        <label htmlFor="dashboardCompanyMainCategory">Main Category</label>
+        <label htmlFor="dashboardCompanyMainCategory">Main Activity</label>
         {
           (profileUpdateStatus === 'notUpdating') ?
               <input
@@ -285,7 +334,7 @@ export default function CompanySettingsForm(
                 {...register('category_id')}
                 id="dashboardCompanyMainCategory"
               >
-                <option disabled value="">Select Category</option>
+                <option disabled value="">Select Activity</option>
                 {
                   mainCategories?.map(cat => (
                       <option key={cat?.mainCategoryId} value={cat?.mainCategoryId}>{cat?.mainCategoryName}</option>
@@ -301,7 +350,7 @@ export default function CompanySettingsForm(
             }
       </div>
       <div className="mt-2 ms-2 profileFormInputItem cityContainerProfileForm">
-        <label htmlFor="dashboardCompanySubCategory">Sub-Category</label>
+        <label htmlFor="dashboardCompanySubCategory">Sub-Activity</label>
         {
           (profileUpdateStatus === 'notUpdating') ?
               <input
@@ -318,7 +367,7 @@ export default function CompanySettingsForm(
                 {...register('sub_category_id')}
                 id="dashboardCompanySubCategory"
               >
-                <option disabled value="">Select Sub-Category</option>
+                <option disabled value="">Select Sub-Activity</option>
                 {
                   subCategories?.map(cat => (
                       <option key={cat?.subCategoryId} value={cat?.subCategoryId}>{cat?.subCategoryName}</option>
@@ -377,14 +426,15 @@ export default function CompanySettingsForm(
         :
         <>
           <select
-            defaultValue={selectValue}
+            defaultValue={''}
             onChange={handleChangeBusinessType}
             className={`form-select signUpInput mt-2 ${errors?.country_id ? 'inputError' : ''}`}
+            // {...register('main_type')}
             id="dashboardCompanymainType"
           >
           <option disabled value="">Select Company Types</option>
           {
-            allTypesRendered?.map(type => (
+            filteredTypes?.map(type => (
               <option key={type?.id} value={type?.id}>{type?.name}</option>
             ))
           }

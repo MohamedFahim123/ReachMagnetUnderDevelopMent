@@ -2,6 +2,7 @@
     background: var(--primary-white);
     border-radius: 9px;
     width: 100%;
+    box-shadow: 0px 7px 5px rgb(213 217 222);
 }
 .companyCard__item .card__content{
     display: flex;

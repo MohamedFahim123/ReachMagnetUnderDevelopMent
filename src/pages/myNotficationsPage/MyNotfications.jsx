@@ -121,8 +121,12 @@ export default function MyNotfications({ token, fireNotification, setFireNotific
     const handleNavigation = (target, id) => {
         if (target === 'booked_appointments') {
             navigate(`/profile/booked-appointments`);
-        } else if (target === 'one_click_quotation') {
+        } else if (target === 'one_click_quotation' && loginType ==='user') {
+            navigate(`/profile/oneclick-quotations/${id}`);
+        }else if (target === 'one_click_quotation' && loginType ==='employee') {
             navigate(`/profile/companyoneclick-quotations/${id}`);
+        }else if (target === 'buy_one_click_quotation' && loginType ==='employee') {
+            navigate(`/profile/oneclick-quotations/${id}`);
         } else if (target === 'quotation') {
             navigate(`/profile/quotations/${id}`);
         } else if (target === 'quotation_order') {

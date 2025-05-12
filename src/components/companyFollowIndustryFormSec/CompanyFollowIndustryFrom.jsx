@@ -8,6 +8,7 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
     const [currIndustries, setCurrIndustries] = useState([]);
     const [allIndustries, setAllIndustries] = useState([]);
     const [selectedIndustries, setSelectedIndustries] = useState([]);
+    const [selectedSubIndustries, setSelectedSubIndustries] = useState({});
     const [isEditing, setIsEditing] = useState(false);
 
     const fetchCurrentIndustries = async () => {
@@ -53,159 +54,20 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
         const industry = allIndustries.find((indus) => indus.id === industryId);
         if (industry && !selectedIndustries.some((ind) => ind.id === industry.id)) {
             setSelectedIndustries([...selectedIndustries, industry]);
+            setSelectedSubIndustries(prev => ({
+                ...prev,
+                [industry.id]: []
+            }));
         }
     };
+    const handleAddSubIndustry = (industryId, subIndustryId) => {
+        setSelectedSubIndustries(prev => ({
+            ...prev,
+            [industryId]: [...new Set([...prev[industryId], subIndustryId])]
+        }));
+    };
 
-    // Remove industry from selection
-    // const handleRemoveIndustry = async (industryId) => {
-    //     if (loginType === 'user') {
-    //         // Ensure the industry exists in the current industries
-    //         const isCurrentIndustry = currIndustries.some((ind) => ind.id === industryId);
-    //         if (!isCurrentIndustry) {
-    //             toast.error('Cannot delete an industry that is not associated with the user.');
-    //             return;
-    //         }
-    
-    //         try {
-    //             await axios.post(
-    //                 `${baseURL}/user/unfollow-industry?t=${new Date().getTime()}`,
-    //                 { industry_id:  String(industryId) },
-    //                 {
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`,
-    //                     },
-    //                 }
-    //             );
-    //             toast.success('Industry removed successfully');
-    //             fetchCurrentIndustries(); // Refresh the current industries
-    //         } catch (error) {
-    //             const errorMessage = error?.response?.data?.errors?.industry_id?.[0] || 'Failed to remove industry';
-    //             toast.error(errorMessage);
-    //         }
-    //     } else {
-    //         setSelectedIndustries(selectedIndustries.filter((ind) => ind.id !== industryId));
-    //     }
-    // };
-
-    // Confirm changes
-    console.log(selectedIndustries);
-    
-// const handleConfirmChanges = async () => {
-//     if (loginType === 'user') {
-//         try {
-//             const industryIds = selectedIndustries.map((ind) => ind.id);
-//             await axios.post(
-//                 `${baseURL}/user/follow-industries`,
-//                 { industry_id: industryIds },
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${token}`,
-//                     },
-//                 }
-//             );
-//             toast.success('Industries updated successfully');
-//             fetchCurrentIndustries(); // Fetch updated industries to ensure consistency
-//             setIsEditing(false); // Exit edit mode
-//         } catch (error) {
-//             const errorMessage = error?.response?.data?.errors?.industry_id?.[0] || 'Failed to update industries';
-//             toast.error(errorMessage);
-//         }
-//     } else {
-//         const industryIds = selectedIndustries.map((ind) => ind.id);
-//         try {
-//             const response = await axios.post(
-//                 `${baseURL}/employee/update-company-industires`,
-//                 {
-//                     industry_id: industryIds,
-//                 },
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${token}`,
-//                     },
-//                 }
-//             );
-//             toast.success('Industries updated successfully');
-//             fetchCurrentIndustries(); // Refresh the current industries list
-//             setIsEditing(false); // Exit edit mode
-//         } catch (error) {
-//             toast.error(error?.response?.data.message || 'Failed to update industries');
-//         }
-//     }
-// };
-
-
-    // console.log(currIndustries);
-    
-    // const handleConfirmChanges = async () => {
-    //     if (loginType === 'user') {
-    //         // Determine additions and removals
-    //         const industriesToFollow = selectedIndustries.map((ind) => ind.id); // Send all selected industries
-    //         const industriesToUnfollow = currIndustries.filter(
-    //             (currInd) => !selectedIndustries.some((ind) => ind.id === currInd.id)
-    //         );
-    
-    //         try {
-    //             // Follow all selected industries
-    //             if (industriesToFollow.length > 0) {
-    //                 await axios.post(
-    //                     `${baseURL}/user/follow-industries?t=${new Date().getTime()}`,
-    //                     { industry_id: industriesToFollow },
-    //                     {
-    //                         headers: {
-    //                             Authorization: `Bearer ${token}`,
-    //                         },
-    //                     }
-    //                 );
-    //                 toast.success('Industries updated successfully');
-    //             }
-    
-    //             // Unfollow removed industries
-    //             if (industriesToUnfollow.length > 0) {
-    //                 for (const industry of industriesToUnfollow) {
-    //                     await axios.post(
-    //                         `${baseURL}/user/unfollow-industry?t=${new Date().getTime()}`,
-    //                         { industry_id: String(industry.id) }, // Ensure industry_id is sent as string
-    //                         {
-    //                             headers: {
-    //                                 Authorization: `Bearer ${token}`,
-    //                             },
-    //                         }
-    //                     );
-    //                 }
-    //                 toast.success('Industries removed successfully');
-    //             }
-    
-    //             // Refresh industries and exit edit mode
-    //             fetchCurrentIndustries();
-    //             setIsEditing(false);
-    //         } catch (error) {
-    //             const errorMessage =
-    //             error?.response?.data?.errors?.industry_id?.[0] ||
-    //             error?.response?.data?.message ||
-    //             'Failed to update industries';
-    //         toast.error(errorMessage);
-    //         }
-    //     } else {
-    //         // Handle employee logic
-    //         const industryIds = selectedIndustries.map((ind) => ind.id);
-    //         try {
-    //             await axios.post(
-    //                 `${baseURL}/employee/update-company-industires`,
-    //                 { industry_id: industryIds },
-    //                 {
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`,
-    //                     },
-    //                 }
-    //             );
-    //             toast.success('Industries updated successfully');
-    //             fetchCurrentIndustries(); // Refresh the current industries list
-    //             setIsEditing(false); // Exit edit mode
-    //         } catch (error) {
-    //             toast.error(error?.response?.data.message || 'Failed to update industries');
-    //         }
-    //     }
-    // };
+  
 
     const handleConfirmChanges = async () => {
         if (loginType === 'user') {
@@ -266,10 +128,14 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
         } else {
             // Handle employee logic
             const industryIds = selectedIndustries.map((ind) => ind.id);
+            const subIndustryIds = Object.entries(selectedSubIndustries)
+            .flatMap(([industryId, subIndustries]) =>
+                subIndustries.map(subId => ({ industry_id: Number(industryId), sub_industry_id: subId }))
+            );
             try {
                 await axios.post(
                     `${baseURL}/employee/update-company-industires`,
-                    { industry_id: industryIds },
+                    { industry_id: industryIds, sub_industries: subIndustryIds },
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -277,8 +143,8 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
                     }
                 );
                 toast.success('Industries updated successfully');
-                fetchCurrentIndustries(); // Refresh the current industries list
-                setIsEditing(false); // Exit edit mode
+                fetchCurrentIndustries();
+                setIsEditing(false); 
             } catch (error) {
                 toast.error(error?.response?.data.message || 'Failed to update industries');
             }
@@ -297,12 +163,11 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
             <div className={`mt-2 profileFormInputItem w-100 pe-4 ms-2 'ps-3'}`}>
                 <label htmlFor="dashboardCompanymainType">{loginType ==='user' ? 'User Industries' : 'Company Industries' }</label>
                 {!isEditing ? (
-                    // View mode: Show current industries with "Update" button
                     <>
                         <div>
                             {currIndustries.map((el) => (
-                                <span className='chosen__choice' key={el?.id}>
-                                    {el?.name}
+                                <span className='chosen__choice' key={el?.industryId}>
+                                    {el?.industryName}
                                 </span>
                             ))}
                         </div>
@@ -310,8 +175,8 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setIsEditing(true); // Enable edit mode
-                                    setSelectedIndustries(currIndustries); // Pre-fill selected industries
+                                    setIsEditing(true);
+                                    setSelectedIndustries(currIndustries);
                                 }}
                                 className="btn btn-primary"
                             >
@@ -320,9 +185,7 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
                         </div>
                     </>
                 ) : (
-                    // Edit mode: Show dropdown, selected industries, and confirm button
                     <>
-                        {/* Dropdown for selecting industries */}
                         <select
                             defaultValue=""
                             onChange={(e) => handleAddIndustry(Number(e.target.value))}
@@ -336,9 +199,8 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
                                 </option>
                             ))}
                         </select>
-
                         {/* Selected Industries with delete option */}
-                        <div className="mt-3">
+                        {/* <div className="mt-3">
                             {selectedIndustries.map((el) => (
                                 <span className='chosen__choice' key={el?.id}>
                                     {el?.name}
@@ -352,7 +214,65 @@ export default function CompanyFollowIndustryFrom({ token, setUnAuth }) {
                                     ></i>
                                 </span>
                             ))}
-                        </div>
+                        </div> */}
+
+                    <div className="mt-3">
+                        {selectedIndustries?.map((el) => (
+                            <div key={el.id}>
+                                <span className='chosen__choice'>
+                                    {el.industryName || el?.name}
+                                    <i
+                                        onClick={() => {
+                                            setSelectedIndustries(prev => prev.filter(ind => ind.id !== el.id));
+                                            setSelectedSubIndustries(prev => {
+                                                const updated = { ...prev };
+                                                delete updated[el.id];
+                                                return updated;
+                                            });
+                                        }}
+                                        className="bi bi-trash chosen__choice-delete"
+                                    ></i>
+                                </span>
+                                
+                                {/* Sub-Industry Dropdown */}
+                                {el?.sub_industries?.length > 0 && (
+                                    <select
+                                        defaultValue=""
+                                        onChange={(e) => handleAddSubIndustry(el.id, Number(e.target.value))}
+                                        className="form-select signUpInput mt-2"
+                                    >
+                                        <option disabled value="">Select Sub-Industry</option>
+                                        {el?.sub_industries?.map((sub) => (
+                                            <option key={sub?.id} value={sub?.id}>{sub?.name}</option>
+                                        ))}
+                                    </select>
+                                )}
+
+                                {/* Display Selected Sub-Industries */}
+                                {selectedSubIndustries[el.id]?.length > 0 && (
+                                    <div>
+                                        {selectedSubIndustries[el.id]?.map(subId => {
+                                            const subIndustry = el?.sub_industries?.find(sub => sub.id === subId);
+                                            return subIndustry ? (
+                                                <span className='chosen__choice' key={subIndustry.id}>
+                                                    {subIndustry.name}
+                                                    <i
+                                                        onClick={() => {
+                                                            setSelectedSubIndustries(prev => ({
+                                                                ...prev,
+                                                                [el.id]: prev[el.id].filter(id => id !== subIndustry.id)
+                                                            }));
+                                                        }}
+                                                        className="bi bi-trash chosen__choice-delete"
+                                                    ></i>
+                                                </span>
+                                            ) : null;
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
 
                         {/* Confirm and Cancel Buttons */}
                         <div className="text-center mt-4">
