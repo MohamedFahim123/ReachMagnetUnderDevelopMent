@@ -33,7 +33,7 @@ export default function ShowOneClickQuotation({ token }) {
     const result = str.match(regex);
     negotiationId = result[1];
     console.log(negotiationId);
-    
+
   })();
   const [currentUserLogin, setCurrentUserLogin] = useState(null);
   const [unAuth, setUnAuth] = useState(false);
@@ -234,13 +234,13 @@ export default function ShowOneClickQuotation({ token }) {
                                 {row?.quantity !== 'N/A' ? +row?.quantity : 0}
                               </td>
                               <td className='text-center text-capitalize'>
-                                {row?.offer_price !== 'N/A' ? +row?.offer_price : 0}
+                                {row?.offer_price !== 'N/A' ? row?.offer_price : 0}
                               </td>
                               <td className='text-center text-capitalize'>
                                 {row?.tax !== 'N/A' ? +row?.tax : 0}
                               </td>
                               <td className='text-center text-capitalize'>
-                                {row?.total_price !== 'N/A' ? +row?.total_price : 0}
+                                {row?.total_price !== 'N/A' ? row?.total_price : 0}
                               </td>
                               <td className='text-center text-capitalize'>
                                 {row?.duration !== 'N/A' ? +row?.duration : 0} days
@@ -290,6 +290,177 @@ export default function ShowOneClickQuotation({ token }) {
                               <i className="bi bi-wechat fs-4"></i>
                               <span>Chat with requester</span>
                             </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="quoteTotals__handler">
+                      <h3 className='text-capitalize'>
+                        Quote Targeted Information
+                      </h3>
+                      <div className="row align-items-center">
+                        <div className="col-lg-12">
+                          <div className="totals__full__info">
+                            <div className="totals__text">
+                              <h5 className=''>
+                                Targeted Budget
+                              </h5>
+                            </div>
+                            <div className="totals__prices">
+                              <h5 className=''>
+                                <input
+                                  Value={
+                                    fullData?.target_budget
+                                  }
+                                  name='target_budget'
+                                  type="number"
+                                  id='quotationstarget_budget'
+                                  className='form-control text-center'
+                                  // min={0}
+                                  // maxLength={4}
+                                  disabled
+                                // onChange={handleChangeInput}
+                                />
+                              </h5>
+                            </div>
+                            <div className="actions w-100 position-relative d-flex gap-5">
+                              {currNegotiation?.can_achieve_target_budget === 'Yes' ?
+                                <div className="d-flex gap-2 align-items-center">
+                                  <label htmlFor="can_achieve_target_budget_true">Yes</label>
+                                  <input
+                                    type="radio"
+                                    id="can_achieve_target_budget_true"
+                                    name="can_achieve_target_budget"
+                                    value="Yes"
+                                    checked={currNegotiation?.can_achieve_target_budget === 'Yes'}
+                                    disabled
+                                  />
+                                </div>
+                                :
+                                <div className="d-flex gap-2 align-items-center">
+                                  <label htmlFor="can_achieve_target_budget_false">No</label>
+                                  <input
+                                    type="radio"
+                                    id="can_achieve_target_budget_false"
+                                    name="can_achieve_target_budget"
+                                    value="No"
+                                    checked={currNegotiation?.can_achieve_target_budget === 'No'}
+                                    disabled
+                                  />
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row align-items-center">
+                        <div className="col-lg-12">
+                          <div className="totals__full__info">
+                            <div className="totals__text">
+                              <h5 className=''>
+                                Targeted delivery time
+                              </h5>
+                            </div>
+                            <div className="totals__prices">
+                              <h5 className=''>
+                                <input
+                                  Value={
+                                    fullData?.target_delivery_time
+                                  }
+                                  name='target_delivery_time'
+                                  type="text"
+                                  id='quotationtarget_delivery_time'
+                                  className='form-control text-center'
+                                  // min={0}
+                                  // maxLength={4}
+                                  disabled
+                                // onChange={handleChangeInput}
+                                />
+                              </h5>
+                            </div>
+                            <div className="actions w-100 position-relative d-flex gap-5">
+                              {currNegotiation?.can_achieve_target_delivery_time === 'Yes' ?
+                                <div className="d-flex gap-2 align-items-center">
+                                  <label htmlFor="can_achieve_target_delivery_time_true">Yes</label>
+                                  <input
+                                    type="radio"
+                                    id="can_achieve_target_delivery_time_true"
+                                    name="can_achieve_target_delivery_time"
+                                    value="Yes"
+                                    checked={currNegotiation?.can_achieve_target_delivery_time === 'Yes'}
+                                    disabled
+                                  />
+                                </div>
+                                :
+                                <div className="d-flex gap-2 align-items-center">
+                                  <label htmlFor="can_achieve_target_delivery_time_false">No</label>
+                                  <input
+                                    type="radio"
+                                    id="can_achieve_target_delivery_time_false"
+                                    name="can_achieve_target_delivery_time"
+                                    value="No"
+                                    checked={currNegotiation?.can_achieve_target_delivery_time === 'No'}
+                                    disabled
+                                  />
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row align-items-center">
+                        <div className="col-lg-12">
+                          <div className="totals__full__info">
+                            <div className="totals__text">
+                              <h5 className=''>
+                                Preferred delivery terms
+                              </h5>
+                            </div>
+                            <div className="totals__prices">
+                              <h5 className=''>
+                                <textarea
+                                  Value={
+                                    fullData?.preferred_delivery_terms
+                                  }
+                                  defaultValue={fullData?.preferred_delivery_terms}
+                                  name='preferred_delivery_terms'
+                                  id='quotationpreferred_delivery_terms'
+                                  className='form-control text-center'
+                                  // min={0}
+                                  // maxLength={4}
+                                  disabled
+                                // onChange={handleChangeInput}
+                                />
+                              </h5>
+                            </div>
+                            <div className="actions w-100 position-relative d-flex gap-5">
+                              {
+                                currNegotiation?.can_achieve_preferred_delivery_terms === 'Yes' ?
+                                  <div className="d-flex gap-2 align-items-center">
+                                    <label htmlFor="can_achieve_preferred_delivery_terms_true">Yes</label>
+                                    <input
+                                      type="radio"
+                                      id="can_achieve_preferred_delivery_terms_true"
+                                      name="can_achieve_preferred_delivery_terms"
+                                      value="Yes"
+                                      checked={currNegotiation?.can_achieve_preferred_delivery_terms === 'Yes'}
+                                      disabled
+                                    />
+                                  </div>
+                                  :
+                                  <div className="d-flex gap-2 align-items-center">
+                                    <label htmlFor="can_achieve_preferred_delivery_terms_false">No</label>
+                                    <input
+                                      type="radio"
+                                      id="can_achieve_preferred_delivery_terms_false"
+                                      name="can_achieve_preferred_delivery_terms"
+                                      value="No"
+                                      checked={currNegotiation?.can_achieve_preferred_delivery_terms === 'No'}
+                                      disabled
+                                    />
+                                  </div>
+                              }
+                            </div>
                           </div>
                         </div>
                       </div>

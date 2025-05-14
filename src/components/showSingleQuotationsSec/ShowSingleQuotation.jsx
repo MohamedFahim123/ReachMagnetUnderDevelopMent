@@ -1,26 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './showSinglequotation.css';
-import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
-import ContentViewHeader from '../contentViewHeaderSec/ContentViewHeader';
-import MyNewSidebarDash from '../myNewSidebarDash/MyNewSidebarDash';
-import MainContentHeader from '../mainContentHeaderSec/MainContentHeader';
-import { Table } from 'react-bootstrap';
 import axios from 'axios';
-import { baseURL } from '../../functions/baseUrl';
-import toast from 'react-hot-toast';
-import MyLoader from '../myLoaderSec/MyLoader';
 import Cookies from 'js-cookie';
-import UnAuthSec from '../unAuthSection/UnAuthSec';
+import { useEffect, useRef, useState } from 'react';
+import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import toast from 'react-hot-toast';
+import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { baseURL } from '../../functions/baseUrl';
+import ContentViewHeader from '../contentViewHeaderSec/ContentViewHeader';
+import MainContentHeader from '../mainContentHeaderSec/MainContentHeader';
+import MyLoader from '../myLoaderSec/MyLoader';
+import MyNewSidebarDash from '../myNewSidebarDash/MyNewSidebarDash';
 import ShowLocationOnMap from '../showLocationOnMapSec/ShowLocationOnMap';
+import UnAuthSec from '../unAuthSection/UnAuthSec';
+import './showSinglequotation.css';
+
 export default function ShowSingleQuotation({ token }) {
     const loginType = localStorage.getItem('loginType');
     const { quotationsId } = useParams();
     const [fullData, setFullData] = useState([]);
     const [newData, setNewdata] = useState([]);
     const [acceptedSingleQuotations, setAcceptedSingleQuotations] = useState([]);
-    
+
     const [submitionData, setSubmitionData] = useState({
         quotation_id: quotationsId,
         services: '',
@@ -107,14 +108,14 @@ export default function ShowSingleQuotation({ token }) {
         const submitData = {};
         let slug = undefined;
         if (!isOneClickQuotation) {
-            if(loginType === 'user'){
+            if (loginType === 'user') {
                 submitData.quotation_id = quotationsId;
                 submitData.status = 'rejected'
                 slug = 'update-quotation-status';
-            }else {
+            } else {
                 submitData.quotation_id = quotationsId;
                 slug = 'reject-sell-quotation';
-            }
+            }
         } else {
             submitData.negotiate_one_click_quotation_id = `${newData?.id}`;
             slug = 'reject-sell-negotiation-quotation';
@@ -162,30 +163,45 @@ export default function ShowSingleQuotation({ token }) {
         setTotalPrice(+subTotalPrice + +shippingValue + +servicesValue);
     }, [subTotalPrice, shippingValue, servicesValue]);
 
+    const [extraOptions, setExtraOptions] = useState({
+        can_achieve_target_budget: '',
+        can_achieve_preferred_delivery_terms: '',
+        can_achieve_target_delivery_time: '',
+    });
+
     const handleAcceptQuotation = () => {
         const toastId = toast.loading('Loading...');
         let submitData = {};
         let slug = undefined;
         if (!isOneClickQuotation) {
-            if(loginType === 'user'){
+            if (loginType === 'user') {
                 slug = 'update-quotation-status';
                 submitData = submitionData;
                 submitData.status = 'accepted'
-                submitData.company_notes= replyText
-            }else {
+                submitData.company_notes = replyText
+            } else {
                 slug = 'complete-quotation-data';
                 submitData = submitionData;
-                submitData.company_notes= replyText;
-                submitData.extras_note= extrasNoteInput;
-            }
+                submitData.company_notes = replyText;
+                submitData.extras_note = extrasNoteInput;
+            }
         } else {
             slug = 'complete-negotiation-quotation-data';
             submitData.negotiate_one_click_quotation_id = `${newData?.id}`;
             submitData.shipping_price = shippingValue;
             submitData.services = servicesValue;
             submitData.offer_validaty = submitionData.offer_validaty;
-            submitData.company_notes= replyText;
-            submitData.extras_note= extrasNoteInput;
+            submitData.company_notes = replyText;
+            submitData.extras_note = extrasNoteInput;
+            if (extraOptions.can_achieve_target_budget) {
+                submitData.can_achieve_target_budget = extraOptions?.can_achieve_target_budget;
+            }
+            if (extraOptions.can_achieve_preferred_delivery_terms) {
+                submitData.can_achieve_preferred_delivery_terms = extraOptions?.can_achieve_preferred_delivery_terms;
+            }
+            if (extraOptions.can_achieve_target_delivery_time) {
+                submitData.can_achieve_target_delivery_time = extraOptions?.can_achieve_target_delivery_time;
+            }
         };
         (async () => {
             await axios.post(`${baseURL}/${loginType}/${slug}?t=${new Date().getTime()}`,
@@ -226,7 +242,7 @@ export default function ShowSingleQuotation({ token }) {
                             }
                         );
                     }
-    
+
                     if (
                         error?.response?.data?.message === 'Server Error' ||
                         error?.response?.data?.message === 'Unauthorized'
@@ -343,7 +359,7 @@ export default function ShowSingleQuotation({ token }) {
                         });
                     }
                 });
-                fetchShowQuotations()
+            fetchShowQuotations()
         } else {
             const submitData = updatedData?.find(el => +el?.negotiate_one_click_quotation_detail_id === +id);
             submitData.status = type;
@@ -373,9 +389,6 @@ export default function ShowSingleQuotation({ token }) {
         }
     };
 
-
-    
-
     const handleUpdateBuyQuotationCompanyStatus = async (type) => {
         const toastId = toast.loading('Loading...');
         const submitData = {
@@ -404,6 +417,7 @@ export default function ShowSingleQuotation({ token }) {
                 });
             })
     };
+
     const [visibleRowId, setVisibleRowId] = useState(null);
 
     const toggleOptions = (rowId) => {
@@ -427,8 +441,8 @@ export default function ShowSingleQuotation({ token }) {
 
     const [show, setShow] = useState(false);
     const [currNote, setCurrNote] = useState('');
-    const handleViewNotes = (id) =>{
-        const note = newData?.quotation_details?.find((row)=>+row?.id === +id)?.note
+    const handleViewNotes = (id) => {
+        const note = newData?.quotation_details?.find((row) => +row?.id === +id)?.note
         setShow(true);
         setCurrNote(note);
     };
@@ -447,7 +461,7 @@ export default function ShowSingleQuotation({ token }) {
 
     const handleViewOptions = (options) => {
         setCurrOptions(options);
-        setShowOptions(true); 
+        setShowOptions(true);
     };
 
     // const handleCloseFiles = () => setShow(false);
@@ -456,12 +470,10 @@ export default function ShowSingleQuotation({ token }) {
     const [editExtrasNote, setEditExtrasNote] = useState(false);
     const [extrasNoteInput, setExtrasNoteInput] = useState(newData?.extras_note === 'N/A' ? '' : newData?.extras_note);
 
-    const handleExtrasNoteChange = () => {
-        setEditExtrasNote(true);
-    };
-    console.log(acceptedSingleQuotations);
-    console.log('newData:', newData);
-    console.log('fullData:', fullData);
+    // const handleExtrasNoteChange = () => {
+    //     setEditExtrasNote(true);
+    // };
+
     const startNewChat = async (receiverId, receiverType) => {
         try {
             const res = await axios.post(`${baseURL}/${loginType}/start-chat`, {
@@ -484,19 +496,19 @@ export default function ShowSingleQuotation({ token }) {
             console.log(error?.response?.data?.message || 'Failed to load messages');
         }
     };
-    
+
     const handleNavigation = () => {
-        if (newData?.chatId === null ) {
+        if (newData?.chatId === null) {
             startNewChat(newData?.receiver_id, newData?.receiver_type);
         }
-         else {
-            Cookies.set('newChatId', newData?.chatId )
+        else {
+            Cookies.set('newChatId', newData?.chatId)
             navigate(`/your-messages`);
 
         }
     };
 
-console.log(fullData?.target_budget);
+    console.log(newData)
 
     return (
         <>
@@ -508,7 +520,6 @@ console.log(fullData?.target_budget);
                         <MyNewSidebarDash />
                         <div className='main__content container'>
                             <MainContentHeader search={false} currentUserLogin={currentUserLogin} />
-                            
                             {(
                                 unAuth ?
                                     <UnAuthSec />
@@ -516,10 +527,10 @@ console.log(fullData?.target_budget);
                                     <div className='content__view__handler'>
                                         <ContentViewHeader title={`Quotation: ${newData?.code || fullData?.code} `} />
                                         <div className="quotationTable__content quotationTable__NewStyle">
-                                            <Table  responsive>
+                                            <Table responsive>
                                                 <thead id='theadBg'>
-                                                    <tr 
-                                                    className='table__default__header'>
+                                                    <tr
+                                                        className='table__default__header'>
                                                         <th>(##) Title </th>
                                                         <th className='text-center'>Measure</th>
                                                         <th className='text-center'>QTY</th>
@@ -527,9 +538,7 @@ console.log(fullData?.target_budget);
                                                         <th className='text-center'>Tax(%)</th>
                                                         <th className='text-center'>Price</th>
                                                         <th className='text-center'>Duration (Days)</th>
-                                                        
                                                         <th className='text-center'> Status</th>
-                                                        
                                                         <th className='text-center'> Notes</th>
                                                         <th className='text-center'> Files</th>
                                                         {
@@ -542,635 +551,739 @@ console.log(fullData?.target_budget);
                                                         }
                                                     </tr>
                                                 </thead>
-            <tbody>
-                {
-                    acceptedSingleQuotations?.map((row, idx) => (
-                        <>
-                        <tr key={`${row?.id}${row?.title}`}>
-                            <td className='text-capitalize'>
-                                <span className='me-2 indexOfTheTable'>{idx + 1}</span>
-                                <span title={`${row?.title}`} className=' cursorPointer'>
-                                    {
-                                    `${row?.code ?
-                                        `(${row?.code})` :
-                                        ''
-                                    } ${row?.title} `
-                                    }
-                                
-                                </span>
-                            </td>
-                            <td className='text-center text-capitalize'>
-                                {
-                                    row?.unit_of_measure 
-                                        ? row?.unit_of_measure !== 'N/A' 
-                                        ? row?.unit_of_measure 
-                                        : '' 
-                                        : row?.type === 'service' 
-                                        ? 'services item' 
-                                        : 'Customized Product'
-                                }
-                            </td>
-                            <td className='text-center text-capitalize'>
-                                {row?.quantity !== 'N/A' ? +row?.quantity : 0}
-                            </td>
-                            <td className='text-center text-capitalize'>
-                                {
-                                    !isOneClickQuotation ?
-                                        <input
-                                            type="number"
-                                            className={`form-control m-auto ${(!isOneClickQuotation &&
-                                                (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell'))}`}
-                                            defaultValue={
-                                                (row?.offer_price !== 'N/A' ? (row?.offer_price ? +row?.offer_price : 0) : 0)
-                                            }
-                                            name={'offer_price'}
-                                            min={1}
-                                            minLength={1}
-                                            onChange={(e) => handleChangeValuesInRow(e, row?.id)}
-                                            disabled={(!isOneClickQuotation ? (newData?.company_status !== 'Pending' || loginType === 'user' || newData?.quotation_type !== 'sell') : !(fullData?.quotation_type === 'sell'))}
-                                        />
-                                        :
-                                        <input
-                                            type="number"
-                                            className={`form-control w-100 m-auto ${(fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false) ? 'bg-white' : ''}`}
-                                            defaultValue={
-                                                (row?.offer_price !== 'N/A' ? (row?.offer_price ? +row?.offer_price : 0) : 0)
-                                            }
-                                            name={'item_price'}
-                                            min={1}
-                                            minLength={1}
-                                            onChange={(e) => handleChangeValuesInRow(e, row?.id)}
-                                            disabled={fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'}
-                                        />
-                                }
-                            </td>
-                            <td className='text-center text-capitalize'>
-                                <input
-                                    type="number"
-                                    className={`form-control ${(!isOneClickQuotation ?
-                                        (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell')
-                                        :
-                                        (fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false)) ? 'bg-white' : ''}`}
-                                    defaultValue={row?.tax !== 'N/A' ? +row?.tax : 0}
-                                    name='tax'
-                                    onChange={(e) => handleChangeValuesInRow(e, row?.id)}
-                                    disabled={(!isOneClickQuotation ?
-                                        (newData?.company_status !== 'Pending' || loginType === 'user' || newData?.quotation_type !== 'sell')
-                                        :
-                                        (fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'))}
-                                />
-                            </td>
-                            <td className='text-center text-capitalize'>
-                            {newData?.currency_symbol} {!isOneClickQuotation ?
-                                    ((row?.quantity * updatedData?.find(el => el?.quotation_detail_id === row?.id)?.offer_price)
-                                        +
-                                        (
-                                            (row?.quantity * updatedData?.find(el => el?.quotation_detail_id === row?.id)?.offer_price
-                                                * (updatedData?.find(el => el?.quotation_detail_id === row?.id)?.tax / 100))
-                                        ))
-                                    || (row?.total_price !== 'N/A' ? (row?.total_price ? +row?.total_price : 0) : 0)
-                                    :
-                                    ((row?.quantity * updatedData?.find(el => el?.negotiate_one_click_quotation_detail_id === row?.id)?.item_price)
-                                        +
-                                        (
-                                            (row?.quantity * updatedData?.find(el => el?.negotiate_one_click_quotation_detail_id === row?.id)?.item_price
-                                                * (updatedData?.find(el => el?.negotiate_one_click_quotation_detail_id === row?.id)?.tax / 100))
-                                        ))
-                                    || (row?.total_price !== 'N/A' ? (row?.total_price ? +row?.total_price : 0) : 0)
-                                }
-                            </td>
-                            <td className='text-center text-capitalize'>
-                                <input
-                                    type="number"
-                                    name={'duration'}
-                                    defaultValue={row?.duration === 'N/A' ? 0 : row?.duration}
-                                    disabled={(!isOneClickQuotation ?
-                                        (newData?.company_status !== 'Pending' || loginType === 'user' || newData?.quotation_type !== 'sell')
-                                        :
-                                        (fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'))}
-                                    onChange={(e) => handleChangeValuesInRow(e, row?.id)}
-                                    className={`form-control m-auto ${(!isOneClickQuotation ?
-                                        (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell')
-                                        :
-                                        (fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false)) ? 'bg-white' : ''}`} />
-                            </td>
-                            <td>
-                                <div className={` tableBtnSingleQuote`}>
-                                    <p className={`order__statue ${row?.status}`}>
-                                    {row?.status}
-                                    </p>
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                {
-                                row?.note !== 'N/A' ?
-                                    <i onClick={()=>handleViewNotes(row?.id)} className="bi bi-eye cursorPointer"></i>
-                                    : 
-                                    'No Notes'
-                                }
-                            </td>
-                            <Modal show={show} onHide={() => setShow(false)}>
-                                <Modal.Header closeButton>
-                                <Modal.Title>Notes</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>{currNote}</Modal.Body>
-                                <Modal.Footer>
-                                <Button variant="secondary" onClick={() => setShow(false)}>
-                                    Close
-                                </Button>
-                                </Modal.Footer>
-                            </Modal>
-                            <td className='text-center'>
-                               {
-                               row?.type === "customized" ? 
-                                <i onClick={() => handleViewFiles(row?.medias)}
-                                    className="bi bi-box-arrow-up-right cursorPointer"
-                                >
-                                </i>
-                                :
-                                'No Files'
-                                }
+                                                <tbody>
+                                                    {
+                                                        acceptedSingleQuotations?.map((row, idx) => (
+                                                            <>
+                                                                <tr key={`${row?.id}${row?.title}`}>
+                                                                    <td className='text-capitalize'>
+                                                                        <span className='me-2 indexOfTheTable'>{idx + 1}</span>
+                                                                        <span title={`${row?.title}`} className=' cursorPointer'>
+                                                                            {
+                                                                                `${row?.code ?
+                                                                                    `(${row?.code})` :
+                                                                                    ''
+                                                                                } ${row?.title} `
+                                                                            }
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className='text-center text-capitalize'>
+                                                                        {
+                                                                            row?.unit_of_measure
+                                                                                ? row?.unit_of_measure !== 'N/A'
+                                                                                    ? row?.unit_of_measure
+                                                                                    : ''
+                                                                                : row?.type === 'service'
+                                                                                    ? 'services item'
+                                                                                    : 'Customized Product'
+                                                                        }
+                                                                    </td>
+                                                                    <td className='text-center text-capitalize'>
+                                                                        {row?.quantity !== 'N/A' ? +row?.quantity : 0}
+                                                                    </td>
+                                                                    <td className='text-center text-capitalize'>
+                                                                        {
+                                                                            !isOneClickQuotation ?
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className={`form-control m-auto ${(!isOneClickQuotation &&
+                                                                                        (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell'))}`}
+                                                                                    defaultValue={
+                                                                                        (row?.offer_price !== 'N/A' ? (row?.offer_price ? +row?.offer_price : 0) : 0)
+                                                                                    }
+                                                                                    name={'offer_price'}
+                                                                                    min={1}
+                                                                                    minLength={1}
+                                                                                    onChange={(e) => handleChangeValuesInRow(e, row?.id)}
+                                                                                    disabled={(!isOneClickQuotation ? (newData?.company_status !== 'Pending' || loginType === 'user' || newData?.quotation_type !== 'sell') : !(fullData?.quotation_type === 'sell'))}
+                                                                                />
+                                                                                :
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className={`form-control w-100 m-auto ${(fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false) ? 'bg-white' : ''}`}
+                                                                                    defaultValue={
+                                                                                        (row?.offer_price !== 'N/A' ? (row?.offer_price ? +row?.offer_price : 0) : 0)
+                                                                                    }
+                                                                                    name={'item_price'}
+                                                                                    min={1}
+                                                                                    minLength={1}
+                                                                                    onChange={(e) => handleChangeValuesInRow(e, row?.id)}
+                                                                                    disabled={fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'}
+                                                                                />
+                                                                        }
+                                                                    </td>
+                                                                    <td className='text-center text-capitalize'>
+                                                                        <input
+                                                                            type="number"
+                                                                            className={`form-control ${(!isOneClickQuotation ?
+                                                                                (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell')
+                                                                                :
+                                                                                (fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false)) ? 'bg-white' : ''}`}
+                                                                            defaultValue={row?.tax !== 'N/A' ? +row?.tax : 0}
+                                                                            name='tax'
+                                                                            onChange={(e) => handleChangeValuesInRow(e, row?.id)}
+                                                                            disabled={(!isOneClickQuotation ?
+                                                                                (newData?.company_status !== 'Pending' || loginType === 'user' || newData?.quotation_type !== 'sell')
+                                                                                :
+                                                                                (fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'))}
+                                                                        />
+                                                                    </td>
+                                                                    <td className='text-center text-capitalize'>
+                                                                        {newData?.currency_symbol} {!isOneClickQuotation ?
+                                                                            ((row?.quantity * updatedData?.find(el => el?.quotation_detail_id === row?.id)?.offer_price)
+                                                                                +
+                                                                                (
+                                                                                    (row?.quantity * updatedData?.find(el => el?.quotation_detail_id === row?.id)?.offer_price
+                                                                                        * (updatedData?.find(el => el?.quotation_detail_id === row?.id)?.tax / 100))
+                                                                                ))
+                                                                            || (row?.total_price !== 'N/A' ? (row?.total_price ? +row?.total_price : 0) : 0)
+                                                                            :
+                                                                            ((row?.quantity * updatedData?.find(el => el?.negotiate_one_click_quotation_detail_id === row?.id)?.item_price)
+                                                                                +
+                                                                                (
+                                                                                    (row?.quantity * updatedData?.find(el => el?.negotiate_one_click_quotation_detail_id === row?.id)?.item_price
+                                                                                        * (updatedData?.find(el => el?.negotiate_one_click_quotation_detail_id === row?.id)?.tax / 100))
+                                                                                ))
+                                                                            || (row?.total_price !== 'N/A' ? (row?.total_price ? +row?.total_price : 0) : 0)
+                                                                        }
+                                                                    </td>
+                                                                    <td className='text-center text-capitalize'>
+                                                                        <input
+                                                                            type="number"
+                                                                            name={'duration'}
+                                                                            defaultValue={row?.duration === 'N/A' ? 0 : row?.duration}
+                                                                            disabled={(!isOneClickQuotation ?
+                                                                                (newData?.company_status !== 'Pending' || loginType === 'user' || newData?.quotation_type !== 'sell')
+                                                                                :
+                                                                                (fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'))}
+                                                                            onChange={(e) => handleChangeValuesInRow(e, row?.id)}
+                                                                            className={`form-control m-auto ${(!isOneClickQuotation ?
+                                                                                (newData?.company_status === 'Pending' && loginType !== 'user' && newData?.quotation_type === 'sell')
+                                                                                :
+                                                                                (fullData?.quotation_type === 'sell' ? newData?.company_status === 'Pending' : false)) ? 'bg-white' : ''}`} />
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className={` tableBtnSingleQuote`}>
+                                                                            <p className={`order__statue ${row?.status}`}>
+                                                                                {row?.status}
+                                                                            </p>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className='text-center'>
+                                                                        {
+                                                                            row?.note !== 'N/A' ?
+                                                                                <i onClick={() => handleViewNotes(row?.id)} className="bi bi-eye cursorPointer"></i>
+                                                                                :
+                                                                                'No Notes'
+                                                                        }
+                                                                    </td>
+                                                                    <Modal show={show} onHide={() => setShow(false)}>
+                                                                        <Modal.Header closeButton>
+                                                                            <Modal.Title>Notes</Modal.Title>
+                                                                        </Modal.Header>
+                                                                        <Modal.Body>{currNote}</Modal.Body>
+                                                                        <Modal.Footer>
+                                                                            <Button variant="secondary" onClick={() => setShow(false)}>
+                                                                                Close
+                                                                            </Button>
+                                                                        </Modal.Footer>
+                                                                    </Modal>
+                                                                    <td className='text-center'>
+                                                                        {
+                                                                            row?.type === "customized" ?
+                                                                                <i onClick={() => handleViewFiles(row?.medias)}
+                                                                                    className="bi bi-box-arrow-up-right cursorPointer"
+                                                                                >
+                                                                                </i>
+                                                                                :
+                                                                                'No Files'
+                                                                        }
 
-                            </td>
-                            { !isOneClickQuotation &&
-                                <td className='text-center'>
-                                {
-                                    row?.type !== 'customized' ?
-                                    <i onClick={() => handleViewOptions(row?.preferences)}
-                                     className="bi bi-sliders cursorPointer"></i>
-                                    :
-                                    'No Preferences'
-                                }
-                            </td>
-                            }
-                            <Modal show={showOptions} onHide={() => setShowOptions(false)}>
-                                <Modal.Header closeButton>
-                                <Modal.Title>Options</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body  
-                                >
-                                    <>
-                                    {
-                                    currOptions?.map((opp)=>(
-                                        <div className='d-flex gap-4 mb-3'>
-                                            <p className='text-capitalize'>
-                                            {opp?.attribute} : <span>{opp?.valiue}</span>
-                                            </p>
-                                            <p className='text-capitalize'>
-                                                price: <span>${opp?.price}</span>
-                                            </p>
+                                                                    </td>
+                                                                    {!isOneClickQuotation &&
+                                                                        <td className='text-center'>
+                                                                            {
+                                                                                row?.type !== 'customized' ?
+                                                                                    <i onClick={() => handleViewOptions(row?.preferences)}
+                                                                                        className="bi bi-sliders cursorPointer"></i>
+                                                                                    :
+                                                                                    'No Preferences'
+                                                                            }
+                                                                        </td>
+                                                                    }
+                                                                    <Modal show={showOptions} onHide={() => setShowOptions(false)}>
+                                                                        <Modal.Header closeButton>
+                                                                            <Modal.Title>Options</Modal.Title>
+                                                                        </Modal.Header>
+                                                                        <Modal.Body
+                                                                        >
+                                                                            <>
+                                                                                {
+                                                                                    currOptions?.map((opp) => (
+                                                                                        <div className='d-flex gap-4 mb-3'>
+                                                                                            <p className='text-capitalize'>
+                                                                                                {opp?.attribute} : <span>{opp?.valiue}</span>
+                                                                                            </p>
+                                                                                            <p className='text-capitalize'>
+                                                                                                price: <span>${opp?.price}</span>
+                                                                                            </p>
+                                                                                        </div>
+
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                        </Modal.Body>
+                                                                        <Modal.Footer>
+                                                                            <Button variant="secondary" onClick={() => setShowOptions(false)}>
+                                                                                Close
+                                                                            </Button>
+                                                                        </Modal.Footer>
+                                                                    </Modal>
+                                                                    <Modal show={showFiles} onHide={() => setShowFiles(false)}>
+                                                                        <Modal.Header closeButton>
+                                                                            <Modal.Title>Files</Modal.Title>
+                                                                        </Modal.Header>
+                                                                        <Modal.Body
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'start',
+                                                                                height: 'calc(80vh - 250px)',
+                                                                                overflowY: 'auto'
+                                                                            }}
+                                                                        >
+                                                                            <div className="mediasModal__handler">
+                                                                                {currFile && currFile.length > 0 ? (
+                                                                                    currFile.map((media, i) => (
+                                                                                        <div key={i} className="media__handler">
+                                                                                            <NavLink to={media.media} target="_blank">
+                                                                                                {media.type === "image" ? (
+                                                                                                    <img
+                                                                                                        src={media.media}
+                                                                                                        alt="media"
+                                                                                                        className="mb-3"
+                                                                                                        style={{
+                                                                                                            maxWidth: '200px',
+                                                                                                            maxHeight: '200px',
+                                                                                                            objectFit: 'contain',
+                                                                                                            borderRadius: "8px",
+                                                                                                        }}
+                                                                                                    />
+                                                                                                ) : (
+                                                                                                    "View File"
+                                                                                                )}
+                                                                                            </NavLink>
+                                                                                        </div>
+                                                                                    ))
+                                                                                ) : (
+                                                                                    <p>No files available</p>
+                                                                                )}
+                                                                            </div>
+                                                                        </Modal.Body>
+                                                                        <Modal.Footer>
+                                                                            <Button variant="secondary" onClick={() => setShowFiles(false)}>
+                                                                                Close
+                                                                            </Button>
+                                                                        </Modal.Footer>
+                                                                    </Modal>
+                                                                    {(!isOneClickQuotation ? (loginType === 'employee' && newData?.quotation_type === 'sell') : (fullData?.quotation_type === 'sell')) &&
+                                                                        <td className='text-center text-capitalize p-0'>
+                                                                            <div className="actions w-100 position-relative">
+                                                                                <i style={{ cursor: 'pointer' }} className="bi bi-three-dots-vertical" onClick={() => toggleOptions(row?.id)}></i>
+                                                                                {visibleRowId === row?.id && newData?.company_status === 'Pending' && (
+                                                                                    <div className="options-box" ref={optionsRef}>
+                                                                                        <p className="option mb-1 text-danger" onClick={() => handleChangeStatusSingleQuoteRow('rejected', row?.id)}>Reject</p>
+                                                                                        <p className=" option mb-0 text-success" onClick={() => handleChangeStatusSingleQuoteRow('accepted', row?.id)}>Accept</p>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        </td>}
+                                                                </tr>
+                                                            </>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </Table>
                                         </div>
-                                       
-                                    ))
-                                    } 
-                                    </> 
-                                </Modal.Body>
-                                <Modal.Footer>
-                                <Button variant="secondary" onClick={() => setShowOptions(false)}>
-                                    Close
-                                </Button>
-                                </Modal.Footer>
-                            </Modal>
-                            <Modal show={showFiles} onHide={() => setShowFiles(false)}>
-                                <Modal.Header closeButton>
-                                <Modal.Title>Files</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body  
-                                    style={{
-                                            display: 'flex',
-                                            justifyContent: 'start',
-                                            height: 'calc(80vh - 250px)', 
-                                            overflowY:'auto'
-                                            }}
-                                >
-                                    <div className="mediasModal__handler">
-                                    {currFile && currFile.length > 0 ? (
-                            currFile.map((media, i) => (
-                                <div key={i} className="media__handler">
-                                    <NavLink to={media.media} target="_blank">
-                                        {media.type === "image" ? (
-                                            <img
-                                                src={media.media}
-                                                alt="media"
-                                                className="mb-3"
-                                                style={{
-                                                    maxWidth: '200px',
-                                                    maxHeight: '200px',
-                                                    objectFit: 'contain',
-                                                    borderRadius: "8px",
-                                                }}
-                                            />
-                                        ) : (
-                                            "View File"
-                                        )}
-                                    </NavLink>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No files available</p>
-                        )}
-                                    </div>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                <Button variant="secondary" onClick={() => setShowFiles(false)}>
-                                    Close
-                                </Button>
-                                </Modal.Footer>
-                            </Modal>
-                            {(!isOneClickQuotation ? (loginType === 'employee' && newData?.quotation_type === 'sell') : (fullData?.quotation_type === 'sell')) &&
-                            <td className='text-center text-capitalize p-0'>
-                                <div className="actions w-100 position-relative">
-                                    <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" onClick={() => toggleOptions(row?.id)}></i>
-                                    {visibleRowId === row?.id && newData?.company_status === 'Pending' && (
-                                        <div className="options-box" ref={optionsRef}>
-                                        <p className="option mb-1 text-danger" onClick={() => handleChangeStatusSingleQuoteRow('rejected', row?.id)}>Reject</p>
-                                        <p className=" option mb-0 text-success" onClick={() => handleChangeStatusSingleQuoteRow('accepted', row?.id)}>Accept</p>
-                                    </div>
-                                    )}
-                                </div>
-                            </td>}
-                        </tr>
-                        
-                        
-                        </>
-                    ))
-                }
-            </tbody>
-        </Table>
-    </div>
-    <div className="quoteTotals__handler">
-        <h3>
-            Quote Totals
-        </h3>
-        <div className="row align-items-center">
-            <div className="col-lg-6">
-                <div className="totals__full__info">
-                    <div className="totals__text">
-                        <h5 className='mb-4 '>
-                            subtotal <span className="optional">(Accepted Only)</span>
-                        </h5>
-                        {
-                            newData?.tax !== 'N/A' &&
-                            <h5 className='mb-4'>
-                            Total Tax <span className="optional">(Accepted Only)</span>
-                            </h5>
-                        }
-                        {
-                            (newData?.include_shipping === 'Yes' || isOneClickQuotation) ?
-                                <h5 className='mb-4'>
-                                    Shipping cost 
-                                </h5>
-                                :
-                                ''
-                        }
-                        <h5 className='mb-4'>
-                            Extra 
-                            <span className='optional'>
-                            {loginType === 'employee' ? (
-                                editExtrasNote ? (
-                                    <>
-                                    <input
-                                        type="text"
-                                        name='extras_note'
-                                        value={extrasNoteInput}
-                                        onChange={(e) => setExtrasNoteInput(e.target.value)}
-                                        className="form-control d-inline-block w-auto"
-                                    />
-                                    <i
-                                        className="bi bi-check-lg ms-2"
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => setEditExtrasNote(false)} 
-                                    />
-                                    </>
-                                ) : (
-                                    <>
-                                    {newData?.extras_note === 'N/A' ? "(Specified in notes)" : newData?.extras_note}
-                                    
-                                    </>
-                                )
-                                ) : (
-                                <>
-                                    {newData?.extras_note === 'N/A' ? "(Specified in notes)" : newData?.extras_note}
-                                </>
-                            )}
-                            </span>
-                        </h5>
-                        <h5>
-                            Total Price 
-                        </h5>
-                    </div>
-                    <div className="totals__prices">
-                        <h5 className='mb-4 mt-2'>
-                        {newData?.currency_symbol} {subTotalPrice}
-                        </h5>
-                        {
-                            newData?.tax !== 'N/A' &&
-                            <h5 className='mb-4 mt-2'>
-                                {newData?.currency_symbol} {newData?.tax}
-                            </h5>
-                        }
-                        {
-                            (newData?.include_shipping === 'Yes' || isOneClickQuotation) ?
-                                <h5 className='mb-3'>
-                                    <input
-                                        defaultValue={newData?.shipping_price === 'N/A' ? 0 : newData?.shipping_price}
-                                        name='shipping_price'
-                                        type="number"
-                                        id='quotationShippingPrice'
-                                        className='form-control w-50'
-                                        maxLength={4}
-                                        disabled={
-                                            !isOneClickQuotation ?
-                                                loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
-                                                :
-                                                fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
-                                        }
-                                        onChange={handleChangeInput}
-                                    />
-                                </h5>
-                                :
-                                ''
-                        }
-                        <h5 className='mb-4'>
-                            <input
-                                defaultValue={newData?.services === 'N/A' ? 0 : newData?.services}
-                                name='services'
-                                type="number"
-                                id='quotationservicesPrice'
-                                className='form-control w-50'
-                                min={0}
-                                maxLength={4}
-                                disabled={
-                                    !isOneClickQuotation ?
-                                        loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
-                                        :
-                                        fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
-                                }
-                                onChange={handleChangeInput}
-                            />
-                        </h5>
-                        
-                        <h5 className='mt-3'>
-                            {newData?.currency_symbol} {(newData?.total_price !== 'N/A' && newData?.total_price) || totalPrice || 0}
-                        </h5>
-                    </div>
-                </div>
-            </div>
-            <div className="col-lg-6 adjustPositione">
-                <div className="totals__have__problem">
-                    <h3>
-                        Having a problem?
-                    </h3>
-                    <button onClick={handleNavigation}  className='updateBtn'>
-                        <i className="bi bi-wechat fs-4 me-2"></i>
-                        <span>
-                            Chat Now!
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div className="quoteTotals__handler">
-        <h3 className='text-capitalize'>
-            Quote offer validaty
-        </h3>
-        <div className="row align-items-center">
-            <div className="col-lg-6">
-                <div className="totals__full__info">
-                    <div className="totals__text">
-                        <h5 className=''>
-                            Offer Valid for <span className="optional">(##days)</span>
-                        </h5>
-                    </div>
-                    <div className="totals__prices">
-                        <h5 className=''>
-                            <input
-                                defaultValue={
-                                    !isOneClickQuotation ?
-                                        newData?.offer_validaty !== 'N/A' ? newData?.offer_validaty ? newData?.offer_validaty
-                                        :
-                                        fullData?.offer_validaty : fullData?.offer_validaty === 'N/A' ? 0 : fullData?.offer_validaty
-                                        : 
-                                        0
-                                }
-                                name='offer_validaty'
-                                type="number"
-                                id='quotationservicesPrice'
-                                className='form-control w-50'
-                                min={0}
-                                maxLength={4}
-                                disabled={
-                                    !isOneClickQuotation ?
-                                        loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
-                                        :
-                                        fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
-                                }
-                                onChange={handleChangeInput}
-                            />
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {
-        isOneClickQuotation &&
-        <div className="quoteTotals__handler">
-        <h3 className='text-capitalize'>
-            Quote Targeted Information
-        </h3>
-        <div className="row align-items-center">
-            <div className="col-lg-12">
-                <div className="totals__full__info">
-                    <div className="totals__text">
-                        <h5 className=''>
-                            Targeted Budget 
-                        </h5>
-                    </div>
-                    <div className="totals__prices">
-                        <h5 className=''>
-                            <input
-                                Value={
-                                    fullData?.target_budget
-                                }
-                                name='target_budget'
-                                type="number"
-                                id='quotationstarget_budget'
-                                className='form-control text-center'
-                                // min={0}
-                                // maxLength={4}
-                                disabled
-                                // onChange={handleChangeInput}
-                            />
-                        </h5>
-                    </div>
-                    <div className="actions w-100 position-relative">
-                        <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" 
-                        // onClick={() => toggleOptions(row?.id)}
-                        ></i>
-                        {
-                            <div className="options-box" ref={optionsRef}>
-                            <p className="option mb-1 text-danger" 
-                            // onClick={() => handleChangeStatusSingleQuoteRow('no', row?.id)}
-                            >
-                                Reject
-                            </p>
-                            <p className=" option mb-0 text-success"
-                                    // onClick={() => handleChangeStatusSingleQuoteRow('yes', row?.id)}
-                                >
-                                Accept
-                                </p>
-                        </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="row align-items-center">
-            <div className="col-lg-12">
-                <div className="totals__full__info">
-                    <div className="totals__text">
-                        <h5 className=''>
-                            Targeted delivery time
-                        </h5>
-                    </div>
-                    <div className="totals__prices">
-                        <h5 className=''>
-                            <input
-                                Value={
-                                    fullData?.target_delivery_time
-                                }
-                                name='target_delivery_time'
-                                type="text"
-                                id='quotationtarget_delivery_time'
-                                className='form-control text-center'
-                                // min={0}
-                                // maxLength={4}
-                                disabled
-                                // onChange={handleChangeInput}
-                            />
-                        </h5>
-                    </div>
-                    <div className="actions w-100 position-relative">
-                        <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" 
-                        // onClick={() => toggleOptions(row?.id)}
-                        ></i>
-                        {
-                            <div className="options-box" ref={optionsRef}>
-                            <p className="option mb-1 text-danger" 
-                            // onClick={() => handleChangeStatusSingleQuoteRow('no', row?.id)}
-                            >
-                                Reject
-                            </p>
-                            <p className=" option mb-0 text-success"
-                                    // onClick={() => handleChangeStatusSingleQuoteRow('yes', row?.id)}
-                                >
-                                Accept
-                                </p>
-                        </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-         <div className="row align-items-center">
-            <div className="col-lg-12">
-                <div className="totals__full__info">
-                    <div className="totals__text">
-                        <h5 className=''>
-                            Preferred delivery terms
-                        </h5>
-                    </div>
-                    <div className="totals__prices">
-                        <h5 className=''>
-                            <textarea
-                                Value={
-                                    fullData?.preferred_delivery_terms
-                                }
-                                defaultValue={fullData?.preferred_delivery_terms}
-                                name='preferred_delivery_terms'
-                                id='quotationpreferred_delivery_terms'
-                                className='form-control text-center'
-                                // min={0}
-                                // maxLength={4}
-                                disabled
-                                // onChange={handleChangeInput}
-                            />
-                        </h5>
-                    </div>
-                     <div className="actions w-100 position-relative">
-                            <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" 
-                            // onClick={() => toggleOptions(row?.id)}
-                            ></i>
-                            {
-                                <div className="options-box" ref={optionsRef}>
-                                <p className="option mb-1 text-danger" 
-                                // onClick={() => handleChangeStatusSingleQuoteRow('no', row?.id)}
-                                >
-                                    Reject
-                                </p>
-                                <p className=" option mb-0 text-success"
-                                        // onClick={() => handleChangeStatusSingleQuoteRow('yes', row?.id)}
-                                    >
-                                    Accept
-                                    </p>
-                            </div>
-                            }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    }
+                                        <div className="quoteTotals__handler">
+                                            <h3>
+                                                Quote Totals
+                                            </h3>
+                                            <div className="row align-items-center">
+                                                <div className="col-lg-6">
+                                                    <div className="totals__full__info">
+                                                        <div className="totals__text">
+                                                            <h5 className='mb-4 '>
+                                                                subtotal <span className="optional">(Accepted Only)</span>
+                                                            </h5>
+                                                            {
+                                                                newData?.tax !== 'N/A' &&
+                                                                <h5 className='mb-4'>
+                                                                    Total Tax <span className="optional">(Accepted Only)</span>
+                                                                </h5>
+                                                            }
+                                                            {
+                                                                (newData?.include_shipping === 'Yes' || isOneClickQuotation) ?
+                                                                    <h5 className='mb-4'>
+                                                                        Shipping cost
+                                                                    </h5>
+                                                                    :
+                                                                    ''
+                                                            }
+                                                            <h5 className='mb-4'>
+                                                                Extra
+                                                                <span className='optional'>
+                                                                    {loginType === 'employee' ? (
+                                                                        editExtrasNote ? (
+                                                                            <>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    name='extras_note'
+                                                                                    value={extrasNoteInput}
+                                                                                    onChange={(e) => setExtrasNoteInput(e.target.value)}
+                                                                                    className="form-control d-inline-block w-auto"
+                                                                                />
+                                                                                <i
+                                                                                    className="bi bi-check-lg ms-2"
+                                                                                    style={{ cursor: 'pointer' }}
+                                                                                    onClick={() => setEditExtrasNote(false)}
+                                                                                />
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                {newData?.extras_note === 'N/A' ? "(Specified in notes)" : newData?.extras_note}
 
-<div className="quoteTotals__handler mt-5">
-        <h3>
-            Notes on Quote
-        </h3>
-    <div className="row align-items-center">
-        <div className="col-lg-12 allQuote__notes__handler">
-                <div className="allQuote__notes">
-                    <i className="bi bi-envelope-exclamation"></i>
-                    <p className='text-capitalize'>
-                        requester Notes :
-                    </p>
-                    <p className='user_note'>
-                        { !isOneClickQuotation ? 
-                        newData?.user_notes === 'N/A' ? 'No Notes' : newData?.user_notes
-                        :
-                        fullData?.user_notes === 'N/A' ? 'No Notes' : fullData?.user_notes
-                        }
-                    </p>
-                </div>
-            <div className="replayBackForNote" >
-                <i className="bi bi-envelope-paper"></i>
-                <p>
-                    note from seller :
-                </p>
-                <div className="replayDynamicly_handler">
-                    <div className="replyTextarea">
-                        <textarea
-                            // rows="4"
-                            className="form-control"
-                            defaultValue={newData?.company_notes !== 'N/A' ? newData?.company_notes ? newData?.company_notes : fullData?.company_notes !== 'N/A' ? fullData?.company_notes ? fullData?.company_notes : '' : '' : ''}
-                            onChange={(e) => setReplyText(e.target.value)}
-                            disabled={
-                                !isOneClickQuotation ?
-                                    loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
-                                    :
-                                    fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
-                            }
-                        />
-                        
-                    </div>
-                </div>
-            </div>
-                
-        </div>
-            
-    </div>
-</div>
+                                                                            </>
+                                                                        )
+                                                                    ) : (
+                                                                        <>
+                                                                            {newData?.extras_note === 'N/A' ? "(Specified in notes)" : newData?.extras_note}
+                                                                        </>
+                                                                    )}
+                                                                </span>
+                                                            </h5>
+                                                            <h5>
+                                                                Total Price
+                                                            </h5>
+                                                        </div>
+                                                        <div className="totals__prices">
+                                                            <h5 className='mb-4 mt-2'>
+                                                                {newData?.currency_symbol} {subTotalPrice}
+                                                            </h5>
+                                                            {
+                                                                newData?.tax !== 'N/A' &&
+                                                                <h5 className='mb-4 mt-2'>
+                                                                    {newData?.currency_symbol} {newData?.tax}
+                                                                </h5>
+                                                            }
+                                                            {
+                                                                (newData?.include_shipping === 'Yes' || isOneClickQuotation) ?
+                                                                    <h5 className='mb-3'>
+                                                                        <input
+                                                                            defaultValue={newData?.shipping_price === 'N/A' ? 0 : newData?.shipping_price}
+                                                                            name='shipping_price'
+                                                                            type="number"
+                                                                            id='quotationShippingPrice'
+                                                                            className='form-control w-50'
+                                                                            maxLength={4}
+                                                                            disabled={
+                                                                                !isOneClickQuotation ?
+                                                                                    loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
+                                                                                    :
+                                                                                    fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
+                                                                            }
+                                                                            onChange={handleChangeInput}
+                                                                        />
+                                                                    </h5>
+                                                                    :
+                                                                    ''
+                                                            }
+                                                            <h5 className='mb-4'>
+                                                                <input
+                                                                    defaultValue={newData?.services === 'N/A' ? 0 : newData?.services}
+                                                                    name='services'
+                                                                    type="number"
+                                                                    id='quotationservicesPrice'
+                                                                    className='form-control w-50'
+                                                                    min={0}
+                                                                    maxLength={4}
+                                                                    disabled={
+                                                                        !isOneClickQuotation ?
+                                                                            loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
+                                                                            :
+                                                                            fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
+                                                                    }
+                                                                    onChange={handleChangeInput}
+                                                                />
+                                                            </h5>
+
+                                                            <h5 className='mt-3'>
+                                                                {newData?.currency_symbol} {(newData?.total_price !== 'N/A' && newData?.total_price) || totalPrice || 0}
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6 adjustPositione">
+                                                    <div className="totals__have__problem">
+                                                        <h3>
+                                                            Having a problem?
+                                                        </h3>
+                                                        <button onClick={handleNavigation} className='updateBtn'>
+                                                            <i className="bi bi-wechat fs-4 me-2"></i>
+                                                            <span>
+                                                                Chat Now!
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="quoteTotals__handler">
+                                            <h3 className='text-capitalize'>
+                                                Quote offer validaty
+                                            </h3>
+                                            <div className="row align-items-center">
+                                                <div className="col-lg-6">
+                                                    <div className="totals__full__info">
+                                                        <div className="totals__text">
+                                                            <h5 className=''>
+                                                                Offer Valid for <span className="optional">(##days)</span>
+                                                            </h5>
+                                                        </div>
+                                                        <div className="totals__prices">
+                                                            <h5 className=''>
+                                                                <input
+                                                                    defaultValue={
+                                                                        !isOneClickQuotation ?
+                                                                            newData?.offer_validaty !== 'N/A' ? newData?.offer_validaty ? newData?.offer_validaty
+                                                                                :
+                                                                                fullData?.offer_validaty : fullData?.offer_validaty === 'N/A' ? 0 : fullData?.offer_validaty
+                                                                            :
+                                                                            0
+                                                                    }
+                                                                    name='offer_validaty'
+                                                                    type="number"
+                                                                    id='quotationservicesPrice'
+                                                                    className='form-control w-50'
+                                                                    min={0}
+                                                                    maxLength={4}
+                                                                    disabled={
+                                                                        !isOneClickQuotation ?
+                                                                            loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
+                                                                            :
+                                                                            fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
+                                                                    }
+                                                                    onChange={handleChangeInput}
+                                                                />
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {
+                                            isOneClickQuotation &&
+                                            <div className="quoteTotals__handler">
+                                                <h3 className='text-capitalize'>
+                                                    Quote Targeted Information
+                                                </h3>
+                                                <div className="row align-items-center">
+                                                    <div className="col-lg-12">
+                                                        <div className="totals__full__info">
+                                                            <div className="totals__text">
+                                                                <h5 className=''>
+                                                                    Targeted Budget
+                                                                </h5>
+                                                            </div>
+                                                            <div className="totals__prices">
+                                                                <h5 className=''>
+                                                                    <input
+                                                                        Value={
+                                                                            fullData?.target_budget
+                                                                        }
+                                                                        name='target_budget'
+                                                                        type="number"
+                                                                        id='quotationstarget_budget'
+                                                                        className='form-control text-center'
+                                                                        // min={0}
+                                                                        // maxLength={4}
+                                                                        disabled
+                                                                    // onChange={handleChangeInput}
+                                                                    />
+                                                                </h5>
+                                                            </div>
+                                                            {
+                                                                newData?.company_status === 'Pending' ?
+                                                                    <div className="actions w-100 position-relative d-flex gap-5">
+                                                                        <div className="d-flex gap-2 align-items-center">
+                                                                            <label htmlFor="can_achieve_target_budget_true">Yes</label>
+                                                                            <input
+                                                                                type="radio"
+                                                                                name="can_achieve_target_budget"
+                                                                                id="can_achieve_target_budget_true"
+                                                                                value="yes"
+                                                                                onChange={(e) => setExtraOptions({ ...extraOptions, [e?.target?.name]: e?.target?.value })}
+                                                                            />
+                                                                        </div>
+                                                                        <div className="d-flex gap-2 align-items-center">
+                                                                            <label htmlFor="can_achieve_target_budget_false">No</label>
+                                                                            <input
+                                                                                type="radio"
+                                                                                name="can_achieve_target_budget"
+                                                                                id="can_achieve_target_budget_false"
+                                                                                onChange={(e) => setExtraOptions({ ...extraOptions, [e?.target?.name]: e?.target?.value })}
+                                                                                value="no"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className='actions w-100 position-relative d-flex gap-5'>
+                                                                        {
+                                                                            newData?.can_achieve_target_budget === 'Yes' ?
+                                                                                <div className="d-flex gap-2 align-items-center">
+                                                                                    <label htmlFor="can_achieve_target_budget_true">Yes</label>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        id="can_achieve_target_budget_true"
+                                                                                        name="can_achieve_target_budget"
+                                                                                        value="Yes"
+                                                                                        checked={newData?.can_achieve_target_budget === 'Yes'}
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
+                                                                                :
+                                                                                <div className="d-flex gap-2 align-items-center">
+                                                                                    <label htmlFor="can_achieve_target_budget_false">No</label>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        id="can_achieve_target_budget_false"
+                                                                                        name="can_achieve_target_budget"
+                                                                                        value="No"
+                                                                                        checked={newData?.can_achieve_target_budget === 'No'}
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
+                                                                        }
+                                                                    </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row align-items-center">
+                                                    <div className="col-lg-12">
+                                                        <div className="totals__full__info">
+                                                            <div className="totals__text">
+                                                                <h5 className=''>
+                                                                    Targeted delivery time
+                                                                </h5>
+                                                            </div>
+                                                            <div className="totals__prices">
+                                                                <h5 className=''>
+                                                                    <input
+                                                                        Value={
+                                                                            fullData?.target_delivery_time
+                                                                        }
+                                                                        name='target_delivery_time'
+                                                                        type="text"
+                                                                        id='quotationtarget_delivery_time'
+                                                                        className='form-control text-center'
+                                                                        // min={0}
+                                                                        // maxLength={4}
+                                                                        disabled
+                                                                    // onChange={handleChangeInput}
+                                                                    />
+                                                                </h5>
+                                                            </div>
+                                                            {
+                                                                newData?.company_status === 'Pending' ?
+                                                                    <div className="actions w-100 position-relative d-flex gap-5">
+                                                                        <div className="d-flex gap-2 align-items-center">
+                                                                            <label htmlFor="can_achieve_target_delivery_time_true">Yes</label>
+                                                                            <input
+                                                                                type="radio"
+                                                                                name="can_achieve_target_delivery_time"
+                                                                                id="can_achieve_target_delivery_time_true"
+                                                                                value="yes"
+                                                                                onChange={(e) => setExtraOptions({ ...extraOptions, [e?.target?.name]: e?.target?.value })}
+                                                                            />
+                                                                        </div>
+                                                                        <div className="d-flex gap-2 align-items-center">
+                                                                            <label htmlFor="can_achieve_target_delivery_time_false">No</label>
+                                                                            <input
+                                                                                type="radio"
+                                                                                name="can_achieve_target_delivery_time"
+                                                                                id="can_achieve_target_delivery_time_false"
+                                                                                onChange={(e) => setExtraOptions({ ...extraOptions, [e?.target?.name]: e?.target?.value })}
+                                                                                value="no"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className='actions w-100 position-relative d-flex gap-5'>
+                                                                        {
+                                                                            newData?.can_achieve_target_delivery_time === 'Yes' ?
+                                                                                <div className="d-flex gap-2 align-items-center">
+                                                                                    <label htmlFor="can_achieve_target_delivery_time_true">Yes</label>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        id="can_achieve_target_delivery_time_true"
+                                                                                        name="can_achieve_target_delivery_time"
+                                                                                        value="Yes"
+                                                                                        checked={newData?.can_achieve_target_delivery_time === 'Yes'}
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
+                                                                                :
+                                                                                <div className="d-flex gap-2 align-items-center">
+                                                                                    <label htmlFor="can_achieve_target_delivery_time_false">No</label>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        id="can_achieve_target_delivery_time_false"
+                                                                                        name="can_achieve_target_delivery_time"
+                                                                                        value="No"
+                                                                                        checked={newData?.can_achieve_target_delivery_time === 'No'}
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
+                                                                        }
+                                                                    </div>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row align-items-center">
+                                                    <div className="col-lg-12">
+                                                        <div className="totals__full__info">
+                                                            <div className="totals__text">
+                                                                <h5 className=''>
+                                                                    Preferred delivery terms
+                                                                </h5>
+                                                            </div>
+                                                            <div className="totals__prices">
+                                                                <h5 className=''>
+                                                                    <textarea
+                                                                        Value={
+                                                                            fullData?.preferred_delivery_terms
+                                                                        }
+                                                                        defaultValue={fullData?.preferred_delivery_terms}
+                                                                        name='preferred_delivery_terms'
+                                                                        id='quotationpreferred_delivery_terms'
+                                                                        className='form-control text-center'
+                                                                        // min={0}
+                                                                        // maxLength={4}
+                                                                        disabled
+                                                                    // onChange={handleChangeInput}
+                                                                    />
+                                                                </h5>
+                                                            </div>
+                                                            {
+                                                                newData?.company_status === 'Pending' ?
+                                                                    <div className="actions w-100 position-relative d-flex gap-5">
+                                                                        <div className="d-flex gap-2 align-items-center">
+                                                                            <label htmlFor="can_achieve_preferred_delivery_terms_true">Yes</label>
+                                                                            <input
+                                                                                type="radio"
+                                                                                name="can_achieve_preferred_delivery_terms"
+                                                                                id="can_achieve_preferred_delivery_terms_true"
+                                                                                value="yes"
+                                                                                onChange={(e) => setExtraOptions({ ...extraOptions, [e?.target?.name]: e?.target?.value })}
+                                                                            />
+                                                                        </div>
+                                                                        <div className="d-flex gap-2 align-items-center">
+                                                                            <label htmlFor="can_achieve_preferred_delivery_terms_false">No</label>
+                                                                            <input
+                                                                                type="radio"
+                                                                                name="can_achieve_preferred_delivery_terms"
+                                                                                id="can_achieve_preferred_delivery_terms_false"
+                                                                                onChange={(e) => setExtraOptions({ ...extraOptions, [e?.target?.name]: e?.target?.value })}
+                                                                                value="no"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className='actions w-100 position-relative d-flex gap-5'>
+                                                                        {
+                                                                            newData?.can_achieve_preferred_delivery_terms === 'Yes' ?
+                                                                                <div className="d-flex gap-2 align-items-center">
+                                                                                    <label htmlFor="can_achieve_preferred_delivery_terms_true">Yes</label>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        id="can_achieve_preferred_delivery_terms_true"
+                                                                                        name="can_achieve_preferred_delivery_terms"
+                                                                                        value="Yes"
+                                                                                        checked={newData?.can_achieve_preferred_delivery_terms === 'Yes'}
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
+                                                                                :
+                                                                                <div className="d-flex gap-2 align-items-center">
+                                                                                    <label htmlFor="can_achieve_preferred_delivery_terms_false">No</label>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        id="can_achieve_preferred_delivery_terms_false"
+                                                                                        name="can_achieve_preferred_delivery_terms"
+                                                                                        value="No"
+                                                                                        checked={newData?.can_achieve_preferred_delivery_terms === 'No'}
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
+                                                                        }
+                                                                    </div>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <div className="quoteTotals__handler mt-5">
+                                            <h3>
+                                                Notes on Quote
+                                            </h3>
+                                            <div className="row align-items-center">
+                                                <div className="col-lg-12 allQuote__notes__handler">
+                                                    <div className="allQuote__notes">
+                                                        <i className="bi bi-envelope-exclamation"></i>
+                                                        <p className='text-capitalize'>
+                                                            requester Notes :
+                                                        </p>
+                                                        <p className='user_note'>
+                                                            {!isOneClickQuotation ?
+                                                                newData?.user_notes === 'N/A' ? 'No Notes' : newData?.user_notes
+                                                                :
+                                                                fullData?.user_notes === 'N/A' ? 'No Notes' : fullData?.user_notes
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                    <div className="replayBackForNote" >
+                                                        <i className="bi bi-envelope-paper"></i>
+                                                        <p>
+                                                            note from seller :
+                                                        </p>
+                                                        <div className="replayDynamicly_handler">
+                                                            <div className="replyTextarea">
+                                                                <textarea
+                                                                    // rows="4"
+                                                                    className="form-control"
+                                                                    defaultValue={newData?.company_notes !== 'N/A' ? newData?.company_notes ? newData?.company_notes : fullData?.company_notes !== 'N/A' ? fullData?.company_notes ? fullData?.company_notes : '' : '' : ''}
+                                                                    onChange={(e) => setReplyText(e.target.value)}
+                                                                    disabled={
+                                                                        !isOneClickQuotation ?
+                                                                            loginType === 'user' || newData?.company_status !== 'Pending' || newData?.quotation_type !== 'sell'
+                                                                            :
+                                                                            fullData?.quotation_type === 'sell' ? newData?.company_status !== 'Pending' : newData?.company_status === 'Pending'
+                                                                    }
+                                                                />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
 
                                         <div className="requesterDetails__handler">
                                             {
@@ -1194,10 +1307,10 @@ console.log(fullData?.target_budget);
                                                                 <h5 className='mb-4'>
                                                                     Valid To:
                                                                 </h5>
-                                                                { !isOneClickQuotation &&
+                                                                {!isOneClickQuotation &&
                                                                     <h5 className='mb-4'>
-                                                                    Prefered Currency:
-                                                                </h5>
+                                                                        Prefered Currency:
+                                                                    </h5>
                                                                 }
                                                             </div>
                                                             <div className="mainInfo__texts mt-0">
@@ -1210,10 +1323,10 @@ console.log(fullData?.target_budget);
                                                                 <h5 className='mb-4'>
                                                                     {newData?.valid_to || fullData?.valid_to}
                                                                 </h5>
-                                                               { !isOneClickQuotation &&
-                                                                <h5 className='mb-4'>
-                                                                    {newData?.currency}
-                                                                </h5>}
+                                                                {!isOneClickQuotation &&
+                                                                    <h5 className='mb-4'>
+                                                                        {newData?.currency}
+                                                                    </h5>}
                                                             </div>
                                                         </div>
                                                         <div className="requesterDetails__subInfo">
@@ -1248,7 +1361,7 @@ console.log(fullData?.target_budget);
                                                                     {newData?.country || fullData?.destination_country}
                                                                 </h5>
                                                                 <h5>
-                                                                <ShowLocationOnMap latitude={newData?.latitude} longitude={newData?.longitude} />
+                                                                    <ShowLocationOnMap latitude={newData?.latitude} longitude={newData?.longitude} />
                                                                 </h5>
                                                             </div>
                                                         </div>
