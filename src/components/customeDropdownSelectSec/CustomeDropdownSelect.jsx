@@ -11,6 +11,7 @@ const CustomDropdown = ({
     handleInputChange, // optional
     value, // optional 
 }) => {
+    
     const options = optionsData.map((item) => ({
         value: isFlagDropdown ? item.phoneCode : item,
         label: isFlagDropdown ? `${item.name} (${item.phoneCode})` : item,
@@ -41,14 +42,13 @@ const CustomDropdown = ({
             </div>
         );
     };
-
     return (
         <div>
             <Select
                 options={options}
                 onChange={handleChange}
                 placeholder={placeholder || "Select an option"}
-                value={options.find(opt => opt.value === value) || null}
+                value={options.find(opt => opt.value.toLowerCase() === value?.toLowerCase()) || null}
                 className={errors?.[inputName] ? "is-invalid" : ""}
                 components={isFlagDropdown ? { Option: customOption } : {}}
                 filterOption={(option, inputValue) =>

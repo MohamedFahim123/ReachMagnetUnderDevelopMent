@@ -860,6 +860,7 @@ console.log(currentSubActivitiesInsideMainActivity);
                                   <CustomDropdown
                                   optionsData={countries}
                                   setValue={setValue}
+                                  value={watch("phone_one_code")}
                                   errors={errors}
                                   inputName="phone_one_code"
                                   placeholder="Select a country"
@@ -893,6 +894,7 @@ console.log(currentSubActivitiesInsideMainActivity);
                                    <CustomDropdown
                                   optionsData={countries}
                                   setValue={setValue}
+                                  value={watch("phone_two_code")}
                                   errors={errors}
                                   inputName="phone_two_code"
                                   placeholder="Select a country"
@@ -1433,6 +1435,7 @@ console.log(currentSubActivitiesInsideMainActivity);
                               <CustomDropdown
                                   optionsData={countries}
                                   setValue={setValue}
+                                  value={watch("employee_phone_code")}
                                   errors={errors}
                                   inputName="employee_phone_code"
                                   placeholder="Select a country"

@@ -496,6 +496,7 @@ export default function ShowSingleQuotation({ token }) {
         }
     };
 
+console.log(fullData?.target_budget);
 
     return (
         <>
@@ -973,6 +974,155 @@ export default function ShowSingleQuotation({ token }) {
             </div>
         </div>
     </div>
+    {
+        isOneClickQuotation &&
+        <div className="quoteTotals__handler">
+        <h3 className='text-capitalize'>
+            Quote Targeted Information
+        </h3>
+        <div className="row align-items-center">
+            <div className="col-lg-12">
+                <div className="totals__full__info">
+                    <div className="totals__text">
+                        <h5 className=''>
+                            Targeted Budget 
+                        </h5>
+                    </div>
+                    <div className="totals__prices">
+                        <h5 className=''>
+                            <input
+                                Value={
+                                    fullData?.target_budget
+                                }
+                                name='target_budget'
+                                type="number"
+                                id='quotationstarget_budget'
+                                className='form-control text-center'
+                                // min={0}
+                                // maxLength={4}
+                                disabled
+                                // onChange={handleChangeInput}
+                            />
+                        </h5>
+                    </div>
+                    <div className="actions w-100 position-relative">
+                        <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" 
+                        // onClick={() => toggleOptions(row?.id)}
+                        ></i>
+                        {
+                            <div className="options-box" ref={optionsRef}>
+                            <p className="option mb-1 text-danger" 
+                            // onClick={() => handleChangeStatusSingleQuoteRow('no', row?.id)}
+                            >
+                                Reject
+                            </p>
+                            <p className=" option mb-0 text-success"
+                                    // onClick={() => handleChangeStatusSingleQuoteRow('yes', row?.id)}
+                                >
+                                Accept
+                                </p>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="row align-items-center">
+            <div className="col-lg-12">
+                <div className="totals__full__info">
+                    <div className="totals__text">
+                        <h5 className=''>
+                            Targeted delivery time
+                        </h5>
+                    </div>
+                    <div className="totals__prices">
+                        <h5 className=''>
+                            <input
+                                Value={
+                                    fullData?.target_delivery_time
+                                }
+                                name='target_delivery_time'
+                                type="text"
+                                id='quotationtarget_delivery_time'
+                                className='form-control text-center'
+                                // min={0}
+                                // maxLength={4}
+                                disabled
+                                // onChange={handleChangeInput}
+                            />
+                        </h5>
+                    </div>
+                    <div className="actions w-100 position-relative">
+                        <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" 
+                        // onClick={() => toggleOptions(row?.id)}
+                        ></i>
+                        {
+                            <div className="options-box" ref={optionsRef}>
+                            <p className="option mb-1 text-danger" 
+                            // onClick={() => handleChangeStatusSingleQuoteRow('no', row?.id)}
+                            >
+                                Reject
+                            </p>
+                            <p className=" option mb-0 text-success"
+                                    // onClick={() => handleChangeStatusSingleQuoteRow('yes', row?.id)}
+                                >
+                                Accept
+                                </p>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div className="row align-items-center">
+            <div className="col-lg-12">
+                <div className="totals__full__info">
+                    <div className="totals__text">
+                        <h5 className=''>
+                            Preferred delivery terms
+                        </h5>
+                    </div>
+                    <div className="totals__prices">
+                        <h5 className=''>
+                            <textarea
+                                Value={
+                                    fullData?.preferred_delivery_terms
+                                }
+                                defaultValue={fullData?.preferred_delivery_terms}
+                                name='preferred_delivery_terms'
+                                id='quotationpreferred_delivery_terms'
+                                className='form-control text-center'
+                                // min={0}
+                                // maxLength={4}
+                                disabled
+                                // onChange={handleChangeInput}
+                            />
+                        </h5>
+                    </div>
+                     <div className="actions w-100 position-relative">
+                            <i style={{cursor: 'pointer'}} className="bi bi-three-dots-vertical" 
+                            // onClick={() => toggleOptions(row?.id)}
+                            ></i>
+                            {
+                                <div className="options-box" ref={optionsRef}>
+                                <p className="option mb-1 text-danger" 
+                                // onClick={() => handleChangeStatusSingleQuoteRow('no', row?.id)}
+                                >
+                                    Reject
+                                </p>
+                                <p className=" option mb-0 text-success"
+                                        // onClick={() => handleChangeStatusSingleQuoteRow('yes', row?.id)}
+                                    >
+                                    Accept
+                                    </p>
+                            </div>
+                            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
 
 <div className="quoteTotals__handler mt-5">
         <h3>
